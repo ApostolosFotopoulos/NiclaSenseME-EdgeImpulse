@@ -1,0 +1,9 @@
+ARDUINO BLE, NICLA SENSE ME, EDGE IMPULSE
+https://docs.edgeimpulse.com/docs/edge-impulse-cli/cli-data-forwarder
+https://docs.arduino.cc/hardware/nicla-sense-me
+https://docs.edgeimpulse.com/experts/featured-machine-learning-projects/arduino-kway-outdoor-activity-tracker
+https://docs.edgeimpulse.com/docs/development-platforms/officially-supported-mcu-targets/arduino-nicla-sense-me
+https://gist.github.com/don/32c49cc60245a962aa9c67597bd7ab06
+https://github.com/arduino-libraries/ArduinoBLE/blob/master/examples/Peripheral/BatteryMonitor/BatteryMonitor.ino
+https://docs.arduino.cc/tutorials/nicla-sense-me/web-ble-dashboard
+https://forum.arduino.cc/t/ble-code-to-take-string-input-from-another-bluetooth-enabled-deice/643877
