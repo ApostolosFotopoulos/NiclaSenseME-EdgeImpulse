@@ -240,7 +240,7 @@ void loop()
       #endif
     }
     nicla::leds.setColor(off);
-    nicla::leds.setColorRed();
+    //nicla::leds.setColorRed();
     Serial.print("Disconnected from central: ");
     Serial.println(central.address());
   }
