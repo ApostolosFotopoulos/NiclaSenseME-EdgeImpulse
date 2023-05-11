@@ -1,0 +1,104 @@
+* {
+  font-family: "Roboto Mono", sans-serif;
+}
+
+body {
+  color: white;
+  background: #000000;
+  font-size: 14px;
+}
+
+#pairButton {
+  background-color: #d8f41d;
+  border: none;
+  color: black;
+  padding: 1px;
+  text-align: center;
+  text-decoration: none;
+
+  margin: 8px 18px;
+  height: 25px;
+  width: 100px;
+  border-radius: 10%;
+  outline: none;
+
+  border-radius: 20px;
+  grid-column: 1;
+
+  cursor: pointer;
+}
+
+.container {
+  width: 960px;
+  height: 384px;
+  margin-top: 30px;
+  margin-bottom: 7.5px;
+  margin: 0 auto;
+}
+
+.widget {
+  background-color: #111111;
+  border: 1px solid #000000;
+  border-radius: 0px;
+  padding: 12px;
+  margin: 6px;
+  float: left;
+  color: #dae3e3;
+  padding-bottom: 16px;
+}
+
+.status {
+  margin-top: 1%;
+  width: 885px;
+  height: 42px;
+  color: white;
+  display: grid;
+  grid-template-columns: 15% 70% 15%;
+}
+
+#bluetooth {
+  font-size: 16px;
+  height: 50%;
+  margin: auto;
+}
+
+.label {
+  height: 15px;
+  display: inline;
+  font-size: 12px;
+}
+
+.statusBar {
+  height: 100%;
+  grid-column: 2;
+  vertical-align: middle;
+  text-align: center;
+}
+
+@-webkit-keyframes fadein {
+  from {
+    visibility: hidden;
+
+    opacity: 0;
+  }
+
+  to {
+    visibility: visible;
+
+    opacity: 1;
+  }
+}
+
+@keyframes fadein {
+  from {
+    visibility: hidden;
+
+    opacity: 0;
+  }
+
+  to {
+    visibility: visible;
+
+    opacity: 1;
+  }
+}
