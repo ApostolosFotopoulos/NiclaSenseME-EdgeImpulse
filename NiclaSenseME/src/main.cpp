@@ -138,13 +138,13 @@ void setup()
   */
   BLE.setLocalName("Nicla Sense");
   BLE.setAdvertisedService(edgeImpulseService); // add the service UUID
-  edgeImpulseService.addCharacteristic(predictionChar); // add the battery level characteristic
-  BLE.addService(edgeImpulseService); // Add the battery service
+  edgeImpulseService.addCharacteristic(predictionChar); 
+  BLE.addService(edgeImpulseService); 
   predictionChar.writeValue("Start"); // set initial value for this characteristic
 
-  nicla::begin();
-  nicla::leds.begin();
-  nicla::leds.setColorBlue();
+//   nicla::begin();
+//   nicla::leds.begin();
+//   nicla::leds.setColorBlue();
   /* Start advertising Bluetooth® Low Energy.  It will start continuously transmitting Bluetooth® Low Energy
     advertising packets and will be visible to remote Bluetooth® Low Energy central devices
     until it receives a new connection */
@@ -168,8 +168,8 @@ void loop()
     // print the central's BT address:
     Serial.println(central.address());
     // turn on the LED to indicate the connection:
-    nicla::leds.setColor(off);
-    nicla::leds.setColorGreen();
+    // nicla::leds.setColor(off);
+    // nicla::leds.setColorGreen();
 
     // while the central is connected:
     while (central.connected()) {
@@ -239,7 +239,7 @@ void loop()
           ei_printf("    anomaly score: %.3f\r\n", result.anomaly);
       #endif
     }
-    nicla::leds.setColor(off);
+    // nicla::leds.setColor(off);
     //nicla::leds.setColorRed();
     Serial.print("Disconnected from central: ");
     Serial.println(central.address());
