@@ -16,8 +16,8 @@ var bytesReceived = 0;
 var bytesPrevious = 0;
 
 // UI elements
-const pairButton = document.getElementById("pairButton");
-const BLEstatus = document.getElementById("bluetooth");
+const pairButton = document.querySelector(".status__button");
+const BLEstatus = document.querySelector(".status__msg");
 
 if ("bluetooth" in navigator) {
   pairButton.addEventListener("click", function (event) {
@@ -59,13 +59,6 @@ async function connect() {
     for (const sensor of sensors) {
       msg("characteristic " + sensor + "...");
       NiclaSenseME[sensor].characteristic = await service.getCharacteristic(NiclaSenseME[sensor].uuid);
-      // Set up notification
-      if (NiclaSenseME[sensor].properties.includes("BLENotify")) {
-        NiclaSenseME[sensor].characteristic.addEventListener("characteristicvaluechanged", function (event) {
-          handleIncoming(NiclaSenseME[sensor], event.target.value);
-        });
-        await NiclaSenseME[sensor].characteristic.startNotifications();
-      }
       // Set up polling for read
       if (NiclaSenseME[sensor].properties.includes("BLERead")) {
         NiclaSenseME[sensor].polling = setInterval(function () {

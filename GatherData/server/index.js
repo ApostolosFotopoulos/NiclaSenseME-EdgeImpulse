@@ -16,10 +16,26 @@ app.post("/patient", async (req, res) => {
   } catch (err) {}
 });
 
-app.get("/patient/:id", async (req, res) => {
+app.post("/prediction", async (req, res) => {
   try {
-    const { id: patientId } = req.params;
-    const patient = await pool.query("SELECT * FROM patient WHERE patient_id = $1", [patientId]);
+    console.log("Body:");
+    console.log(req.body);
+    const { patientId, normal, cp1, cp2 } = req.body;
+    const newPatient = await pool.query("INSERT INTO prediction (patient_id, normal, cp1, cp2) VALUES ($1, $2, $3, $4) RETURNING *", [
+      patientId,
+      normal,
+      cp1,
+      cp2,
+    ]);
+    console.log(newPatient.rows[0]);
+    res.json(newPatient.rows[0]);
+  } catch (err) {}
+});
+
+app.get("/patient/:name", async (req, res) => {
+  try {
+    const { name: patientNmae } = req.params;
+    const patient = await pool.query("SELECT * FROM patient WHERE name = $1", [patientNmae]);
     console.log(patient.rows[0]);
     res.json(patient.rows[0]);
   } catch (err) {}
