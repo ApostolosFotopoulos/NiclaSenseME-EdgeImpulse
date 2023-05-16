@@ -1,13 +1,22 @@
 import React, { useState } from "react";
+import globals from "./../globals.js";
 
-export default function PatientInfo({ selectedPatientName, setSelectedPatientName, isGatheringData, setGatheringData }) {
+export default function PatientInfo({ setMsg }) {
   const [patientName, setPatientName] = useState("");
   const [gatherButtonText, setGatherButtonText] = useState("GATHER DATA");
+  const [isGatheringData, setGatheringData] = useState(false);
+  const [selectedPatientName, setSelectedPatientName] = useState("");
 
   function submit(e) {
     e.preventDefault();
-    setSelectedPatientName(patientName);
-    setPatientName("");
+
+    if (isGatheringData) {
+      setMsg("Can't edit patient's name while gathering data");
+    } else {
+      setSelectedPatientName(patientName);
+      globals.selectedPatientName = patientName;
+      setPatientName("");
+    }
   }
 
   function toggleisGatheringDataClass() {
@@ -17,6 +26,7 @@ export default function PatientInfo({ selectedPatientName, setSelectedPatientNam
       setGatherButtonText("GATHER DATA");
     }
 
+    globals.isGatheringData = !isGatheringData;
     setGatheringData(!isGatheringData);
   }
 
@@ -33,6 +43,7 @@ export default function PatientInfo({ selectedPatientName, setSelectedPatientNam
         </label>
         <input
           required
+          disabled={isGatheringData}
           placeholder="Enter Patient's Name"
           type="text"
           className="patient__form-input"

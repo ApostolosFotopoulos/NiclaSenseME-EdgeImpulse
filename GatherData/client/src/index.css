@@ -110,6 +110,10 @@ button {
   align-items: center;
 }
 
+.status__button {
+  width: 125px;
+}
+
 .status__button--connecting {
   background-color: grey;
   color: black;
