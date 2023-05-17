@@ -1,7 +1,7 @@
 const globals = {
   debug: true,
   isGatheringData: false,
-  selectedPatientName: "",
+  selectedPatientFirstName: "",
 };
 
 export default globals;

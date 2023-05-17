@@ -1,25 +1,54 @@
 import React, { useState } from "react";
+import moment from "moment";
 import globals from "./../globals.js";
+import PatientInput from "./PatientInput.js";
+import SelectedPatientInput from "./SelectedPatientInput.js";
+
+moment.suppressDeprecationWarnings = true;
+const formats = ["DD/MM/YYYY", "D/M/YYYY", "DD-MM-YYYY", "D-M-YYYY"];
 
 export default function PatientInfo({ setMsg }) {
-  const [patientName, setPatientName] = useState("");
+  const [patientFirstName, setPatientFirstName] = useState("");
+  const [selectedPatientFirstName, setSelectedPatientFirstName] = useState("");
+  const [patientLastName, setPatientLastName] = useState("");
+  const [selectedPatientLastName, setSelectedPatientLastName] = useState("");
+  const [patientDateOfBirth, setPatientDateOfBirth] = useState("");
+  const [selectedPatientDateOfBirth, setSelectedPatientDateOfBirth] = useState("");
+
   const [gatherButtonText, setGatherButtonText] = useState("GATHER DATA");
   const [isGatheringData, setGatheringData] = useState(false);
-  const [selectedPatientName, setSelectedPatientName] = useState("");
+
+  function clearForm() {
+    setPatientFirstName("");
+    setPatientLastName("");
+    setPatientDateOfBirth("");
+  }
+
+  function isYearValid(year) {
+    return year > 1920 && year < 2023;
+  }
 
   function submit(e) {
     e.preventDefault();
-
-    if (isGatheringData) {
+    console.log(patientDateOfBirth);
+    const checkDate = moment(patientDateOfBirth, formats, true);
+    console.log(checkDate.year());
+    if (!checkDate.isValid() || !isYearValid(checkDate.year())) {
+      console.log("Trash");
+      setMsg("Invalid date");
+    } else if (isGatheringData) {
       setMsg("Can't edit patient's name while gathering data");
     } else {
-      setSelectedPatientName(patientName);
-      globals.selectedPatientName = patientName;
-      setPatientName("");
+      setSelectedPatientFirstName(patientFirstName);
+      setSelectedPatientLastName(patientLastName);
+      setSelectedPatientDateOfBirth(patientDateOfBirth);
+      globals.selectedPatientFirstName = patientFirstName;
+      clearForm();
+      setMsg("Patient Selected");
     }
   }
 
-  function toggleisGatheringDataClass() {
+  function toggleIsGatheringDataClass() {
     if (!isGatheringData) {
       setGatherButtonText("GATHERING");
     } else {
@@ -31,36 +60,25 @@ export default function PatientInfo({ setMsg }) {
   }
 
   async function gatherData() {
-    toggleisGatheringDataClass();
+    toggleIsGatheringDataClass();
   }
 
   return (
     <div className="row-container patient">
       <form className="patient__form" action="" onSubmit={submit}>
-        <h1>Current Patient</h1>
-        <label className="patient__form-label" htmlFor="name">
-          Patient Name
-        </label>
-        <input
-          required
-          disabled={isGatheringData}
-          placeholder="Enter Patient's Name"
-          type="text"
-          className="patient__form-input"
-          name="name"
-          value={patientName}
-          onChange={(e) => setPatientName(e.target.value)}
-        />
+        <h1>Select Patient</h1>
+        <PatientInput field={"First Name"} data={patientFirstName} setData={setPatientFirstName} isGatheringData={isGatheringData} />
+        <PatientInput field={"Last Name"} data={patientLastName} setData={setPatientLastName} isGatheringData={isGatheringData} />
+        <PatientInput field={"Date Of Birth"} data={patientDateOfBirth} setData={setPatientDateOfBirth} isGatheringData={isGatheringData} />
         <button className="patient__form-button" type="submit">
           SUBMIT
         </button>
       </form>
       <div className="patient__details">
         <h1>Patient's Details</h1>
-        <label className="patient__details-label" htmlFor="name">
-          Patient Name
-        </label>
-        <input readOnly placeholder="" type="text" className="patient__details-input" name="name" value={selectedPatientName} />
+        <SelectedPatientInput field={"First Name"} selectedData={selectedPatientFirstName} />
+        <SelectedPatientInput field={"Last Name"} selectedData={selectedPatientLastName} />
+        <SelectedPatientInput field={"Date Of Birth"} selectedData={selectedPatientDateOfBirth} />
         <button className={`patient__details-button ${isGatheringData ? "patient__details-button--collecting" : ""}`} onClick={gatherData}>
           {gatherButtonText}
         </button>
