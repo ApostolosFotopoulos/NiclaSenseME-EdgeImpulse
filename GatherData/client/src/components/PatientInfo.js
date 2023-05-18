@@ -7,7 +7,7 @@ import SelectedPatientInput from "./SelectedPatientInput.js";
 moment.suppressDeprecationWarnings = true;
 const formats = ["DD/MM/YYYY", "D/M/YYYY", "DD-MM-YYYY", "D-M-YYYY"];
 
-export default function PatientInfo({ setMsg }) {
+export default function PatientInfo({ isGatheringData, setGatheringData, setMsg }) {
   const [patientFirstName, setPatientFirstName] = useState("");
   const [selectedPatientFirstName, setSelectedPatientFirstName] = useState("");
   const [patientLastName, setPatientLastName] = useState("");
@@ -16,7 +16,6 @@ export default function PatientInfo({ setMsg }) {
   const [selectedPatientDateOfBirth, setSelectedPatientDateOfBirth] = useState("");
 
   const [gatherButtonText, setGatherButtonText] = useState("GATHER DATA");
-  const [isGatheringData, setGatheringData] = useState(false);
 
   function clearForm() {
     setPatientFirstName("");
@@ -42,7 +41,12 @@ export default function PatientInfo({ setMsg }) {
       setSelectedPatientFirstName(patientFirstName);
       setSelectedPatientLastName(patientLastName);
       setSelectedPatientDateOfBirth(patientDateOfBirth);
-      globals.selectedPatientFirstName = patientFirstName;
+      globals.selectedPatient = {
+        patientFirstName,
+        patientLastName,
+        patientDateOfBirth,
+      };
+      console.log(globals.selectedPatient);
       clearForm();
       setMsg("Patient Selected");
     }
@@ -67,9 +71,27 @@ export default function PatientInfo({ setMsg }) {
     <div className="row-container patient">
       <form className="patient__form" action="" onSubmit={submit}>
         <h1>Select Patient</h1>
-        <PatientInput field={"First Name"} data={patientFirstName} setData={setPatientFirstName} isGatheringData={isGatheringData} />
-        <PatientInput field={"Last Name"} data={patientLastName} setData={setPatientLastName} isGatheringData={isGatheringData} />
-        <PatientInput field={"Date Of Birth"} data={patientDateOfBirth} setData={setPatientDateOfBirth} isGatheringData={isGatheringData} />
+        <PatientInput
+          field={"First Name"}
+          placeholderText={"First name"}
+          data={patientFirstName}
+          setData={setPatientFirstName}
+          isGatheringData={isGatheringData}
+        />
+        <PatientInput
+          field={"Last Name"}
+          placeholderText={"Last name"}
+          data={patientLastName}
+          setData={setPatientLastName}
+          isGatheringData={isGatheringData}
+        />
+        <PatientInput
+          field={"Date Of Birth"}
+          placeholderText={"10/10/2000 or 10-10-2000"}
+          data={patientDateOfBirth}
+          setData={setPatientDateOfBirth}
+          isGatheringData={isGatheringData}
+        />
         <button className="patient__form-button" type="submit">
           SUBMIT
         </button>
@@ -79,7 +101,12 @@ export default function PatientInfo({ setMsg }) {
         <SelectedPatientInput field={"First Name"} selectedData={selectedPatientFirstName} />
         <SelectedPatientInput field={"Last Name"} selectedData={selectedPatientLastName} />
         <SelectedPatientInput field={"Date Of Birth"} selectedData={selectedPatientDateOfBirth} />
-        <button className={`patient__details-button ${isGatheringData ? "patient__details-button--collecting" : ""}`} onClick={gatherData}>
+        <button
+          className={`patient__details-button ${
+            isGatheringData ? "patient__details-button--collecting" : ""
+          }`}
+          onClick={gatherData}
+        >
           {gatherButtonText}
         </button>
       </div>

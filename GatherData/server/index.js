@@ -8,15 +8,22 @@ app.use(express.json());
 
 app.post("/patient", async (req, res) => {
   try {
+    console.log("Body:");
     console.log(req.body);
     const { patientFirstName, patientLastName, patientDateOfBirth } = req.body;
-    const newPatient = await pool.query("INSERT INTO patient(first_name, last_name, date_of_birth) VALUES ($1, $2, $3) RETURNING *", [
-      patientFirstName,
-      patientLastName,
-      patientDateOfBirth,
-    ]);
-    console.log(newPatient.rows[0]);
-    res.json(newPatient.rows[0]);
+
+    if (typeof patientFirstName === "string" || typeof patientLastName === "string" || typeof patientDateOfBirth === "string") {
+      const newPatient = await pool.query("INSERT INTO patient(first_name, last_name, date_of_birth) VALUES ($1, $2, $3) RETURNING *", [
+        patientFirstName,
+        patientLastName,
+        patientDateOfBirth,
+      ]);
+      console.log("Inserted data:");
+      console.log(newPatient.rows[0]);
+      res.json(newPatient.rows[0]);
+    } else {
+      res.json("Invalid Inputs");
+    }
   } catch (err) {}
 });
 
@@ -38,8 +45,8 @@ app.post("/prediction", async (req, res) => {
 
 app.get("/patient/:name", async (req, res) => {
   try {
-    const { name: patientNmae } = req.params;
-    const patient = await pool.query("SELECT * FROM patient WHERE first_name = $1", [patientNmae]);
+    const { name: patientName } = req.params;
+    const patient = await pool.query("SELECT * FROM patient WHERE first_name = $1", [patientName]);
     console.log(patient.rows[0]);
     res.json(patient.rows[0]);
   } catch (err) {}

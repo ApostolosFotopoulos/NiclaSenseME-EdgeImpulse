@@ -1,11 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import globals from "./../globals.js";
 
-export default function Status({ msg, setMsg }) {
+export default function Status({ msg, setMsg, isGatheringData }) {
   const [buttonText, setButtonText] = useState("CONNECT NICLA");
   const [isConnecting, setConnectingState] = useState(false);
   const [isConnected, setConnectedState] = useState(false);
-  let body = {};
+  const [body, setBody] = useState({});
 
   const SERVICE_UUID = "9a48ecba-2e92-082f-c079-9e75aae428b1";
   const NiclaSenseME = {
@@ -117,39 +117,37 @@ export default function Status({ msg, setMsg }) {
 
   async function imitateConnection() {
     NiclaSenseME[sensor].polling = setInterval(async function () {
-      // console.log(isGatheringData);
-      const res = await fetch(`http://localhost:5000/patient/${globals.selectedPatientName}`);
-      const patient = await res.json();
-      console.log(patient);
-      const { patient_id: patientId } = patient;
-
       function getRandomFloat(min, max, decimals) {
         const str = (Math.random() * (max - min) + min).toFixed(decimals);
 
         return parseFloat(str);
       }
 
-      body = {
-        patientId: patientId,
+      setBody({
+        patientId: 1,
         normal: getRandomFloat(0, 1, 2),
         cp1: getRandomFloat(0, 1, 2),
         cp2: getRandomFloat(0, 1, 2),
-      };
-    }, 1000);
-
-    NiclaSenseME[sensor].submitting = setInterval(async function () {
-      console.log(body);
-      console.log(globals.isGatheringData);
-      console.log(globals.selectedPatientName);
-      const res = await fetch(`http://localhost:5000/prediction`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(body),
       });
-      const prediction = await res.json();
-      console.log(prediction);
     }, 1000);
   }
+
+  useEffect(() => {
+    if (isGatheringData) {
+      console.log("Gathering");
+    } else {
+      console.log("Not Gathering");
+    }
+    // console.log(body);
+    // console.log(globals.selectedPatientName);
+    // const res = await fetch(`http://localhost:5000/prediction`, {
+    //   method: "POST",
+    //   headers: { "Content-Type": "application/json" },
+    //   body: JSON.stringify(body),
+    // });
+    // const prediction = await res.json();
+    // console.log(prediction);
+  }, [body, isGatheringData]);
 
   async function connect() {
     toggleIsConnectingClass();
@@ -171,7 +169,9 @@ export default function Status({ msg, setMsg }) {
     <div className="col-container">
       <div className="status">
         <button
-          className={`status__button ${isConnecting ? "status__button--connecting" : ""} ${isConnected ? "status__button--connected" : ""}`}
+          className={`status__button ${isConnecting ? "status__button--connecting" : ""} ${
+            isConnected ? "status__button--connected" : ""
+          }`}
           onClick={connect}
         >
           {buttonText}

@@ -1,6 +1,6 @@
 import React from "react";
 
-export default function PatientInput({ field, data, setData, isGatheringData }) {
+export default function PatientInput({ field, placeholderText, data, setData, isGatheringData }) {
   return (
     <>
       <label className="patient__form-label" htmlFor="name">
@@ -9,7 +9,7 @@ export default function PatientInput({ field, data, setData, isGatheringData }) 
       <input
         required
         disabled={isGatheringData}
-        placeholder={`Enter Patient's ${field}`}
+        placeholder={placeholderText}
         type="text"
         className="patient__form-input"
         name={field}

@@ -17,7 +17,8 @@ img {
   /* FONTS */
   --FF-MAIN: "Roboto Mono", sans-serif;
   --MAIN-FONT-SIZE: 1rem;
-  --MAIN-FONT-COLOR: white;
+  --MAIN-FONT-COLOR: rgb(231, 231, 231);
+  --PLACEHOLDER-FONT-COLOR: rgb(156, 156, 156);
   --BUTTON-FONT-COLOR: black;
 
   /* BG COLORS */
@@ -44,12 +45,12 @@ body {
 input,
 textarea {
   font-family: var(--FF-MAIN);
-  color: white;
+  color: var(--MAIN-FONT-COLOR);
 }
 
 input::placeholder,
 textarea::placeholder {
-  color: white;
+  color: var(--PLACEHOLDER-FONT-COLOR);
 }
 
 h1,
@@ -127,6 +128,75 @@ button {
 .status__msg {
   width: 75%;
   text-align: center;
+}
+
+/* Recent Patients */
+.recent-patients {
+  background-color: var(--MAIN-BG-COLOR);
+  padding: 1rem;
+}
+
+.select-menu {
+  max-width: 330px;
+}
+
+.select-menu__button {
+  display: flex;
+  height: 55px;
+  background: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  align-items: center;
+  cursor: pointer;
+  justify-content: space-between;
+}
+
+.select-menu__options {
+  position: absolute;
+  overflow-y: auto;
+  max-height: 295px;
+  padding: 10px;
+  margin-top: 10px;
+  border-radius: 8px;
+  background: #fff;
+  opacity: 0;
+  transform: translateY(50px);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  transition: transform 0.4s, opacity 0.4s;
+}
+
+.select-menu__options--open {
+  display: block;
+  opacity: 1;
+  z-index: 10;
+  transform: translateY(0px);
+}
+
+.select-menu__option {
+  display: flex;
+  height: 55px;
+  cursor: pointer;
+  padding: 0 16px;
+  border-radius: 8px;
+  align-items: center;
+  background: #fff;
+}
+
+.select-menu__option:hover {
+  background: #f2f2f2;
+}
+
+.select-menu__option-text {
+  color: #333;
+}
+
+.select-menu__button-img {
+  font-size: 25px;
+  transition: transform 0.3s;
+}
+
+.select-menu__button-img--open {
+  transform: rotate(-180deg);
 }
 
 /* PATIENT */
@@ -212,32 +282,4 @@ button {
 .patient__details-button--collecting {
   background-color: grey;
   color: black;
-}
-
-@-webkit-keyframes fadein {
-  from {
-    visibility: hidden;
-
-    opacity: 0;
-  }
-
-  to {
-    visibility: visible;
-
-    opacity: 1;
-  }
-}
-
-@keyframes fadein {
-  from {
-    visibility: hidden;
-
-    opacity: 0;
-  }
-
-  to {
-    visibility: visible;
-
-    opacity: 1;
-  }
 }
