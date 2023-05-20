@@ -1,7 +1,7 @@
-const globals = {
+const constants = {
   debug: true,
   isGatheringData: false,
   selectedPatient: {},
 };
 
-export default globals;
+export default constants;

@@ -1,16 +1,14 @@
 import React, { useState, useRef, useEffect } from "react";
 import "boxicons/css/boxicons.min.css";
-import globals from "./../globals.js";
 
 export default function RecentPatients() {
   const [isMenuOpen, setMenu] = useState(false);
 
   function toggleMenu() {
     setMenu(!isMenuOpen);
-    globals.isMenuOpen = !globals.isMenuOpen;
   }
 
-  function useOutsideAlerter(ref) {
+  function useOutsideAlerter(ref, isMenuOpen) {
     useEffect(() => {
       //Alert if clicked on outside of element
       function handleClickOutside(event) {
@@ -28,7 +26,7 @@ export default function RecentPatients() {
   }
 
   const wrapperRef = useRef(null);
-  useOutsideAlerter(wrapperRef);
+  useOutsideAlerter(wrapperRef, isMenuOpen);
 
   return (
     <div className="col-container recent-patients">

@@ -1,11 +1,18 @@
 import React, { useEffect, useState } from "react";
-import globals from "./../globals.js";
+import constants from "constants";
+import { useDispatch, useSelector } from "react-redux";
+import { setStatus, toggleIsConnected, setIsConnected } from "./statusSlice";
 
-export default function Status({ msg, setMsg, isGatheringData }) {
+export default function Status() {
   const [buttonText, setButtonText] = useState("CONNECT NICLA");
-  const [isConnecting, setConnectingState] = useState(false);
-  const [isConnected, setConnectedState] = useState(false);
+  const [isConnecting, setIsConnecting] = useState(false);
   const [body, setBody] = useState({});
+
+  const msg = useSelector((state) => state.status.msg);
+  const isConnected = useSelector((state) => state.status.isConnected);
+  const isGatheringData = useSelector((state) => state.patientInfo.isGatheringData);
+
+  const dispatch = useDispatch();
 
   const SERVICE_UUID = "9a48ecba-2e92-082f-c079-9e75aae428b1";
   const NiclaSenseME = {
@@ -21,20 +28,25 @@ export default function Status({ msg, setMsg, isGatheringData }) {
   const [sensor] = sensors;
 
   function toggleIsConnectingClass() {
-    setConnectingState(!isConnecting);
-    setButtonText("PAIRING");
+    if (!isConnecting) {
+      setButtonText("PAIRING");
+    }
+    setIsConnecting(!isConnecting);
   }
 
   function toggleIsConnectedClass() {
-    setConnectedState(!isConnected);
-    setButtonText("PAIRED");
+    console.log(isConnected);
+    if (!isConnected) {
+      setButtonText("PAIRED");
+    }
+    dispatch(toggleIsConnected());
   }
 
   function removeStatusButtonStyles() {
-    setConnectingState(false);
-    setConnectedState(false);
+    setIsConnecting(false);
+    dispatch(setIsConnected(false));
     setButtonText("CONNECT");
-    setMsg("Click the connect button to connect Nicla Sense ME");
+    dispatch(setStatus("Waiting..."));
   }
 
   function onDisconnected(event) {
@@ -45,7 +57,7 @@ export default function Status({ msg, setMsg, isGatheringData }) {
         clearInterval(NiclaSenseME[sensor].polling);
       }
     }
-    setMsg("Disconnected");
+    dispatch(setStatus("Disconnected"));
   }
 
   async function connectNicla() {
@@ -57,15 +69,15 @@ export default function Status({ msg, setMsg, isGatheringData }) {
       ],
     });
 
-    setMsg("Connecting to device ...");
+    dispatch(setStatus("Connecting to device ..."));
     device.addEventListener("gattserverdisconnected", onDisconnected);
     const server = await device.gatt.connect();
 
-    setMsg("Getting primary service ...");
+    dispatch(setStatus("Getting primary service ..."));
     const service = await server.getPrimaryService(SERVICE_UUID);
 
     // Set up the characteristics
-    setMsg("Characteristic " + sensor + "...");
+    dispatch(setStatus("Characteristic " + sensor + "..."));
     NiclaSenseME[sensor].characteristic = await service.getCharacteristic(NiclaSenseME[sensor].uuid);
     // Set up polling for read
     if (NiclaSenseME[sensor].properties.includes("BLERead")) {
@@ -87,7 +99,7 @@ export default function Status({ msg, setMsg, isGatheringData }) {
             console.log(predictions);
 
             // console.log(isGatheringData);
-            let res = await fetch(`http://localhost:5000/patient/${globals.selectedPatientName}`);
+            let res = await fetch(`http://localhost:5000/patient/${constants.selectedPatientName}`);
             const patient = await res.json();
             console.log(patient);
             const { patient_id: patientId } = patient;
@@ -112,10 +124,11 @@ export default function Status({ msg, setMsg, isGatheringData }) {
     }
     toggleIsConnectingClass();
     toggleIsConnectedClass();
-    setMsg("Characteristics configured");
+    dispatch(setStatus("Characteristics configured"));
   }
 
   async function imitateConnection() {
+    console.log("dddd");
     NiclaSenseME[sensor].polling = setInterval(async function () {
       function getRandomFloat(min, max, decimals) {
         const str = (Math.random() * (max - min) + min).toFixed(decimals);
@@ -130,6 +143,7 @@ export default function Status({ msg, setMsg, isGatheringData }) {
         cp2: getRandomFloat(0, 1, 2),
       });
     }, 1000);
+    toggleIsConnectedClass();
   }
 
   useEffect(() => {
@@ -151,10 +165,10 @@ export default function Status({ msg, setMsg, isGatheringData }) {
 
   async function connect() {
     toggleIsConnectingClass();
-    setMsg("Requesting device ...");
+    dispatch(setStatus("Requesting device ..."));
 
     try {
-      if (globals.debug) {
+      if (constants.debug) {
         imitateConnection();
       } else {
         connectNicla();
@@ -169,9 +183,9 @@ export default function Status({ msg, setMsg, isGatheringData }) {
     <div className="col-container">
       <div className="status">
         <button
-          className={`status__button ${isConnecting ? "status__button--connecting" : ""} ${
-            isConnected ? "status__button--connected" : ""
-          }`}
+          className={`status__button 
+          ${isConnecting ? "status__button--connecting" : ""} 
+          ${isConnected ? "status__button--connected" : ""}`}
           onClick={connect}
         >
           {buttonText}
