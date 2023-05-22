@@ -20,4 +20,7 @@ export const patientInfoSlice = createSlice({
 
 export const { toggleIsGatheringData, setSelectedpatient } = patientInfoSlice.actions;
 
+export const selectIsGatheringData = (state) => state.patientInfo.isGatheringData;
+export const selectSelectedPatient = (state) => state.patientInfo.selectedPatient;
+
 export default patientInfoSlice.reducer;

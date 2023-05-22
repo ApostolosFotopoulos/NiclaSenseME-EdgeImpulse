@@ -4,37 +4,49 @@ import { useDispatch, useSelector } from "react-redux";
 import PatientInput from "./PatientInput";
 import SelectedPatientInput from "./SelectedPatientInput";
 import { setStatus } from "features/status/statusSlice";
+import { selectIsConnected } from "features/status/statusSlice";
 import { toggleIsGatheringData, setSelectedpatient } from "./patientInfoSlice";
+import { selectIsGatheringData, selectSelectedPatient } from "./patientInfoSlice";
+import { useLazyGetPatientQuery, usePostPatientMutation } from "features/api/apiSlice";
 
 moment.suppressDeprecationWarnings = true;
+//Valid inserted date formats
 const formats = ["DD/MM/YYYY", "D/M/YYYY", "DD-MM-YYYY", "D-M-YYYY"];
 
 export default function PatientInfo() {
+  //Local state
   const [patientFirstName, setPatientFirstName] = useState("");
   const [patientLastName, setPatientLastName] = useState("");
   const [patientDateOfBirth, setPatientDateOfBirth] = useState("");
   const [gatherButtonText, setGatherButtonText] = useState("GATHER DATA");
 
-  const isGatheringData = useSelector((state) => state.patientInfo.isGatheringData);
-  const selectedPatient = useSelector((state) => state.patientInfo.selectedPatient);
-  const isConnected = useSelector((state) => state.status.isConnected);
+  //Redux state
+  const isGatheringData = useSelector(selectIsGatheringData);
+  const selectedPatient = useSelector(selectSelectedPatient);
+  const isConnected = useSelector(selectIsConnected);
   const dispatch = useDispatch();
 
+  //Queries
+  const [getPatient] = useLazyGetPatientQuery();
+  const [insertPatient] = usePostPatientMutation();
+
+  //Clear the form
   function clearForm() {
     setPatientFirstName("");
     setPatientLastName("");
     setPatientDateOfBirth("");
   }
 
+  //Check if the inserted year is valid
   function isYearValid(year) {
-    return year > 1920 && year < 2023;
+    return year > new Date().getFullYear() - 100 && year < new Date().getFullYear();
   }
 
-  function submit(e) {
+  //Select and submit the new patient, if he doesn't already exist, in the database
+  async function submit(e) {
     e.preventDefault();
-    console.log(patientDateOfBirth);
     const checkDate = moment(patientDateOfBirth, formats, true);
-    console.log(checkDate.year());
+
     if (!checkDate.isValid() || !isYearValid(checkDate.year())) {
       console.log("Trash");
       dispatch(setStatus("Invalid date"));
@@ -43,10 +55,34 @@ export default function PatientInfo() {
     } else {
       dispatch(setSelectedpatient({ patientFirstName, patientLastName, patientDateOfBirth }));
       clearForm();
-      dispatch(setStatus("Patient Selected"));
+      try {
+        //Format the date to ISO8601
+        const patientDateOfBirthIso = checkDate.toISOString(true).split("T")[0];
+
+        //Ckeck if the patient exists
+        let res = await getPatient({
+          patientFirstName,
+          patientLastName,
+          patientDateOfBirth: patientDateOfBirthIso,
+        }).unwrap();
+
+        dispatch(setStatus(`Patient ${patientFirstName} ${patientLastName} Selected`));
+        //If the patient doesn't exist, insert the patient in the database
+        if (res === null) {
+          res = await insertPatient({
+            patientFirstName,
+            patientLastName,
+            patientDateOfBirth: patientDateOfBirthIso,
+          }).unwrap();
+          console.log(res);
+        }
+      } catch (e) {
+        dispatch(setStatus("Error communicating with the database"));
+      }
     }
   }
 
+  //Enable gathering data to the database
   async function gatherData() {
     if (isConnected) {
       if (!isGatheringData) {

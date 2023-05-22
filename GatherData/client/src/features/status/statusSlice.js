@@ -23,4 +23,7 @@ export const statusSlice = createSlice({
 
 export const { setStatus, toggleIsConnected, setIsConnected } = statusSlice.actions;
 
+export const selectMsg = (state) => state.status.msg;
+export const selectIsConnected = (state) => state.status.isConnected;
+
 export default statusSlice.reducer;

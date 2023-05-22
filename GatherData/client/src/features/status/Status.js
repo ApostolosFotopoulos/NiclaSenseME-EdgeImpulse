@@ -2,18 +2,23 @@ import React, { useEffect, useState } from "react";
 import constants from "constants";
 import { useDispatch, useSelector } from "react-redux";
 import { setStatus, toggleIsConnected, setIsConnected } from "./statusSlice";
+import { selectMsg, selectIsConnected } from "./statusSlice";
+import { selectIsGatheringData } from "features/patientInfo/patientInfoSlice";
 
 export default function Status() {
+  //Local state
   const [buttonText, setButtonText] = useState("CONNECT NICLA");
   const [isConnecting, setIsConnecting] = useState(false);
   const [body, setBody] = useState({});
 
-  const msg = useSelector((state) => state.status.msg);
-  const isConnected = useSelector((state) => state.status.isConnected);
-  const isGatheringData = useSelector((state) => state.patientInfo.isGatheringData);
+  //Redux state
+  const msg = useSelector(selectMsg);
+  const isConnected = useSelector(selectIsConnected);
+  const isGatheringData = useSelector(selectIsGatheringData);
 
   const dispatch = useDispatch();
 
+  //Nicla service
   const SERVICE_UUID = "9a48ecba-2e92-082f-c079-9e75aae428b1";
   const NiclaSenseME = {
     predictions: {
@@ -42,6 +47,7 @@ export default function Status() {
     dispatch(toggleIsConnected());
   }
 
+  //Remove connect button styles
   function removeStatusButtonStyles() {
     setIsConnecting(false);
     dispatch(setIsConnected(false));
@@ -49,6 +55,7 @@ export default function Status() {
     dispatch(setStatus("Waiting..."));
   }
 
+  //Stop polling when nicla disconnects
   function onDisconnected(event) {
     removeStatusButtonStyles();
     // clear read polling
@@ -60,6 +67,7 @@ export default function Status() {
     dispatch(setStatus("Disconnected"));
   }
 
+  //Connect with nicla via bluetooth
   async function connectNicla() {
     const device = await navigator.bluetooth.requestDevice({
       filters: [
@@ -127,6 +135,7 @@ export default function Status() {
     dispatch(setStatus("Characteristics configured"));
   }
 
+  //Imitate nicla data gathering for debugging
   async function imitateConnection() {
     console.log("dddd");
     NiclaSenseME[sensor].polling = setInterval(async function () {
@@ -142,7 +151,7 @@ export default function Status() {
         cp1: getRandomFloat(0, 1, 2),
         cp2: getRandomFloat(0, 1, 2),
       });
-    }, 1000);
+    }, 2000);
     toggleIsConnectedClass();
   }
 
@@ -152,17 +161,9 @@ export default function Status() {
     } else {
       console.log("Not Gathering");
     }
-    // console.log(body);
-    // console.log(globals.selectedPatientName);
-    // const res = await fetch(`http://localhost:5000/prediction`, {
-    //   method: "POST",
-    //   headers: { "Content-Type": "application/json" },
-    //   body: JSON.stringify(body),
-    // });
-    // const prediction = await res.json();
-    // console.log(prediction);
   }, [body, isGatheringData]);
 
+  //Start the connection
   async function connect() {
     toggleIsConnectingClass();
     dispatch(setStatus("Requesting device ..."));
@@ -174,7 +175,6 @@ export default function Status() {
         connectNicla();
       }
     } catch (e) {
-      //   console.log(e);
       removeStatusButtonStyles();
     }
   }
@@ -183,9 +183,9 @@ export default function Status() {
     <div className="col-container">
       <div className="status">
         <button
-          className={`status__button 
-          ${isConnecting ? "status__button--connecting" : ""} 
-          ${isConnected ? "status__button--connected" : ""}`}
+          className={`status__button ${isConnecting ? "status__button--connecting" : ""} ${
+            isConnected ? "status__button--connected" : ""
+          }`}
           onClick={connect}
         >
           {buttonText}
