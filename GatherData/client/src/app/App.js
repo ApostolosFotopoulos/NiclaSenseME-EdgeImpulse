@@ -1,17 +1,15 @@
-import "style/index.css";
-import React, { useState } from "react";
+import "styles/index.css";
+import React from "react";
 import Status from "features/status/Status";
 import PatientInfo from "features/patientInfo/PatientInfo";
 import RecentPatients from "features/recentPatients/RecentPatients";
 
 function App() {
-  const [isGatheringData, setGatheringData] = useState(false);
-
   return (
     <section className="main-container">
-      <Status isGatheringData={isGatheringData} />
+      <Status />
       <RecentPatients />
-      <PatientInfo isGatheringData={isGatheringData} setGatheringData={setGatheringData} />
+      <PatientInfo />
     </section>
   );
 }

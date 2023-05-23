@@ -44,13 +44,30 @@ body {
 
 input,
 textarea {
+  color-scheme: dark;
   font-family: var(--FF-MAIN);
   color: var(--MAIN-FONT-COLOR);
+  background-color: var(--INPUT-BG-COLOR);
 }
 
 input::placeholder,
 textarea::placeholder {
   color: var(--PLACEHOLDER-FONT-COLOR);
+}
+
+/* Change autocomplete styles in WebKit */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+textarea:-webkit-autofill,
+textarea:-webkit-autofill:hover,
+textarea:-webkit-autofill:focus,
+select:-webkit-autofill,
+select:-webkit-autofill:hover,
+select:-webkit-autofill:focus {
+  border: none;
+  -webkit-text-fill-color: var(--MAIN-FONT-COLOR);
+  transition: background-color 10000s ease-in-out 0s;
 }
 
 h1,
@@ -160,16 +177,18 @@ button {
   border-radius: 8px;
   background: #fff;
   opacity: 0;
+  z-index: -1;
   transform: translateY(50px);
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  transition: transform 0.4s, opacity 0.4s;
+  transition: transform 0.4s, opacity 0.4s, z-index 2s;
 }
 
 .select-menu__options--open {
   display: block;
   opacity: 1;
-  z-index: 10;
+  z-index: 1;
   transform: translateY(0px);
+  transition: transform 0.4s, opacity 0.4s, z-index 0.4s;
 }
 
 .select-menu__option {
@@ -230,7 +249,6 @@ button {
   align-self: center;
   padding: 0.5rem;
   border: none;
-  background-color: var(--INPUT-BG-COLOR);
   border-radius: 5px;
 }
 
@@ -262,7 +280,6 @@ button {
   align-self: center;
   padding: 0.5rem;
   border: none;
-  background-color: var(--INPUT-BG-COLOR);
   border-radius: 5px;
 }
 

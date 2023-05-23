@@ -15,7 +15,14 @@ export const apiSlice = createApi({
         body: body,
       }),
     }),
+    postPrediction: builder.mutation({
+      query: (body) => ({
+        url: "prediction",
+        method: "POST",
+        body: body,
+      }),
+    }),
   }),
 });
 
-export const { useLazyGetPatientQuery, usePostPatientMutation } = apiSlice;
+export const { useLazyGetPatientQuery, usePostPatientMutation, usePostPredictionMutation } = apiSlice;
