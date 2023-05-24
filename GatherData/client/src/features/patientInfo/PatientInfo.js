@@ -5,8 +5,8 @@ import SelectedPatientInput from "./SelectedPatientInput";
 import { checkRes, isValidYear, isEmptyObj, isValidDate, toIsoFormat } from "utils/utils";
 import { setStatus } from "features/status/statusSlice";
 import { selectIsConnected } from "features/status/statusSlice";
-import { toggleIsGatheringData, setSelectedpatient } from "./patientInfoSlice";
-import { selectIsGatheringData, selectSelectedPatient } from "./patientInfoSlice";
+import { toggleIsGatheringData, setGatherButtonText, setSelectedpatient } from "./patientInfoSlice";
+import { selectIsGatheringData, selectGatherButtonText, selectSelectedPatient } from "./patientInfoSlice";
 import { useLazyGetPatientQuery, usePostPatientMutation } from "features/api/apiSlice";
 
 export default function PatientInfo() {
@@ -14,10 +14,10 @@ export default function PatientInfo() {
   const [patientFirstName, setPatientFirstName] = useState("");
   const [patientLastName, setPatientLastName] = useState("");
   const [patientDateOfBirth, setPatientDateOfBirth] = useState("");
-  const [gatherButtonText, setGatherButtonText] = useState("GATHER DATA");
 
   // Redux state
   const isGatheringData = useSelector(selectIsGatheringData);
+  const gatherButtonText = useSelector(selectGatherButtonText);
   const selectedPatient = useSelector(selectSelectedPatient);
   const isConnected = useSelector(selectIsConnected);
   const dispatch = useDispatch();
@@ -80,9 +80,9 @@ export default function PatientInfo() {
       dispatch(setStatus("No patient is selected"));
     } else {
       if (!isGatheringData) {
-        setGatherButtonText("GATHERING");
+        dispatch(setGatherButtonText("GATHERING"));
       } else {
-        setGatherButtonText("GATHER DATA");
+        dispatch(setGatherButtonText("GATHER DATA"));
       }
       dispatch(toggleIsGatheringData());
     }

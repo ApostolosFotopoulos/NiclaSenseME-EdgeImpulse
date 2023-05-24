@@ -25,7 +25,6 @@ app.get("/patient/:fname&:lname&:dob", async (req, res) => {
   try {
     console.log(req.params);
     let { fname: patientFirstName, lname: patientLastName, dob: patientDateOfBirth } = req.params;
-    patientFirstName = 1;
     if (isString(patientFirstName) && isString(patientLastName) && isString(patientDateOfBirth)) {
       const patient = await pool.query(
         "SELECT * FROM patient WHERE first_name=$1 AND last_name=$2 AND date_of_birth=$3",

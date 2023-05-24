@@ -3,6 +3,7 @@ import { DEBUG, SERVICE_UUID, CHARACTERISTIC_UUID, SET_INTERVAL_TIME } from "uti
 import { useDispatch, useSelector } from "react-redux";
 import { setStatus, toggleIsConnected, setIsConnected } from "./statusSlice";
 import { selectMsg, selectIsConnected } from "./statusSlice";
+import { stopGatheringData, setGatherButtonText } from "features/patientInfo/patientInfoSlice";
 import { selectIsGatheringData } from "features/patientInfo/patientInfoSlice";
 
 export default function Status() {
@@ -24,7 +25,6 @@ export default function Status() {
 
   // Set local variables
   useEffect(() => {
-    console.log("Start");
     my.NiclaSenseME = {
       predictions: {
         uuid: CHARACTERISTIC_UUID,
@@ -36,6 +36,8 @@ export default function Status() {
 
     const sensors = Object.keys(my.NiclaSenseME);
     [my.sensor] = sensors;
+
+    my.initialRender = true;
   }, [my]);
 
   // Nicla service
@@ -47,9 +49,10 @@ export default function Status() {
   }
 
   function toggleIsConnectedClass() {
-    console.log(isConnected);
     if (!isConnected) {
       setButtonText("PAIRED");
+    } else {
+      setButtonText("CONNECT NICLA");
     }
     dispatch(toggleIsConnected());
   }
@@ -58,17 +61,15 @@ export default function Status() {
   function removeStatusButtonStyles() {
     setIsConnecting(false);
     dispatch(setIsConnected(false));
-    setButtonText("CONNECT");
+    setButtonText("CONNECT NICLA");
     dispatch(setStatus("Waiting..."));
+    dispatch(stopGatheringData());
+    dispatch(setGatherButtonText("GATHER DATA"));
   }
 
   // Stop polling when nicla disconnects
   function onDisconnected(event) {
     removeStatusButtonStyles();
-    // clear read polling
-    if (typeof my.NiclaSenseME[my.sensor].polling !== "undefined") {
-      clearInterval(my.NiclaSenseME[my.sensor].polling);
-    }
     dispatch(setStatus("Disconnected"));
   }
 
@@ -132,15 +133,16 @@ export default function Status() {
   }
 
   // Imitate nicla data gathering for debugging
+
   async function imitateConnection() {
-    // console.log(NiclaSenseME[sensor]);
+    clearInterval(my.NiclaSenseME[my.sensor].polling);
     my.NiclaSenseME[my.sensor].polling = setInterval(async function () {
       function getRandomFloat(min, max, decimals) {
         const str = (Math.random() * (max - min) + min).toFixed(decimals);
 
         return parseFloat(str);
       }
-
+      console.log("1");
       setBody({
         patientId: 1,
         normal: getRandomFloat(0, 1, 2),
@@ -150,6 +152,20 @@ export default function Status() {
     }, SET_INTERVAL_TIME);
     toggleIsConnectedClass();
   }
+
+  //Stop polling if user disconnects stops collecting with nicla
+  useEffect(() => {
+    if (!isConnected) {
+      clearInterval(my.NiclaSenseME[my.sensor].polling);
+    }
+  }, [my, isConnected]);
+
+  //Run on unmount
+  useEffect(() => {
+    return () => {
+      clearInterval(my.NiclaSenseME[my.sensor].polling);
+    };
+  }, [my]);
 
   useEffect(() => {
     if (isGatheringData) {
@@ -161,6 +177,11 @@ export default function Status() {
 
   // Start the connection
   async function connect() {
+    if (isConnected) {
+      removeStatusButtonStyles();
+      return;
+    }
+
     toggleIsConnectingClass();
     dispatch(setStatus("Requesting device ..."));
 
