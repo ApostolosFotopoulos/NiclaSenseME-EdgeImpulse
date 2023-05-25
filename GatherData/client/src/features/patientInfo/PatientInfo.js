@@ -2,10 +2,10 @@ import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import PatientInput from "./PatientInput";
 import SelectedPatientInput from "./SelectedPatientInput";
-import { checkRes, isValidYear, isEmptyObj, isValidDate, toIsoFormat } from "utils/utils";
+import { checkRes, isValidYear, isEmptyObj, isValidDate, toIsoDayFormat } from "utils/utils";
 import { setStatus } from "features/status/statusSlice";
 import { selectIsConnected } from "features/status/statusSlice";
-import { toggleIsGatheringData, setGatherButtonText, setSelectedpatient } from "./patientInfoSlice";
+import { enableIsGatheringData, disableIsGatheringData, setSelectedpatient } from "./patientInfoSlice";
 import { selectIsGatheringData, selectGatherButtonText, selectSelectedPatient } from "./patientInfoSlice";
 import { useLazyGetPatientQuery, usePostPatientMutation } from "features/api/apiSlice";
 
@@ -39,36 +39,40 @@ export default function PatientInfo() {
 
     if (!isValidDate(patientDateOfBirth) || !isValidYear(patientDateOfBirth)) {
       dispatch(setStatus("Invalid date"));
-    } else if (isGatheringData) {
+      return;
+    }
+
+    if (isGatheringData) {
       dispatch(setStatus("Can't edit patient's name while gathering data"));
-    } else {
-      clearForm();
-      try {
-        // Format the date to ISO8601
-        const patientDateOfBirthIso = toIsoFormat(patientDateOfBirth);
-        // Ckeck if the patient exists
-        let res = await getPatient({
+      return;
+    }
+
+    try {
+      // Format the date to ISO8601
+      const patientDateOfBirthIso = toIsoDayFormat(patientDateOfBirth);
+      // Ckeck if the patient exists
+      let res = await getPatient({
+        patientFirstName,
+        patientLastName,
+        patientDateOfBirth: patientDateOfBirthIso,
+      }).unwrap();
+      checkRes(res);
+      // If the patient doesn't exist, insert the patient in the database
+      if (res === null) {
+        res = await insertPatient({
           patientFirstName,
           patientLastName,
           patientDateOfBirth: patientDateOfBirthIso,
         }).unwrap();
         checkRes(res);
-        dispatch(setStatus(`Patient ${patientFirstName} ${patientLastName} selected`));
-        // If the patient doesn't exist, insert the patient in the database
-        if (res === null) {
-          res = await insertPatient({
-            patientFirstName,
-            patientLastName,
-            patientDateOfBirth: patientDateOfBirthIso,
-          }).unwrap();
-          checkRes(res);
-        }
-
-        const { id: patientId } = res;
-        dispatch(setSelectedpatient({ patientId, patientFirstName, patientLastName, patientDateOfBirth }));
-      } catch (e) {
-        dispatch(setStatus("Error communicating with the database"));
       }
+
+      const { id: patientId } = res;
+      dispatch(setSelectedpatient({ patientId, patientFirstName, patientLastName, patientDateOfBirth }));
+      dispatch(setStatus(`Patient ${patientFirstName} ${patientLastName} selected`));
+      clearForm();
+    } catch (e) {
+      dispatch(setStatus("Error communicating with the database"));
     }
   }
 
@@ -76,16 +80,20 @@ export default function PatientInfo() {
   async function gatherData() {
     if (!isConnected) {
       dispatch(setStatus("Nicla isn't connected"));
-    } else if (isEmptyObj(selectedPatient)) {
-      dispatch(setStatus("No patient is selected"));
-    } else {
-      if (!isGatheringData) {
-        dispatch(setGatherButtonText("GATHERING"));
-      } else {
-        dispatch(setGatherButtonText("GATHER DATA"));
-      }
-      dispatch(toggleIsGatheringData());
+      return;
     }
+
+    if (isEmptyObj(selectedPatient)) {
+      dispatch(setStatus("No patient is selected"));
+      return;
+    }
+
+    if (isGatheringData) {
+      dispatch(disableIsGatheringData());
+      return;
+    }
+
+    dispatch(enableIsGatheringData());
   }
 
   return (

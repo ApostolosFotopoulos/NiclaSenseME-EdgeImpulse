@@ -1,23 +1,11 @@
 const express = require("express");
 const cors = require("cors");
 const pool = require("./db");
+const { isFloat, isInt, isString } = require("./utils");
 
 const app = express();
 app.use(cors());
 app.use(express.json());
-
-// Utility Functions
-function isFloat(n) {
-  return Number(n) === n && n % 1 !== 0;
-}
-
-function isInt(n) {
-  return Number.isInteger(n);
-}
-
-function isString(str) {
-  return typeof str === "string";
-}
 
 // PATIENT QUERIES
 // Get patient with first name, last name and date of birth

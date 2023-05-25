@@ -27,6 +27,11 @@ export function isValidYear(date) {
 }
 
 // Change a string date to ISO8601 format
-export function toIsoFormat(date) {
+export function toIsoDayFormat(date) {
   return moment(date, formats, true).toISOString(true).split("T")[0];
+}
+
+//Get current date in ISO8601 format
+export function getCurrentDate() {
+  return moment(new Date(), formats, true).toISOString(true).split("T")[0];
 }

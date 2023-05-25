@@ -10,11 +10,13 @@ export const patientInfoSlice = createSlice({
   name: "patientInfo",
   initialState,
   reducers: {
-    toggleIsGatheringData: (state) => {
-      state.isGatheringData = !state.isGatheringData;
+    enableIsGatheringData: (state) => {
+      state.isGatheringData = true;
+      state.gatherButtonText = "GATHERING";
     },
-    stopGatheringData: (state) => {
+    disableIsGatheringData: (state) => {
       state.isGatheringData = false;
+      state.gatherButtonText = "GATHER DATA";
     },
     setGatherButtonText: (state, txt) => {
       state.gatherButtonText = txt.payload;
@@ -25,7 +27,7 @@ export const patientInfoSlice = createSlice({
   },
 });
 
-export const { toggleIsGatheringData, stopGatheringData, setGatherButtonText, setSelectedpatient } =
+export const { enableIsGatheringData, disableIsGatheringData, setGatherButtonText, setSelectedpatient } =
   patientInfoSlice.actions;
 
 export const selectIsGatheringData = (state) => state.patientInfo.isGatheringData;

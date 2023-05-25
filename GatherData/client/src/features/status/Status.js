@@ -1,10 +1,18 @@
 import React, { useEffect, useRef, useState } from "react";
 import { DEBUG, SERVICE_UUID, CHARACTERISTIC_UUID, SET_INTERVAL_TIME } from "utils/constants";
 import { useDispatch, useSelector } from "react-redux";
-import { setStatus, toggleIsConnected, setIsConnected } from "./statusSlice";
-import { selectMsg, selectIsConnected } from "./statusSlice";
-import { stopGatheringData, setGatherButtonText } from "features/patientInfo/patientInfoSlice";
-import { selectIsGatheringData } from "features/patientInfo/patientInfoSlice";
+import { checkRes, getCurrentDate } from "utils/utils";
+import {
+  setStatus,
+  enableIsConnected,
+  disableIsConnected,
+  disableIsConnecting,
+  enableIsConnecting,
+} from "./statusSlice";
+import { selectMsg, selectConnectButtonText, selectIsConnecting, selectIsConnected } from "./statusSlice";
+import { disableIsGatheringData } from "features/patientInfo/patientInfoSlice";
+import { selectIsGatheringData, selectSelectedPatient } from "features/patientInfo/patientInfoSlice";
+import { usePostPredictionMutation } from "features/api/apiSlice";
 
 export default function Status() {
   // Local variables
@@ -12,16 +20,19 @@ export default function Status() {
   const { current: my } = compRef;
 
   // Local state
-  const [buttonText, setButtonText] = useState("CONNECT NICLA");
-  const [isConnecting, setIsConnecting] = useState(false);
-  const [body, setBody] = useState({});
+  const [predictionsBody, setPredictionsBody] = useState({});
 
   // Redux state
   const msg = useSelector(selectMsg);
+  const connectButtonText = useSelector(selectConnectButtonText);
+  const isConnecting = useSelector(selectIsConnecting);
   const isConnected = useSelector(selectIsConnected);
   const isGatheringData = useSelector(selectIsGatheringData);
-
+  const selectedPatient = useSelector(selectSelectedPatient);
   const dispatch = useDispatch();
+
+  //Queries
+  const [insertPrediction] = usePostPredictionMutation();
 
   // Set local variables
   useEffect(() => {
@@ -40,37 +51,16 @@ export default function Status() {
     my.initialRender = true;
   }, [my]);
 
-  // Nicla service
-  function toggleIsConnectingClass() {
-    if (!isConnecting) {
-      setButtonText("PAIRING");
-    }
-    setIsConnecting(!isConnecting);
-  }
-
-  function toggleIsConnectedClass() {
-    if (!isConnected) {
-      setButtonText("PAIRED");
-    } else {
-      setButtonText("CONNECT NICLA");
-    }
-    dispatch(toggleIsConnected());
-  }
-
   // Remove connect button styles
-  function removeStatusButtonStyles() {
-    setIsConnecting(false);
-    dispatch(setIsConnected(false));
-    setButtonText("CONNECT NICLA");
-    dispatch(setStatus("Waiting..."));
-    dispatch(stopGatheringData());
-    dispatch(setGatherButtonText("GATHER DATA"));
+  function stopConnection() {
+    clearInterval(my.NiclaSenseME[my.sensor].polling);
+    dispatch(disableIsConnected());
+    dispatch(disableIsGatheringData());
   }
 
   // Stop polling when nicla disconnects
   function onDisconnected(event) {
-    removeStatusButtonStyles();
-    dispatch(setStatus("Disconnected"));
+    stopConnection();
   }
 
   // Connect with nicla via bluetooth
@@ -114,22 +104,17 @@ export default function Status() {
             }
             console.log(predictions);
 
-            const body = {
-              //patientId: patientId,
+            setPredictionsBody({
               normal: parseFloat(predictions[3].value),
               cp1: parseFloat(predictions[0].value),
               cp2: parseFloat(predictions[1].value),
-            };
-            console.log(JSON.stringify(body));
+            });
           })
           .catch((e) => {
             // console.log(e);
           });
       }, SET_INTERVAL_TIME);
     }
-    toggleIsConnectingClass();
-    toggleIsConnectedClass();
-    dispatch(setStatus("Characteristics configured"));
   }
 
   // Imitate nicla data gathering for debugging
@@ -143,22 +128,13 @@ export default function Status() {
         return parseFloat(str);
       }
       console.log("1");
-      setBody({
-        patientId: 1,
+      setPredictionsBody({
         normal: getRandomFloat(0, 1, 2),
         cp1: getRandomFloat(0, 1, 2),
         cp2: getRandomFloat(0, 1, 2),
       });
     }, SET_INTERVAL_TIME);
-    toggleIsConnectedClass();
   }
-
-  //Stop polling if user disconnects stops collecting with nicla
-  useEffect(() => {
-    if (!isConnected) {
-      clearInterval(my.NiclaSenseME[my.sensor].polling);
-    }
-  }, [my, isConnected]);
 
   //Run on unmount
   useEffect(() => {
@@ -168,22 +144,36 @@ export default function Status() {
   }, [my]);
 
   useEffect(() => {
+    console.log("Run use effect");
+    async function postPrediction() {
+      try {
+        const body = {
+          patientId: selectedPatient.patientId,
+          ...predictionsBody,
+          predictionDate: getCurrentDate(),
+        };
+        let res = await insertPrediction(body).unwrap();
+        checkRes(res);
+      } catch (e) {
+        dispatch(setStatus("Error communicating with the database"));
+      }
+    }
+
     if (isGatheringData) {
-      console.log("Gathering");
+      postPrediction();
     } else {
       console.log("Not Gathering");
     }
-  }, [body, isGatheringData]);
+  }, [predictionsBody, isGatheringData, selectedPatient, insertPrediction, dispatch]);
 
   // Start the connection
   async function connect() {
     if (isConnected) {
-      removeStatusButtonStyles();
+      stopConnection();
       return;
     }
 
-    toggleIsConnectingClass();
-    dispatch(setStatus("Requesting device ..."));
+    dispatch(enableIsConnecting());
 
     try {
       if (DEBUG) {
@@ -191,8 +181,11 @@ export default function Status() {
       } else {
         connectNicla();
       }
+
+      dispatch(disableIsConnecting());
+      dispatch(enableIsConnected());
     } catch (e) {
-      removeStatusButtonStyles();
+      stopConnection();
     }
   }
 
@@ -205,7 +198,7 @@ export default function Status() {
           }`}
           onClick={connect}
         >
-          {buttonText}
+          {connectButtonText}
         </button>
         <div className="status__msg">{msg}</div>
       </div>

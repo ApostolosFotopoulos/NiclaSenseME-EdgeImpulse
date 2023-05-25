@@ -2,6 +2,8 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   msg: "Waiting ...",
+  connectButtonText: "CONNECT NICLA",
+  isConnecting: false,
   isConnected: false,
 };
 
@@ -12,18 +14,34 @@ export const statusSlice = createSlice({
     setStatus: (state, msg) => {
       state.msg = msg.payload;
     },
-    toggleIsConnected: (state) => {
-      state.isConnected = !state.isConnected;
+    enableIsConnecting: (state) => {
+      state.isConnecting = true;
+      state.connectButtonText = "CONNECTING";
+      state.msg = "Requesting device ...";
     },
-    setIsConnected: (state, isConnected) => {
-      state.isConnected = isConnected.payload;
+    disableIsConnecting: (state) => {
+      state.isConnecting = false;
+    },
+    enableIsConnected: (state) => {
+      state.isConnected = true;
+      state.connectButtonText = "CONNECTED";
+      state.msg = "Characteristics configured";
+    },
+    disableIsConnected: (state) => {
+      state.isConnecting = false;
+      state.isConnected = false;
+      state.connectButtonText = "CONNECT NICLA";
+      state.msg = "Waiting ...";
     },
   },
 });
 
-export const { setStatus, toggleIsConnected, setIsConnected } = statusSlice.actions;
+export const { setStatus, enableIsConnecting, disableIsConnecting, enableIsConnected, disableIsConnected } =
+  statusSlice.actions;
 
 export const selectMsg = (state) => state.status.msg;
+export const selectIsConnecting = (state) => state.status.isConnecting;
 export const selectIsConnected = (state) => state.status.isConnected;
+export const selectConnectButtonText = (state) => state.status.connectButtonText;
 
 export default statusSlice.reducer;
