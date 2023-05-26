@@ -60,6 +60,7 @@ export default function Status() {
 
   // Stop polling when nicla disconnects
   function onDisconnected(event) {
+    console.log("Disconnected");
     stopConnection();
   }
 
@@ -90,7 +91,7 @@ export default function Status() {
       my.NiclaSenseME[my.sensor].polling = setInterval(function () {
         my.NiclaSenseME[my.sensor].characteristic
           .readValue()
-          .then(async function (data) {
+          .then(function (data) {
             const decodedData = new TextDecoder().decode(data);
             const elements = decodedData.split(",");
             const predictions = [];
@@ -102,13 +103,22 @@ export default function Status() {
               };
               predictions.push(pr);
             }
-            console.log(predictions);
 
-            setPredictionsBody({
-              normal: parseFloat(predictions[3].value),
-              cp1: parseFloat(predictions[0].value),
-              cp2: parseFloat(predictions[1].value),
+            const bestPrediction = predictions.reduce((a, b) => {
+              if (parseFloat(a.value) > parseFloat(b.value)) {
+                return a;
+              }
+              return b;
             });
+
+            console.log(predictions);
+            if (bestPrediction.id !== "idle") {
+              setPredictionsBody({
+                normal: parseFloat(predictions.find((el) => el.id === "normal").value),
+                cp1: parseFloat(predictions.find((el) => el.id === "cp1").value),
+                cp2: parseFloat(predictions.find((el) => el.id === "cp2").value),
+              });
+            }
           })
           .catch((e) => {
             // console.log(e);
@@ -118,16 +128,15 @@ export default function Status() {
   }
 
   // Imitate nicla data gathering for debugging
-
-  async function imitateConnection() {
+  function imitateConnection() {
     clearInterval(my.NiclaSenseME[my.sensor].polling);
-    my.NiclaSenseME[my.sensor].polling = setInterval(async function () {
+    my.NiclaSenseME[my.sensor].polling = setInterval(function () {
       function getRandomFloat(min, max, decimals) {
         const str = (Math.random() * (max - min) + min).toFixed(decimals);
 
         return parseFloat(str);
       }
-      console.log("1");
+
       setPredictionsBody({
         normal: getRandomFloat(0, 1, 2),
         cp1: getRandomFloat(0, 1, 2),
@@ -144,7 +153,7 @@ export default function Status() {
   }, [my]);
 
   useEffect(() => {
-    console.log("Run use effect");
+    console.log("Run use effect for gathering");
     async function postPrediction() {
       try {
         const body = {
@@ -161,8 +170,6 @@ export default function Status() {
 
     if (isGatheringData) {
       postPrediction();
-    } else {
-      console.log("Not Gathering");
     }
   }, [predictionsBody, isGatheringData, selectedPatient, insertPrediction, dispatch]);
 
@@ -174,12 +181,11 @@ export default function Status() {
     }
 
     dispatch(enableIsConnecting());
-
     try {
       if (DEBUG) {
         imitateConnection();
       } else {
-        connectNicla();
+        await connectNicla();
       }
 
       dispatch(disableIsConnecting());
@@ -197,6 +203,7 @@ export default function Status() {
             isConnected ? "status__button--connected" : ""
           }`}
           onClick={connect}
+          disabled={isConnecting}
         >
           {connectButtonText}
         </button>

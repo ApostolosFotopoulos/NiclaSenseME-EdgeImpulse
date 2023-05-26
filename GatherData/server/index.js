@@ -1,7 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 const pool = require("./db");
-const { isFloat, isInt, isString } = require("./utils");
+const { isPosInt, isPosNumeric, isString } = require("./utils");
 
 const app = express();
 app.use(cors());
@@ -59,7 +59,13 @@ app.post("/prediction", async (req, res) => {
     console.log(req.body);
     const { patientId, normal, cp1, cp2, predictionDate } = req.body;
 
-    if (isInt(patientId) && isFloat(normal) && isFloat(cp1) && isFloat(cp2) && isString(predictionDate)) {
+    if (
+      isPosInt(patientId) &&
+      isPosNumeric(normal) &&
+      isPosNumeric(cp1) &&
+      isPosNumeric(cp2) &&
+      isString(predictionDate)
+    ) {
       const newPatient = await pool.query(
         "INSERT INTO prediction (patient_id, normal, cp1, cp2, prediction_date) VALUES ($1, $2, $3, $4, $5) RETURNING *",
         [patientId, normal, cp1, cp2, predictionDate]
