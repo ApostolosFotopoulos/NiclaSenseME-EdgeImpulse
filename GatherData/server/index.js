@@ -80,6 +80,35 @@ app.post("/prediction", async (req, res) => {
   }
 });
 
+// SESSION QUERIES
+// Insert new session
+app.post("/session", async (req, res) => {
+  try {
+    console.log("Body:");
+    console.log(req.body);
+    const { patientId, normal, cp1, cp2, sessionDate } = req.body;
+
+    if (
+      isPosInt(patientId) &&
+      isPosNumeric(normal) &&
+      isPosNumeric(cp1) &&
+      isPosNumeric(cp2) &&
+      isString(sessionDate)
+    ) {
+      const newPatient = await pool.query(
+        "INSERT INTO session (patient_id, normal, cp1, cp2, session_date) VALUES ($1, $2, $3, $4, $5) RETURNING *",
+        [patientId, normal, cp1, cp2, sessionDate]
+      );
+      console.log(newPatient.rows[0]);
+      res.json(newPatient.rows[0]);
+    } else {
+      res.json("Invalid Inputs");
+    }
+  } catch (err) {
+    console.log(err);
+  }
+});
+
 app.put("/patient/:id", async (req, res) => {
   try {
     console.log(req.body);
