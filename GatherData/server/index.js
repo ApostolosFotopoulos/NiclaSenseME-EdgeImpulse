@@ -14,12 +14,12 @@ app.get("/patient/:fname&:lname&:dob", async (req, res) => {
     console.log(req.params);
     let { fname: patientFirstName, lname: patientLastName, dob: patientDateOfBirth } = req.params;
     if (isString(patientFirstName) && isString(patientLastName) && isString(patientDateOfBirth)) {
-      const patient = await pool.query(
+      const queryRes = await pool.query(
         "SELECT * FROM patient WHERE first_name=$1 AND last_name=$2 AND date_of_birth=$3",
         [patientFirstName, patientLastName, patientDateOfBirth]
       );
-      console.log(patient.rows[0]);
-      res.json(patient.rows[0]);
+      console.log(queryRes.rows[0]);
+      res.json(queryRes.rows[0]);
     } else {
       res.json("Invalid Inputs");
     }
@@ -36,13 +36,13 @@ app.post("/patient", async (req, res) => {
     const { patientFirstName, patientLastName, patientDateOfBirth } = req.body;
 
     if (isString(patientFirstName) && isString(patientLastName) && isString(patientDateOfBirth)) {
-      const newPatient = await pool.query(
+      const queryRes = await pool.query(
         "INSERT INTO patient(first_name, last_name, date_of_birth) VALUES ($1, $2, $3) RETURNING *",
         [patientFirstName, patientLastName, patientDateOfBirth]
       );
       console.log("Inserted data:");
-      console.log(newPatient.rows[0]);
-      res.json(newPatient.rows[0]);
+      console.log(queryRes.rows[0]);
+      res.json(queryRes.rows[0]);
     } else {
       res.json("Invalid Inputs");
     }
@@ -66,13 +66,14 @@ app.post("/prediction", async (req, res) => {
       isPosNumeric(cp2) &&
       isString(predictionDate)
     ) {
-      const newPatient = await pool.query(
+      const queryRes = await pool.query(
         "INSERT INTO prediction (patient_id, normal, cp1, cp2, prediction_date) VALUES ($1, $2, $3, $4, $5) RETURNING *",
         [patientId, normal, cp1, cp2, predictionDate]
       );
-      console.log(newPatient.rows[0]);
-      res.json(newPatient.rows[0]);
+      console.log(queryRes.rows[0]);
+      res.json(queryRes.rows[0]);
     } else {
+      console.log("Why");
       res.json("Invalid Inputs");
     }
   } catch (err) {
@@ -86,21 +87,15 @@ app.post("/session", async (req, res) => {
   try {
     console.log("Body:");
     console.log(req.body);
-    const { patientId, normal, cp1, cp2, sessionDate } = req.body;
+    const { patientId, sessionDate } = req.body;
 
-    if (
-      isPosInt(patientId) &&
-      isPosNumeric(normal) &&
-      isPosNumeric(cp1) &&
-      isPosNumeric(cp2) &&
-      isString(sessionDate)
-    ) {
-      const newPatient = await pool.query(
-        "INSERT INTO session (patient_id, normal, cp1, cp2, session_date) VALUES ($1, $2, $3, $4, $5) RETURNING *",
-        [patientId, normal, cp1, cp2, sessionDate]
+    if (isPosInt(patientId) && isString(sessionDate)) {
+      const queryRes = await pool.query(
+        "INSERT INTO session (patient_id, normal, cp1 , cp2, session_date) SELECT patient_id, ROUND(AVG(normal)::numeric, 5), ROUND(AVG(cp1)::numeric, 5), ROUND(AVG(cp2)::numeric, 5), prediction_date FROM prediction WHERE patient_id=$1 AND prediction_date=$2 GROUP BY patient_id, prediction_date RETURNING *",
+        [patientId, sessionDate]
       );
-      console.log(newPatient.rows[0]);
-      res.json(newPatient.rows[0]);
+      console.log(queryRes.rows[0]);
+      res.json(queryRes.rows[0]);
     } else {
       res.json("Invalid Inputs");
     }
@@ -109,16 +104,17 @@ app.post("/session", async (req, res) => {
   }
 });
 
-app.put("/patient/:id", async (req, res) => {
+// Update session
+app.put("/session/:id&:pid&:sdate", async (req, res) => {
   try {
     console.log(req.body);
-    const { patientName } = req.body;
-    const { id: patientId } = req.params;
-    const patient = await pool.query("UPDATE patient SET name=$1 WHERE patient_id = $2", [
-      patientName,
-      patientId,
-    ]);
-    res.json("update success");
+    const { id: sessionId, pid: patientId, sdate: sessionDate } = req.params;
+    const queryRes = await pool.query(
+      "UPDATE session as s SET normal=new_avg.normal, cp1=new_avg.cp1, cp2=new_avg.cp2 FROM (SELECT ROUND(AVG(normal)::numeric, 5) as normal, ROUND(AVG(cp1)::numeric, 5) as cp1, ROUND(AVG(cp2)::numeric, 5) as cp2 FROM prediction WHERE patient_id=$1 AND prediction_date=$2) AS new_avg WHERE id = $3 RETURNING s.id, s.patient_id, s.normal, s.cp1, s.cp2, s.session_date",
+      [patientId, sessionDate, sessionId]
+    );
+    console.log(queryRes.rows[0]);
+    res.json(queryRes.rows[0]);
   } catch (err) {
     console.log(err);
   }

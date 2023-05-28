@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { DEBUG, SERVICE_UUID, CHARACTERISTIC_UUID, SET_INTERVAL_TIME } from "utils/constants";
 import { useDispatch, useSelector } from "react-redux";
-import { checkRes, getCurrentDate } from "utils/utils";
+import { checkRes, isEmptyObj, getCurrentDate } from "utils/utils";
 import {
   setStatus,
   enableIsConnected,
@@ -168,7 +168,7 @@ export default function Status() {
       }
     }
 
-    if (isGatheringData) {
+    if (isGatheringData && !isEmptyObj(predictionsBody)) {
       postPrediction();
     }
   }, [predictionsBody, isGatheringData, selectedPatient, insertPrediction, dispatch]);
