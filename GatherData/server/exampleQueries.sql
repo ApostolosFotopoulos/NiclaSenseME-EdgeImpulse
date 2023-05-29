@@ -4,17 +4,20 @@ SELECT *
 FROM patient 
 WHERE first_name='Tolis' AND last_name='Fot' AND date_of_birth='1997-09-03'
 
--- Insert new patient
+-- Insert patient
 INSERT INTO patient(first_name, last_name, date_of_birth) 
 VALUES ('Tom', 'Jones', '2000-08-11') RETURNING *
 
 -- PREDICTION QUERIES
--- Insert new prediction
+-- Insert prediction
 INSERT INTO prediction (patient_id, normal, cp1, cp2, prediction_date) 
 VALUES (26, 0.10, 0.10, 0.80, '2023-05-01') RETURNING *
 
 -- SESSION QUERIES
--- Insert new session
+-- Get session with patient id and session date
+SELECT * FROM session WHERE patient_id=26 AND session_date='2023-05-28'
+
+-- Insert session
 INSERT INTO session (patient_id, normal, cp1 ,cp2, session_date)
 SELECT patient_id, ROUND(AVG(normal)::numeric, 5), ROUND(AVG(cp1)::numeric, 5), ROUND(AVG(cp2)::numeric, 5), prediction_date
 FROM prediction

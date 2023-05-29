@@ -12,7 +12,7 @@ app.use(express.json());
 app.get("/patient/:fname&:lname&:dob", async (req, res) => {
   try {
     console.log(req.params);
-    let { fname: patientFirstName, lname: patientLastName, dob: patientDateOfBirth } = req.params;
+    const { fname: patientFirstName, lname: patientLastName, dob: patientDateOfBirth } = req.params;
     if (isString(patientFirstName) && isString(patientLastName) && isString(patientDateOfBirth)) {
       const queryRes = await pool.query(
         "SELECT * FROM patient WHERE first_name=$1 AND last_name=$2 AND date_of_birth=$3",
@@ -28,7 +28,7 @@ app.get("/patient/:fname&:lname&:dob", async (req, res) => {
   }
 });
 
-//Insert new patient
+//Insert patient
 app.post("/patient", async (req, res) => {
   try {
     console.log("Body:");
@@ -52,7 +52,7 @@ app.post("/patient", async (req, res) => {
 });
 
 // PREDICTION QUERIES
-// Insert new prediction
+// Insert prediction
 app.post("/prediction", async (req, res) => {
   try {
     console.log("Body:");
@@ -82,7 +82,27 @@ app.post("/prediction", async (req, res) => {
 });
 
 // SESSION QUERIES
-// Insert new session
+// Get session with patient id and session date
+app.get("/session/:pid&:sdate", async (req, res) => {
+  try {
+    console.log(req.params);
+    const { pid: patientId, sdate: sessionDate } = req.params;
+    if (isPosInt(parseInt(patientId)) && isString(sessionDate)) {
+      const queryRes = await pool.query("SELECT * FROM session WHERE patient_id=$1 AND session_date=$2", [
+        patientId,
+        sessionDate,
+      ]);
+      console.log(queryRes.rows[0]);
+      res.json(queryRes.rows[0]);
+    } else {
+      res.json("Invalid Inputs");
+    }
+  } catch (err) {
+    console.log(err);
+  }
+});
+
+// Insert session
 app.post("/session", async (req, res) => {
   try {
     console.log("Body:");

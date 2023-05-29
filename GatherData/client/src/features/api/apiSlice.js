@@ -22,7 +22,31 @@ export const apiSlice = createApi({
         body: body,
       }),
     }),
+    getSession: builder.query({
+      query: ({ patientId, sessionDate }) => `session/${patientId}&${sessionDate}`,
+    }),
+    postSession: builder.mutation({
+      query: (body) => ({
+        url: "session",
+        method: "POST",
+        body: body,
+      }),
+    }),
+    updateSession: builder.mutation({
+      query: ({ sessionId, patientId, sessionDate, ...body }) => ({
+        url: `post/${sessionId}&${patientId}&${sessionDate}`,
+        method: "PUT",
+        body,
+      }),
+    }),
   }),
 });
 
-export const { useLazyGetPatientQuery, usePostPatientMutation, usePostPredictionMutation } = apiSlice;
+export const {
+  useLazyGetPatientQuery,
+  usePostPatientMutation,
+  usePostPredictionMutation,
+  useLazyGetSessionQuery,
+  usePostSessionMutation,
+  useUpdateSessionMutation,
+} = apiSlice;
