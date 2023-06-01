@@ -11,6 +11,7 @@ app.use(express.json());
 // Get patient with first name, last name and date of birth
 app.get("/patient/:fname&:lname&:dob", async (req, res) => {
   try {
+    console.log("Get patient");
     console.log(req.params);
     const { fname: patientFirstName, lname: patientLastName, dob: patientDateOfBirth } = req.params;
     if (isString(patientFirstName) && isString(patientLastName) && isString(patientDateOfBirth)) {
@@ -28,8 +29,9 @@ app.get("/patient/:fname&:lname&:dob", async (req, res) => {
   }
 });
 
-//Insert patient
+// Insert patient
 app.post("/patient", async (req, res) => {
+  console.log("Insert patient");
   try {
     console.log("Body:");
     console.log(req.body);
@@ -52,8 +54,30 @@ app.post("/patient", async (req, res) => {
 });
 
 // PREDICTION QUERIES
+// Get predictions count with patient id and prediction date
+app.get("/prediction-count/:pid&:pdate", async (req, res) => {
+  console.log("Get predictions count");
+  try {
+    console.log(req.params);
+    const { pid: patientId, pdate: predictionDate } = req.params;
+    if (isPosInt(parseInt(patientId)) && isString(predictionDate)) {
+      const queryRes = await pool.query(
+        "SELECT COUNT(prediction_id) FROM prediction WHERE patient_id=$1 AND prediction_date=$2",
+        [patientId, predictionDate]
+      );
+      console.log(queryRes.rows[0]);
+      res.json(queryRes.rows[0]);
+    } else {
+      res.json("Invalid Inputs");
+    }
+  } catch (err) {
+    console.log(err);
+  }
+});
+
 // Insert prediction
 app.post("/prediction", async (req, res) => {
+  console.log("Insert prediction");
   try {
     console.log("Body:");
     console.log(req.body);
@@ -84,6 +108,7 @@ app.post("/prediction", async (req, res) => {
 // SESSION QUERIES
 // Get session with patient id and session date
 app.get("/session/:pid&:sdate", async (req, res) => {
+  console.log("Get session");
   try {
     console.log(req.params);
     const { pid: patientId, sdate: sessionDate } = req.params;
@@ -104,6 +129,7 @@ app.get("/session/:pid&:sdate", async (req, res) => {
 
 // Insert session
 app.post("/session", async (req, res) => {
+  console.log("Insert session");
   try {
     console.log("Body:");
     console.log(req.body);
@@ -125,12 +151,13 @@ app.post("/session", async (req, res) => {
 });
 
 // Update session
-app.put("/session/:id&:pid&:sdate", async (req, res) => {
+app.put("/session/:sid&:pid&:sdate", async (req, res) => {
+  console.log("Update session");
   try {
     console.log(req.body);
-    const { id: sessionId, pid: patientId, sdate: sessionDate } = req.params;
+    const { sid: sessionId, pid: patientId, sdate: sessionDate } = req.params;
     const queryRes = await pool.query(
-      "UPDATE session as s SET normal=new_avg.normal, cp1=new_avg.cp1, cp2=new_avg.cp2 FROM (SELECT ROUND(AVG(normal)::numeric, 5) as normal, ROUND(AVG(cp1)::numeric, 5) as cp1, ROUND(AVG(cp2)::numeric, 5) as cp2 FROM prediction WHERE patient_id=$1 AND prediction_date=$2) AS new_avg WHERE id = $3 RETURNING s.id, s.patient_id, s.normal, s.cp1, s.cp2, s.session_date",
+      "UPDATE session as s SET normal=new_avg.normal, cp1=new_avg.cp1, cp2=new_avg.cp2 FROM (SELECT ROUND(AVG(normal)::numeric, 5) as normal, ROUND(AVG(cp1)::numeric, 5) as cp1, ROUND(AVG(cp2)::numeric, 5) as cp2 FROM prediction WHERE patient_id=$1 AND prediction_date=$2) AS new_avg WHERE session_id = $3 RETURNING s.session_id, s.patient_id, s.normal, s.cp1, s.cp2, s.session_date",
       [patientId, sessionDate, sessionId]
     );
     console.log(queryRes.rows[0]);

@@ -2,12 +2,30 @@ import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import PatientInput from "./PatientInput";
 import SelectedPatientInput from "./SelectedPatientInput";
-import { checkRes, isValidYear, isEmptyObj, isValidDate, toIsoDayFormat } from "utils/utils";
+import { checkRes, isValidYear, isEmptyObj, getCurrentDate, isValidDate, toIsoDayFormat } from "utils/utils";
 import { setStatus } from "features/status/statusSlice";
 import { selectIsConnected } from "features/status/statusSlice";
-import { enableIsGatheringData, disableIsGatheringData, setSelectedpatient } from "./patientInfoSlice";
-import { selectIsGatheringData, selectGatherButtonText, selectSelectedPatient } from "./patientInfoSlice";
-import { useLazyGetPatientQuery, usePostPatientMutation } from "features/api/apiSlice";
+import {
+  enableIsGatheringData,
+  disableIsGatheringData,
+  enableIsSubmittingSession,
+  disableIsSubmittingSession,
+  setSelectedpatient,
+} from "./patientInfoSlice";
+import {
+  selectIsGatheringData,
+  selectIsSubmittingSession,
+  selectGatherButtonText,
+  selectSelectedPatient,
+} from "./patientInfoSlice";
+import {
+  useLazyGetPatientQuery,
+  usePostPatientMutation,
+  useLazyGetPredictionCountQuery,
+  useLazyGetSessionQuery,
+  usePostSessionMutation,
+  useUpdateSessionMutation,
+} from "features/api/apiSlice";
 
 export default function PatientInfo() {
   // Local state
@@ -17,6 +35,7 @@ export default function PatientInfo() {
 
   // Redux state
   const isGatheringData = useSelector(selectIsGatheringData);
+  const isSubmittingSession = useSelector(selectIsSubmittingSession);
   const gatherButtonText = useSelector(selectGatherButtonText);
   const selectedPatient = useSelector(selectSelectedPatient);
   const isConnected = useSelector(selectIsConnected);
@@ -25,6 +44,10 @@ export default function PatientInfo() {
   // Queries
   const [getPatient] = useLazyGetPatientQuery();
   const [insertPatient] = usePostPatientMutation();
+  const [getPredictionCount] = useLazyGetPredictionCountQuery();
+  const [getSession] = useLazyGetSessionQuery();
+  const [insertSession] = usePostSessionMutation();
+  const [updateSession] = useUpdateSessionMutation();
 
   // Clear the form
   function clearForm() {
@@ -67,13 +90,63 @@ export default function PatientInfo() {
         checkRes(res);
       }
 
-      const { id: patientId } = res;
+      const { patient_id: patientId } = res;
       dispatch(setSelectedpatient({ patientId, patientFirstName, patientLastName, patientDateOfBirth }));
       dispatch(setStatus(`Patient ${patientFirstName} ${patientLastName} selected`));
       clearForm();
     } catch (e) {
       dispatch(setStatus("Error communicating with the database"));
     }
+  }
+
+  async function submitSession() {
+    dispatch(enableIsSubmittingSession());
+
+    try {
+      // Ckeck if valid predictions exist
+      let res = await getPredictionCount({
+        patientId: selectedPatient.patientId,
+        predictionDate: getCurrentDate(),
+      }).unwrap();
+      checkRes(res);
+
+      const { count } = res;
+      console.log(count);
+      if (count <= 0) {
+        return;
+      }
+
+      res = await getSession({
+        patientId: selectedPatient.patientId,
+        sessionDate: getCurrentDate(),
+      }).unwrap();
+      checkRes(res);
+      console.log(res);
+
+      if (res === null) {
+        res = await insertSession({
+          patientId: selectedPatient.patientId,
+          sessionDate: getCurrentDate(),
+        }).unwrap();
+        checkRes(res);
+        console.log(res);
+      } else {
+        const { session_id: sessionId } = res;
+        console.log(sessionId);
+        res = await updateSession({
+          sessionId: sessionId,
+          patientId: selectedPatient.patientId,
+          sessionDate: getCurrentDate(),
+        });
+        checkRes(res);
+        console.log(res);
+      }
+    } catch (e) {
+      console.log(e);
+      dispatch(setStatus("Error communicating with the database"));
+    }
+
+    dispatch(disableIsSubmittingSession());
   }
 
   // Enable gathering data to the database
@@ -90,6 +163,7 @@ export default function PatientInfo() {
 
     if (isGatheringData) {
       dispatch(disableIsGatheringData());
+      await submitSession();
       return;
     }
 
@@ -135,6 +209,7 @@ export default function PatientInfo() {
             isGatheringData ? "patient__details-button--collecting" : ""
           }`}
           onClick={gatherData}
+          disabled={isSubmittingSession}
         >
           {gatherButtonText}
         </button>

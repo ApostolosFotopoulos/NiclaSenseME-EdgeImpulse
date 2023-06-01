@@ -3,7 +3,7 @@ import React from "react";
 export default function PatientInput({ field, placeholderText, data, setData, isGatheringData }) {
   return (
     <>
-      <label className="patient__form-label" htmlFor="name">
+      <label className="patient__form-label" htmlFor={field}>
         {field}
       </label>
       <input
@@ -12,7 +12,7 @@ export default function PatientInput({ field, placeholderText, data, setData, is
         placeholder={placeholderText}
         type="text"
         className="patient__form-input"
-        name={field}
+        id={field}
         value={data}
         onChange={(e) => setData(e.target.value)}
       />

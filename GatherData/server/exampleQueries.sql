@@ -9,6 +9,11 @@ INSERT INTO patient(first_name, last_name, date_of_birth)
 VALUES ('Tom', 'Jones', '2000-08-11') RETURNING *
 
 -- PREDICTION QUERIES
+-- Get predictions count with patient id and prediction date
+SELECT COUNT(prediction_id)
+FROM prediction
+WHERE patient_id=26 AND prediction_date='2023-05-28'
+
 -- Insert prediction
 INSERT INTO prediction (patient_id, normal, cp1, cp2, prediction_date) 
 VALUES (26, 0.10, 0.10, 0.80, '2023-05-01') RETURNING *
@@ -31,5 +36,5 @@ SET normal=new_avg.normal, cp1=new_avg.cp1, cp2=new_avg.cp2
 FROM 	(SELECT ROUND(AVG(normal)::numeric, 5) as normal, ROUND(AVG(cp1)::numeric, 5) as cp1, ROUND(AVG(cp2)::numeric, 5) as cp2
         FROM prediction
         WHERE patient_id=26 AND prediction_date='2023-05-28') AS new_avg
-WHERE id = 1 
+WHERE session_id = 1 
 RETURNING s.id, s.patient_id, s.normal, s.cp1, s.cp2, s.session_date

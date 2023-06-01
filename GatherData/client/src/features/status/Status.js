@@ -138,9 +138,9 @@ export default function Status() {
       }
 
       setPredictionsBody({
-        normal: getRandomFloat(0, 1, 2),
-        cp1: getRandomFloat(0, 1, 2),
-        cp2: getRandomFloat(0, 1, 2),
+        normal: getRandomFloat(0, 1, 5),
+        cp1: getRandomFloat(0, 1, 5),
+        cp2: getRandomFloat(0, 1, 5),
       });
     }, SET_INTERVAL_TIME);
   }

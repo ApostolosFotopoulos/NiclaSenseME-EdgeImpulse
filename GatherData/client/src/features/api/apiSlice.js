@@ -15,6 +15,9 @@ export const apiSlice = createApi({
         body: body,
       }),
     }),
+    getPredictionCount: builder.query({
+      query: ({ patientId, predictionDate }) => `prediction-count/${patientId}&${predictionDate}`,
+    }),
     postPrediction: builder.mutation({
       query: (body) => ({
         url: "prediction",
@@ -34,7 +37,7 @@ export const apiSlice = createApi({
     }),
     updateSession: builder.mutation({
       query: ({ sessionId, patientId, sessionDate, ...body }) => ({
-        url: `post/${sessionId}&${patientId}&${sessionDate}`,
+        url: `session/${sessionId}&${patientId}&${sessionDate}`,
         method: "PUT",
         body,
       }),
@@ -45,6 +48,7 @@ export const apiSlice = createApi({
 export const {
   useLazyGetPatientQuery,
   usePostPatientMutation,
+  useLazyGetPredictionCountQuery,
   usePostPredictionMutation,
   useLazyGetSessionQuery,
   usePostSessionMutation,
