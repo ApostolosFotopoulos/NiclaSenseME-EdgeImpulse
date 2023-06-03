@@ -37,4 +37,4 @@ FROM 	(SELECT ROUND(AVG(normal)::numeric, 5) as normal, ROUND(AVG(cp1)::numeric,
         FROM prediction
         WHERE patient_id=26 AND prediction_date='2023-05-28') AS new_avg
 WHERE session_id = 1 
-RETURNING s.id, s.patient_id, s.normal, s.cp1, s.cp2, s.session_date
+RETURNING s.session_id, s.patient_id, s.normal, s.cp1, s.cp2, s.session_date
