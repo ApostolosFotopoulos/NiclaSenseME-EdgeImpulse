@@ -1,8 +1,8 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { setupListeners } from "@reduxjs/toolkit/query";
-import statusReducer from "features/status/statusSlice";
-import patientInfoReducer from "features/patientInfo/patientInfoSlice";
-import { apiSlice } from "features/api/apiSlice";
+import statusReducer from "pages/main/status/statusSlice";
+import patientInfoReducer from "pages/main/patientInfo/patientInfoSlice";
+import { apiSlice } from "api/apiSlice";
 
 export const store = configureStore({
   reducer: {

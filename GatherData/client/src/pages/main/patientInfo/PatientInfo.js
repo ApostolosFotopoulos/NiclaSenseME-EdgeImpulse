@@ -3,8 +3,8 @@ import { useDispatch, useSelector } from "react-redux";
 import PatientInput from "./PatientInput";
 import SelectedPatientInput from "./SelectedPatientInput";
 import { checkRes, isValidYear, isEmptyObj, getCurrentDate, isValidDate, toIsoDayFormat } from "utils/utils";
-import { setStatus } from "features/status/statusSlice";
-import { selectIsConnected } from "features/status/statusSlice";
+import { setStatus } from "pages/main/status/statusSlice";
+import { selectIsConnected } from "pages/main/status/statusSlice";
 import {
   enableIsGatheringData,
   disableIsGatheringData,
@@ -25,7 +25,7 @@ import {
   useLazyGetSessionQuery,
   usePostSessionMutation,
   useUpdateSessionMutation,
-} from "features/api/apiSlice";
+} from "api/apiSlice";
 
 export default function PatientInfo() {
   // Local state
