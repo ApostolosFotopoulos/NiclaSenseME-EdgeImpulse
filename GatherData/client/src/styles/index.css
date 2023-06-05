@@ -16,7 +16,8 @@ img {
 :root {
   /* FONTS */
   --FF-MAIN: "Roboto Mono", sans-serif;
-  --MAIN-FONT-SIZE: 1rem;
+  --MAIN-FONT-SIZE: 16px;
+  --SMALL-FONT-SIZE: 14px;
   --MAIN-FONT-COLOR: rgb(231, 231, 231);
   --PLACEHOLDER-FONT-COLOR: rgb(156, 156, 156);
   --BUTTON-FONT-COLOR: black;
@@ -25,6 +26,10 @@ img {
   --BODY-BG-COLOR: black;
   --MAIN-BG-COLOR: #111111;
   --BUTTON-BG-COLOR: #d8f41d;
+  --BUTTON-HOVER-COLOR: rgb(255, 255, 83);
+  --BUTTON-DISABLED-COLOR: rgba(242, 242, 242, 0.4);
+  --LINK-BG-COLOR: blue;
+  --LINK-HOVER-COLOR: rgb(116, 116, 255);
   --INPUT-BG-COLOR: #050505;
 
   /* WIDTHS */
@@ -36,18 +41,33 @@ img {
   font-family: var(--FF-MAIN);
 }
 
+*:focus {
+  outline: none;
+}
+
 body {
   color: var(--MAIN-FONT-COLOR);
   background: var(--BODY-BG-COLOR);
   font-size: var(--MAIN-FONT-SIZE);
 }
 
+h1,
+h2,
+h3 {
+  font-weight: normal;
+}
+
 input,
 textarea {
-  color-scheme: dark;
   font-family: var(--FF-MAIN);
+  font-size: var(--MAIN-FONT-SIZE);
   color: var(--MAIN-FONT-COLOR);
   background-color: var(--INPUT-BG-COLOR);
+}
+
+input:focus,
+textarea:focus {
+  border: 1px solid white;
 }
 
 input::placeholder,
@@ -70,22 +90,40 @@ select:-webkit-autofill:focus {
   transition: background-color 10000s ease-in-out 0s;
 }
 
-h1,
-h2,
-h3 {
-  font-weight: normal;
+a:link {
+  color: var(--LINK-BG-COLOR);
+}
+
+a:visited {
+  color: var(--LINK-BG-COLOR);
+}
+
+a:hover {
+  color: var(--LINK-HOVER-COLOR);
+}
+
+a:active {
+  color: var(--LINK-BG-COLOR);
 }
 
 button {
   background-color: var(--BUTTON-BG-COLOR);
   color: var(--BUTTON-FONT-COLOR);
-  padding: 1px;
+  font-size: var(--MAIN-FONT-SIZE);
+  padding: 5px;
   text-align: center;
   border: none;
-  height: 25px;
   width: 100px;
   border-radius: 20px;
   cursor: pointer;
+}
+
+button:hover {
+  background-color: var(--BUTTON-HOVER-COLOR);
+}
+
+button:disabled {
+  background-color: var(--BUTTON-DISABLED-COLOR);
 }
 
 /* GENERAL CLASSES */
@@ -94,6 +132,7 @@ button {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  min-height: 100vh;
 }
 
 .col-container {
@@ -101,7 +140,6 @@ button {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 1rem;
   margin-top: 1rem;
   width: var(--DESKTOP-PAGE-WIDTH);
 }
@@ -114,6 +152,90 @@ button {
   gap: 1rem;
   margin-top: 1rem;
   width: var(--DESKTOP-PAGE-WIDTH);
+}
+
+.offscreen {
+  position: absolute;
+  left: -9999px;
+}
+
+.hide {
+  display: none;
+}
+
+.faCheck--green {
+  color: limegreen;
+  margin-left: 0.25rem;
+}
+
+.faTimes--red {
+  color: red;
+  margin-left: 0.25rem;
+}
+
+/* REGISTER */
+.register {
+  width: 100%;
+  max-width: 420px;
+  min-height: 400px;
+  justify-content: flex-start;
+  margin-top: 0;
+  margin-bottom: 4rem;
+  padding: 1rem;
+  background-color: var(--MAIN-BG-COLOR);
+}
+
+.register__errmsg {
+  background-color: lightpink;
+  color: firebrick;
+  font-weight: bold;
+  padding: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.register__form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  flex-grow: 1;
+  padding-bottom: 1rem;
+}
+
+.register__form-label {
+  width: 100%;
+  margin-top: 1rem;
+}
+
+.register__form-input {
+  width: 100%;
+  padding: 0.25rem;
+  border-radius: 0.5rem;
+  border: 1px solid gray;
+}
+
+.register__instructions {
+  font-size: var(--SMALL-FONT-SIZE);
+  border-radius: 0.5rem;
+  background: #000;
+  padding: 0.25rem;
+  position: relative;
+  bottom: -10px;
+}
+
+.register__instructions-svg {
+  font-size: var(--MAIN-FONT-SIZE);
+  margin-right: 0.5rem;
+}
+
+.register__button {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  align-self: center;
+}
+
+.register__login-link {
+  text-align: center;
 }
 
 /* STATUS */
@@ -147,77 +269,6 @@ button {
   text-align: center;
 }
 
-/* Recent Patients */
-.recent-patients {
-  background-color: var(--MAIN-BG-COLOR);
-  padding: 1rem;
-}
-
-.select-menu {
-  max-width: 330px;
-}
-
-.select-menu__button {
-  display: flex;
-  height: 55px;
-  background: #fff;
-  padding: 20px;
-  border-radius: 8px;
-  align-items: center;
-  cursor: pointer;
-  justify-content: space-between;
-}
-
-.select-menu__options {
-  position: absolute;
-  overflow-y: auto;
-  max-height: 295px;
-  padding: 10px;
-  margin-top: 10px;
-  border-radius: 8px;
-  background: #fff;
-  opacity: 0;
-  z-index: -1;
-  transform: translateY(50px);
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  transition: transform 0.4s, opacity 0.4s, z-index 2s;
-}
-
-.select-menu__options--open {
-  display: block;
-  opacity: 1;
-  z-index: 1;
-  transform: translateY(0px);
-  transition: transform 0.4s, opacity 0.4s, z-index 0.4s;
-}
-
-.select-menu__option {
-  display: flex;
-  height: 55px;
-  cursor: pointer;
-  padding: 0 16px;
-  border-radius: 8px;
-  align-items: center;
-  background: #fff;
-}
-
-.select-menu__option:hover {
-  background: #f2f2f2;
-}
-
-.select-menu__option-text {
-  color: #333;
-}
-
-.select-menu__button-img {
-  font-size: 25px;
-  transition: transform 0.3s;
-}
-
-.select-menu__button-img--open {
-  transform: rotate(-180deg);
-}
-
 /* PATIENT */
 .patient {
   background-color: var(--MAIN-BG-COLOR);
@@ -248,7 +299,7 @@ button {
   margin-top: 0.2rem;
   align-self: center;
   padding: 0.5rem;
-  border: none;
+  border: 1px solid gray;
   border-radius: 5px;
 }
 
