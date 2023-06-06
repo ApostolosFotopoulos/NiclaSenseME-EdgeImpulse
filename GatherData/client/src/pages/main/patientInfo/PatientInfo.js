@@ -57,7 +57,7 @@ export default function PatientInfo() {
   }
 
   // Select and submit the new patient, if he doesn't already exist, in the database
-  async function submit(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
 
     if (!isValidDate(patientDateOfBirth) || !isValidYear(patientDateOfBirth)) {
@@ -172,7 +172,7 @@ export default function PatientInfo() {
 
   return (
     <div className="row-container patient">
-      <form className="patient__form" action="" onSubmit={submit}>
+      <form className="patient__form" onSubmit={handleSubmit}>
         <h1>Select Patient</h1>
         <PatientInput
           field={"First Name"}

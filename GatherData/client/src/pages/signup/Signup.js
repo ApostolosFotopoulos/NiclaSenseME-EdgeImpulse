@@ -1,4 +1,3 @@
-import "styles/index.css";
 import { useRef, useState, useEffect } from "react";
 import { faCheck, faTimes, faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -8,7 +7,7 @@ import React from "react";
 const USER_REGEX = /^[A-z][A-z0-9-_]{3,23}$/;
 const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
 
-export default function Register() {
+export default function Signup() {
   const userRef = useRef();
   const errRef = useRef();
 
@@ -43,7 +42,7 @@ export default function Register() {
     setErrMsg("");
   }, [user, pwd, matchPwd]);
 
-  const handleSubmit = async (e) => {
+  function handleSubmit(e) {
     e.preventDefault();
     // if button enabled with JS hack
     const v1 = USER_REGEX.test(user);
@@ -69,23 +68,23 @@ export default function Register() {
       }
       errRef.current.focus();
     }
-  };
+  }
 
   return (
     <div className="main-container">
-      <section className="col-container register">
-        <p ref={errRef} className={errMsg ? "register__errmsg" : "offscreen"} aria-live="assertive">
+      <section className="col-container signup">
+        <p ref={errRef} className={errMsg ? "login-signup__errmsg" : "offscreen"} aria-live="assertive">
           {errMsg}
         </p>
-        <h1>Register</h1>
-        <form className="register__form" onSubmit={handleSubmit}>
-          <label className="register__form-label" htmlFor="username">
+        <h1>Sign Up</h1>
+        <form className="login-signup__form" onSubmit={handleSubmit}>
+          <label className="login-signup__form-label" htmlFor="username">
             Username:
             <FontAwesomeIcon icon={faCheck} className={validName ? "faCheck--green" : "hide"} />
             <FontAwesomeIcon icon={faTimes} className={validName || !user ? "hide" : "faTimes--red"} />
           </label>
           <input
-            className="register__form-input"
+            className="login-signup__form-input"
             type="text"
             id="username"
             ref={userRef}
@@ -98,11 +97,8 @@ export default function Register() {
             onFocus={() => setUserFocus(true)}
             onBlur={() => setUserFocus(false)}
           />
-          <p
-            id="uidnote"
-            className={userFocus && user && !validName ? "register__instructions" : "offscreen"}
-          >
-            <FontAwesomeIcon className="register__instructions-svg" icon={faInfoCircle} />
+          <p id="uidnote" className={userFocus && user && !validName ? "signup__instructions" : "offscreen"}>
+            <FontAwesomeIcon className="signup__instructions-svg" icon={faInfoCircle} />
             4 to 24 characters.
             <br />
             Must begin with a letter.
@@ -110,13 +106,13 @@ export default function Register() {
             Letters, numbers, underscores, hyphens allowed.
           </p>
 
-          <label className="register__form-label" htmlFor="password">
+          <label className="login-signup__form-label" htmlFor="password">
             Password:
             <FontAwesomeIcon icon={faCheck} className={validPwd ? "faCheck--green" : "hide"} />
             <FontAwesomeIcon icon={faTimes} className={validPwd || !pwd ? "hide" : "faTimes--red"} />
           </label>
           <input
-            className="register__form-input"
+            className="login-signup__form-input"
             type="password"
             id="password"
             onChange={(e) => setPwd(e.target.value)}
@@ -127,8 +123,8 @@ export default function Register() {
             onFocus={() => setPwdFocus(true)}
             onBlur={() => setPwdFocus(false)}
           />
-          <p id="pwdnote" className={pwdFocus && !validPwd ? "register__instructions" : "offscreen"}>
-            <FontAwesomeIcon className="register__instructions-svg" icon={faInfoCircle} />
+          <p id="pwdnote" className={pwdFocus && !validPwd ? "signup__instructions" : "offscreen"}>
+            <FontAwesomeIcon className="signup__instructions-svg" icon={faInfoCircle} />
             8 to 24 characters.
             <br />
             Must include uppercase and lowercase letters, a number and a special character.
@@ -138,13 +134,13 @@ export default function Register() {
             <span aria-label="dollar sign">$</span> <span aria-label="percent">%</span>
           </p>
 
-          <label className="register__form-label" htmlFor="confirm_pwd">
+          <label className="login-signup__form-label" htmlFor="confirm_pwd">
             Confirm Password:
             <FontAwesomeIcon icon={faCheck} className={validMatch && matchPwd ? "faCheck--green" : "hide"} />
             <FontAwesomeIcon icon={faTimes} className={validMatch || !matchPwd ? "hide" : "faTimes--red"} />
           </label>
           <input
-            className="register__form-input"
+            className="login-signup__form-input"
             type="password"
             id="confirm_pwd"
             onChange={(e) => setMatchPwd(e.target.value)}
@@ -155,24 +151,19 @@ export default function Register() {
             onFocus={() => setMatchFocus(true)}
             onBlur={() => setMatchFocus(false)}
           />
-          <p id="confirmnote" className={matchFocus && !validMatch ? "register__instructions" : "offscreen"}>
-            <FontAwesomeIcon className="register__instructions-svg" icon={faInfoCircle} />
+          <p id="confirmnote" className={matchFocus && !validMatch ? "signup__instructions" : "offscreen"}>
+            <FontAwesomeIcon className="signup__instructions-svg" icon={faInfoCircle} />
             Must match the first password input field.
           </p>
-          <button
-            className="register__button"
-            disabled={!validName || !validPwd || !validMatch ? true : false}
-          >
+          <button className="login-signup__button" disabled={!validName || !validPwd || !validMatch}>
             Sign Up
           </button>
-          <p className="register__login-link">
+          <p className="login-signup__link">
             Already registered?
             <br />
             <span>
               {/*put router link here*/}
-              <a className="wtf" href="http://localhost:3000/#">
-                Sign In
-              </a>
+              <a href="http://localhost:3000/#">Sign In</a>
             </span>
           </p>
         </form>

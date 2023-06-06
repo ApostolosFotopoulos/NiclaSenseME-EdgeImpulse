@@ -1,4 +1,3 @@
-import "styles/index.css";
 import React from "react";
 import Status from "pages/main/status/Status";
 import PatientInfo from "pages/main/patientInfo/PatientInfo";
