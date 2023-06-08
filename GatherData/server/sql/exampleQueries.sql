@@ -1,5 +1,15 @@
---  PATIENT QUERIES
---  Get patient with first name, last name and date of birth
+-- DOCTOR QUERIES
+-- Select doctor with user name
+SELECT *
+FROM doctor
+WHERE user_name='John'
+
+-- Insert doctor
+INSERT INTO doctor(user_name, first_name, last_name, passhash) 
+VALUES ('John', 'John', 'Mime', 'xxx') RETURNING *
+
+-- PATIENT QUERIES
+-- Get patient with first name, last name and date of birth
 SELECT * 
 FROM patient 
 WHERE first_name='Tolis' AND last_name='Fot' AND date_of_birth='1997-09-03'

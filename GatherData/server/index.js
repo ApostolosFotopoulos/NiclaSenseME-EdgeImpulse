@@ -1,12 +1,15 @@
+require("module-alias/register");
 const express = require("express");
 const cors = require("cors");
-const pool = require("./db");
-const { isPosInt, isPosNumeric, isString } = require("./utils");
+const pool = require("@root/config/db");
+const { isPosInt, isPosNumeric, isString } = require("@root/utils/utils");
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 
+// ROUTES
+app.use("/", require("@root/routes/jwtAuth"));
 // PATIENT QUERIES
 // Get patient with first name, last name and date of birth
 app.get("/patient/:fname&:lname&:dob", async (req, res) => {

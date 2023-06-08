@@ -1,25 +1,31 @@
 import { useRef, useState, useEffect } from "react";
 import { faCheck, faTimes, faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { USER_REGEX, NAME_REGEX, PWD_REGEX } from "utils/constants";
 
 import React from "react";
-
-const USER_REGEX = /^[A-z][A-z0-9-_]{3,23}$/;
-const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
 
 export default function Signup() {
   const userRef = useRef();
   const errRef = useRef();
 
   const [user, setUser] = useState("");
-  const [validName, setValidName] = useState(false);
+  const [validUser, setValidUser] = useState(false);
   const [userFocus, setUserFocus] = useState(false);
 
-  const [pwd, setPwd] = useState("");
-  const [validPwd, setValidPwd] = useState(false);
-  const [pwdFocus, setPwdFocus] = useState(false);
+  const [firstName, setFirstName] = useState("");
+  const [validFirstName, setValidFirstName] = useState(false);
+  const [firstNameFocus, setFirstNameFocus] = useState(false);
 
-  const [matchPwd, setMatchPwd] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [validLastName, setValidLastName] = useState(false);
+  const [lastNameFocus, setLastNameFocus] = useState(false);
+
+  const [password, setPassword] = useState("");
+  const [validPassword, setValidPassword] = useState(false);
+  const [passwordFocus, setPasswordFocus] = useState(false);
+
+  const [matchPassword, setMatchPassword] = useState("");
   const [validMatch, setValidMatch] = useState(false);
   const [matchFocus, setMatchFocus] = useState(false);
 
@@ -30,34 +36,47 @@ export default function Signup() {
   }, []);
 
   useEffect(() => {
-    setValidName(USER_REGEX.test(user));
+    setValidUser(USER_REGEX.test(user));
   }, [user]);
 
   useEffect(() => {
-    setValidPwd(PWD_REGEX.test(pwd));
-    setValidMatch(pwd === matchPwd);
-  }, [pwd, matchPwd]);
+    setValidFirstName(NAME_REGEX.test(firstName));
+  }, [firstName]);
+
+  useEffect(() => {
+    setValidLastName(NAME_REGEX.test(lastName));
+  }, [lastName]);
+
+  useEffect(() => {
+    setValidPassword(PWD_REGEX.test(password));
+    setValidMatch(password === matchPassword);
+  }, [password, matchPassword]);
 
   useEffect(() => {
     setErrMsg("");
-  }, [user, pwd, matchPwd]);
+  }, [user, firstName, lastName, password, matchPassword]);
 
   function handleSubmit(e) {
     e.preventDefault();
     // if button enabled with JS hack
     const v1 = USER_REGEX.test(user);
-    const v2 = PWD_REGEX.test(pwd);
-    if (!v1 || !v2) {
+    const v2 = NAME_REGEX.test(firstName);
+    const v3 = NAME_REGEX.test(lastName);
+    const v4 = PWD_REGEX.test(password);
+    if (!v1 || !v2 || !v3 || !v4) {
       setErrMsg("Invalid Entry");
       return;
     }
+
     try {
       //Querry
       //clear state and controlled inputs
       //need value attrib on inputs for this
       setUser("");
-      setPwd("");
-      setMatchPwd("");
+      setFirstName("");
+      setLastName("");
+      setPassword("");
+      setMatchPassword("");
     } catch (err) {
       if (!err?.response) {
         setErrMsg("No Server Response");
@@ -80,8 +99,8 @@ export default function Signup() {
         <form className="login-signup__form" onSubmit={handleSubmit}>
           <label className="login-signup__form-label" htmlFor="username">
             Username:
-            <FontAwesomeIcon icon={faCheck} className={validName ? "faCheck--green" : "hide"} />
-            <FontAwesomeIcon icon={faTimes} className={validName || !user ? "hide" : "faTimes--red"} />
+            <FontAwesomeIcon icon={faCheck} className={validUser ? "faCheck--green" : "hide"} />
+            <FontAwesomeIcon icon={faTimes} className={validUser || !user ? "hide" : "faTimes--red"} />
           </label>
           <input
             className="login-signup__form-input"
@@ -92,12 +111,12 @@ export default function Signup() {
             onChange={(e) => setUser(e.target.value)}
             value={user}
             required
-            aria-invalid={validName ? "false" : "true"}
-            aria-describedby="uidnote"
+            aria-invalid={validUser ? "false" : "true"}
+            aria-describedby="usernote"
             onFocus={() => setUserFocus(true)}
             onBlur={() => setUserFocus(false)}
           />
-          <p id="uidnote" className={userFocus && user && !validName ? "signup__instructions" : "offscreen"}>
+          <p id="usernote" className={userFocus && !validUser ? "signup__instructions" : "offscreen"}>
             <FontAwesomeIcon className="signup__instructions-svg" icon={faInfoCircle} />
             4 to 24 characters.
             <br />
@@ -105,25 +124,90 @@ export default function Signup() {
             <br />
             Letters, numbers, underscores, hyphens allowed.
           </p>
-
+          <label className="login-signup__form-label" htmlFor="firstName">
+            First Name:
+            <FontAwesomeIcon icon={faCheck} className={validFirstName ? "faCheck--green" : "hide"} />
+            <FontAwesomeIcon
+              icon={faTimes}
+              className={validFirstName || !firstName ? "hide" : "faTimes--red"}
+            />
+          </label>
+          <input
+            className="login-signup__form-input"
+            type="text"
+            id="firstName"
+            autoComplete="off"
+            onChange={(e) => setFirstName(e.target.value)}
+            value={firstName}
+            required
+            aria-invalid={validFirstName ? "false" : "true"}
+            aria-describedby="firstnamenote"
+            onFocus={() => setFirstNameFocus(true)}
+            onBlur={() => setFirstNameFocus(false)}
+          />
+          <p
+            id="firstnamenote"
+            className={firstNameFocus && !validFirstName ? "signup__instructions" : "offscreen"}
+          >
+            <FontAwesomeIcon className="signup__instructions-svg" icon={faInfoCircle} />
+            No numbers or spaces.
+            <br />
+            Must use latin characters.
+          </p>
+          <label className="login-signup__form-label" htmlFor="lastName">
+            Last Name:
+            <FontAwesomeIcon icon={faCheck} className={validLastName ? "faCheck--green" : "hide"} />
+            <FontAwesomeIcon
+              icon={faTimes}
+              className={validLastName || !lastName ? "hide" : "faTimes--red"}
+            />
+          </label>
+          <input
+            className="login-signup__form-input"
+            type="text"
+            id="lastName"
+            autoComplete="off"
+            onChange={(e) => setLastName(e.target.value)}
+            value={lastName}
+            required
+            aria-invalid={validLastName ? "false" : "true"}
+            aria-describedby="lastnamenote"
+            onFocus={() => setLastNameFocus(true)}
+            onBlur={() => setLastNameFocus(false)}
+          />
+          <p
+            id="lastnamenote"
+            className={lastNameFocus && !validLastName ? "signup__instructions" : "offscreen"}
+          >
+            <FontAwesomeIcon className="signup__instructions-svg" icon={faInfoCircle} />
+            No numbers or spaces.
+            <br />
+            Must use latin characters.
+          </p>
           <label className="login-signup__form-label" htmlFor="password">
             Password:
-            <FontAwesomeIcon icon={faCheck} className={validPwd ? "faCheck--green" : "hide"} />
-            <FontAwesomeIcon icon={faTimes} className={validPwd || !pwd ? "hide" : "faTimes--red"} />
+            <FontAwesomeIcon icon={faCheck} className={validPassword ? "faCheck--green" : "hide"} />
+            <FontAwesomeIcon
+              icon={faTimes}
+              className={validPassword || !password ? "hide" : "faTimes--red"}
+            />
           </label>
           <input
             className="login-signup__form-input"
             type="password"
             id="password"
-            onChange={(e) => setPwd(e.target.value)}
-            value={pwd}
+            onChange={(e) => setPassword(e.target.value)}
+            value={password}
             required
-            aria-invalid={validPwd ? "false" : "true"}
-            aria-describedby="pwdnote"
-            onFocus={() => setPwdFocus(true)}
-            onBlur={() => setPwdFocus(false)}
+            aria-invalid={validPassword ? "false" : "true"}
+            aria-describedby="passwordnote"
+            onFocus={() => setPasswordFocus(true)}
+            onBlur={() => setPasswordFocus(false)}
           />
-          <p id="pwdnote" className={pwdFocus && !validPwd ? "signup__instructions" : "offscreen"}>
+          <p
+            id="passwordnote"
+            className={passwordFocus && !validPassword ? "signup__instructions" : "offscreen"}
+          >
             <FontAwesomeIcon className="signup__instructions-svg" icon={faInfoCircle} />
             8 to 24 characters.
             <br />
@@ -134,17 +218,23 @@ export default function Signup() {
             <span aria-label="dollar sign">$</span> <span aria-label="percent">%</span>
           </p>
 
-          <label className="login-signup__form-label" htmlFor="confirm_pwd">
+          <label className="login-signup__form-label" htmlFor="confirm_password">
             Confirm Password:
-            <FontAwesomeIcon icon={faCheck} className={validMatch && matchPwd ? "faCheck--green" : "hide"} />
-            <FontAwesomeIcon icon={faTimes} className={validMatch || !matchPwd ? "hide" : "faTimes--red"} />
+            <FontAwesomeIcon
+              icon={faCheck}
+              className={validMatch && matchPassword ? "faCheck--green" : "hide"}
+            />
+            <FontAwesomeIcon
+              icon={faTimes}
+              className={validMatch || !matchPassword ? "hide" : "faTimes--red"}
+            />
           </label>
           <input
             className="login-signup__form-input"
             type="password"
-            id="confirm_pwd"
-            onChange={(e) => setMatchPwd(e.target.value)}
-            value={matchPwd}
+            id="confirm_password"
+            onChange={(e) => setMatchPassword(e.target.value)}
+            value={matchPassword}
             required
             aria-invalid={validMatch ? "false" : "true"}
             aria-describedby="confirmnote"
@@ -155,7 +245,10 @@ export default function Signup() {
             <FontAwesomeIcon className="signup__instructions-svg" icon={faInfoCircle} />
             Must match the first password input field.
           </p>
-          <button className="login-signup__button" disabled={!validName || !validPwd || !validMatch}>
+          <button
+            className="login-signup__button"
+            disabled={!validUser || !validFirstName || !validLastName || !validPassword || !validMatch}
+          >
             Sign Up
           </button>
           <p className="login-signup__link">
