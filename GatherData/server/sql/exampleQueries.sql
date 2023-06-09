@@ -6,7 +6,7 @@ WHERE user_name='John'
 
 -- Insert doctor
 INSERT INTO doctor(user_name, first_name, last_name, passhash) 
-VALUES ('John', 'John', 'Mime', 'xxx') RETURNING *
+VALUES ('John', 'John', 'Mime', 'xxx') RETURNING doctor_id
 
 -- PATIENT QUERIES
 -- Get patient with first name, last name and date of birth
