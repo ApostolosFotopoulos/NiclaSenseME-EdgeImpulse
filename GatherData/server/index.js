@@ -10,6 +10,7 @@ app.use(express.json());
 
 // ROUTES
 app.use("/", require("@root/routes/jwtAuth"));
+app.use("/", require("@root/routes/doctor"));
 // PATIENT QUERIES
 // Get patient with first name, last name and date of birth
 app.get("/patient/:fname&:lname&:dob", async (req, res) => {

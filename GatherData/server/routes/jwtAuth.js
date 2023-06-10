@@ -3,6 +3,7 @@ const bcrypt = require("bcrypt");
 const pool = require("@root/config/db");
 const jwtGenerator = require("@root/utils/jwtGenerator");
 const { isString, isValidUserName, isValidName, isValidPassword } = require("@root/utils/validateData");
+const auth = require("@root/middleware/auth");
 
 // Insert doctor
 router.post("/signup", async (req, res) => {
@@ -79,6 +80,16 @@ router.post("/login", async (req, res) => {
   } catch (err) {
     console.log(err.message);
     res.status(500).json({ msg: "Server error" });
+  }
+});
+
+// Verify jwt
+router.get("/verify", auth, (req, res) => {
+  try {
+    res.json(true);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server error");
   }
 });
 

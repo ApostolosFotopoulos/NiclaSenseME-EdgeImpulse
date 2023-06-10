@@ -3,10 +3,16 @@ const NAME_REGEX = /^[a-zA-Z]+([ \\'-]{0,1}[a-zA-Z]+){0,2}[.]{0,1}$/;
 const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
 
 function isPosFloat(n) {
+  if (typeof n === "string") {
+    n = parseFloat(n);
+  }
   return Number(n) === n && n % 1 !== 0 && n >= 0;
 }
 
 function isPosInt(n) {
+  if (typeof n === "string") {
+    n = parseInt(n);
+  }
   return Number.isInteger(n) && n >= 0;
 }
 
