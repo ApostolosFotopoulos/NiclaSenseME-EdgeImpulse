@@ -130,8 +130,8 @@ button:disabled {
 .main-container {
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
   min-height: 100vh;
 }
 
@@ -262,7 +262,7 @@ button:disabled {
 }
 
 .status__button {
-  width: 125px;
+  width: 140px;
 }
 
 .status__button--connecting {

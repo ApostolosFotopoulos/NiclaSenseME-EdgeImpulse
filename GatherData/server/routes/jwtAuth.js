@@ -17,7 +17,7 @@ router.post("/signup", async (req, res) => {
       !isValidName(doctorLastName) ||
       !isValidPassword(doctorPassword)
     ) {
-      return res.status(422).json({ msg: "Invalid data" });
+      return res.status(422).json({ errMsg: "Invalid data" });
     }
 
     // Check if the user exists
@@ -25,7 +25,7 @@ router.post("/signup", async (req, res) => {
     console.log(queryRes.rows[0]);
 
     if (queryRes.rows.length > 0) {
-      return res.status(401).json({ msg: "Username already taken" });
+      return res.status(401).json({ errMsg: "Username already taken" });
     }
 
     const saltRounds = 10;
@@ -44,7 +44,7 @@ router.post("/signup", async (req, res) => {
     res.json({ token });
   } catch (err) {
     console.log(err.message);
-    res.status(500).json({ msg: "Server error" });
+    res.status(500).json({ errMsg: "Server error" });
   }
 });
 
@@ -55,7 +55,7 @@ router.post("/login", async (req, res) => {
     const { doctorUserName, doctorPassword } = req.body;
 
     if (!isString(doctorUserName) || !isString(doctorPassword)) {
-      return res.status(422).json({ msg: "Invalid data" });
+      return res.status(422).json({ errMsg: "Invalid data" });
     }
 
     // Check if the user exists
@@ -63,14 +63,14 @@ router.post("/login", async (req, res) => {
     console.log(queryRes.rows[0]);
 
     if (queryRes.rows.length === 0) {
-      return res.status(401).json({ msg: "User or password is incorrect" });
+      return res.status(401).json({ errMsg: "User or password is incorrect" });
     }
 
     const { passhash: doctorDatabasePassword } = queryRes.rows[0];
     const validPassword = await bcrypt.compare(doctorPassword, doctorDatabasePassword);
 
     if (!validPassword) {
-      return res.status(401).json({ msg: "User or password is incorrect" });
+      return res.status(401).json({ errMsg: "User or password is incorrect" });
     }
 
     // Return the jwt token
@@ -79,17 +79,17 @@ router.post("/login", async (req, res) => {
     res.json({ token });
   } catch (err) {
     console.log(err.message);
-    res.status(500).json({ msg: "Server error" });
+    res.status(500).json({ errMsg: "Server error" });
   }
 });
 
 // Verify jwt
 router.get("/verify", auth, (req, res) => {
   try {
-    res.json(true);
+    res.json({ isVerified: true });
   } catch (err) {
     console.error(err.message);
-    res.status(500).send("Server error");
+    res.status(500).json({ errMsg: "Server error" });
   }
 });
 

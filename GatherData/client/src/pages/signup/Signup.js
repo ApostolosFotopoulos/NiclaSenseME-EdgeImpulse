@@ -1,14 +1,20 @@
 import { useRef, useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
 import { faCheck, faTimes, faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { USER_REGEX, NAME_REGEX, PWD_REGEX } from "utils/constants";
+import { enableIsAuthenticated, disableIsAuthenticated } from "app/appSlice";
+import { useSignUpDoctorMutation } from "api/apiSlice";
 
 import React from "react";
 
 export default function Signup() {
+  // Refs
   const userRef = useRef();
   const errRef = useRef();
 
+  // Local state
   const [user, setUser] = useState("");
   const [validUser, setValidUser] = useState(false);
   const [userFocus, setUserFocus] = useState(false);
@@ -31,9 +37,15 @@ export default function Signup() {
 
   const [errMsg, setErrMsg] = useState("");
 
-  useEffect(() => {
-    userRef.current.focus();
-  }, []);
+  // Redux state
+  const dispatch = useDispatch();
+
+  // Queries
+  const [signUpDoctor] = useSignUpDoctorMutation();
+
+  // useEffect(() => {
+  //   userRef.current.focus();
+  // }, []);
 
   useEffect(() => {
     setValidUser(USER_REGEX.test(user));
@@ -56,7 +68,7 @@ export default function Signup() {
     setErrMsg("");
   }, [user, firstName, lastName, password, matchPassword]);
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
     // if button enabled with JS hack
     const v1 = USER_REGEX.test(user);
@@ -69,22 +81,35 @@ export default function Signup() {
     }
 
     try {
-      //Querry
-      //clear state and controlled inputs
-      //need value attrib on inputs for this
+      const body = {
+        doctorUserName: user,
+        doctorFirstName: firstName,
+        doctorLastName: lastName,
+        doctorPassword: password,
+      };
+      let res = await signUpDoctor(body).unwrap();
+      console.log(res);
+
+      if (res.jwtToken) {
+        localStorage.setItem("token", res.jwtToken);
+        dispatch(enableIsAuthenticated());
+      } else {
+        dispatch(disableIsAuthenticated());
+      }
+
       setUser("");
       setFirstName("");
       setLastName("");
       setPassword("");
       setMatchPassword("");
     } catch (err) {
-      if (!err?.response) {
-        setErrMsg("No Server Response");
-      } else if (err.response?.status === 409) {
-        setErrMsg("Username Taken");
+      console.log(err);
+      if (err.data.errMsg) {
+        setErrMsg(err.data.errMsg);
       } else {
-        setErrMsg("Registration Failed");
+        setErrMsg("No server response");
       }
+
       errRef.current.focus();
     }
   }
@@ -255,8 +280,7 @@ export default function Signup() {
             Already registered?
             <br />
             <span>
-              {/*put router link here*/}
-              <a href="http://localhost:3000/#">Sign In</a>
+              <Link to={"/login"}>Log In</Link>
             </span>
           </p>
         </form>

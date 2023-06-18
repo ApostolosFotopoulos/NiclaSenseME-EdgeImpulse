@@ -4,6 +4,32 @@ export const apiSlice = createApi({
   reducerPath: "api",
   baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:5000/", timeout: 5000 }),
   endpoints: (builder) => ({
+    signUpDoctor: builder.mutation({
+      query: (body) => ({
+        url: "signup",
+        method: "POST",
+        body: body,
+      }),
+    }),
+    logInDoctor: builder.mutation({
+      query: (body) => ({
+        url: "login",
+        method: "POST",
+        body: body,
+      }),
+    }),
+    verifyDoctor: builder.query({
+      query: ({ jwtToken }) => ({
+        url: "verify",
+        headers: { jwt_token: jwtToken },
+      }),
+    }),
+    getDoctor: builder.query({
+      query: ({ jwtToken }) => ({
+        url: "doctor",
+        headers: { jwt_token: jwtToken },
+      }),
+    }),
     getPatient: builder.query({
       query: ({ patientFirstName, patientLastName, patientDateOfBirth }) =>
         `patient/${patientFirstName}&${patientLastName}&${patientDateOfBirth}`,
@@ -39,13 +65,17 @@ export const apiSlice = createApi({
       query: ({ sessionId, patientId, sessionDate, ...body }) => ({
         url: `session/${sessionId}&${patientId}&${sessionDate}`,
         method: "PUT",
-        body,
+        body: body,
       }),
     }),
   }),
 });
 
 export const {
+  useSignUpDoctorMutation,
+  useLogInDoctorMutation,
+  useLazyVerifyDoctorQuery,
+  useLazyGetDoctorQuery,
   useLazyGetPatientQuery,
   usePostPatientMutation,
   useLazyGetPredictionCountQuery,

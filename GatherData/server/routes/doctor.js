@@ -9,7 +9,7 @@ router.get("/doctor", auth, async (req, res) => {
     const { doctorId } = req.doctor;
 
     if (!isPosInt(doctorId)) {
-      return res.status(422).json({ msg: "Invalid data" });
+      return res.status(422).json({ errMsg: "Invalid data" });
     }
 
     const queryRes = await pool.query(
@@ -21,7 +21,7 @@ router.get("/doctor", auth, async (req, res) => {
     res.json(queryRes.rows[0]);
   } catch (err) {
     console.error(err.message);
-    res.status(500).send("Server error");
+    res.status(500).json({ errMsg: "Server error" });
   }
 });
 

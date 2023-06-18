@@ -10,8 +10,8 @@ import {
   enableIsConnecting,
 } from "./statusSlice";
 import { selectMsg, selectConnectButtonText, selectIsConnecting, selectIsConnected } from "./statusSlice";
-import { disableIsGatheringData } from "pages/main/patientInfo/patientInfoSlice";
-import { selectIsGatheringData, selectSelectedPatient } from "pages/main/patientInfo/patientInfoSlice";
+import { disableIsGatheringData } from "pages/dashboard/patientInfo/patientInfoSlice";
+import { selectIsGatheringData, selectSelectedPatient } from "pages/dashboard/patientInfo/patientInfoSlice";
 import { usePostPredictionMutation } from "api/apiSlice";
 
 export default function Status() {

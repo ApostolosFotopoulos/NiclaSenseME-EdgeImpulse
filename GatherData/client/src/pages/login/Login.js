@@ -1,8 +1,8 @@
 import { useRef, useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import React from "react";
 
 export default function Login() {
-  // const { setAuth } = useContext(AuthContext);
   const userRef = useRef();
   const errRef = useRef();
 
@@ -53,7 +53,7 @@ export default function Login() {
         <p ref={errRef} className={errMsg ? "login-signup__errmsg" : "offscreen"} aria-live="assertive">
           {errMsg}
         </p>
-        <h1>Sign In</h1>
+        <h1>Log In</h1>
         <form className="login-signup__form" onSubmit={handleSubmit}>
           <label className="login-signup__form-label" htmlFor="username">
             Username:
@@ -86,7 +86,7 @@ export default function Login() {
           <br />
           <span className="line">
             {/*put router link here*/}
-            <a href="#">Sign Up</a>
+            <Link to={"/signup"}>Sign Up</Link>
           </span>
         </p>
       </section>

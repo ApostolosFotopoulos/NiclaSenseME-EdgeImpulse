@@ -1,7 +1,8 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { setupListeners } from "@reduxjs/toolkit/query";
-import statusReducer from "pages/main/status/statusSlice";
-import patientInfoReducer from "pages/main/patientInfo/patientInfoSlice";
+import statusReducer from "pages/dashboard/status/statusSlice";
+import patientInfoReducer from "pages/dashboard/patientInfo/patientInfoSlice";
+import appReducer from "app/appSlice";
 import { apiSlice } from "api/apiSlice";
 
 export const store = configureStore({
@@ -9,6 +10,7 @@ export const store = configureStore({
     [apiSlice.reducerPath]: apiSlice.reducer,
     status: statusReducer,
     patientInfo: patientInfoReducer,
+    app: appReducer,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(apiSlice.middleware),
 });
