@@ -1,10 +1,9 @@
-import React from "react";
 import Status from "pages/dashboard/status/Status";
 import PatientInfo from "pages/dashboard/patientInfo/PatientInfo";
 
 function Dashboard() {
   return (
-    <section className="main-container">
+    <section className="main-container main-container--top">
       <Status />
       <PatientInfo />
     </section>

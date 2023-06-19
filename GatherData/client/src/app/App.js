@@ -1,31 +1,28 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
 import { useLazyVerifyDoctorQuery } from "api/apiSlice";
 import { enableIsAuthenticated, disableIsAuthenticated, enableCheckedAuth } from "./appSlice";
-import { selectIsAuthenticated, selectCheckedAuth } from "./appSlice";
+import { selectIsAuthenticated } from "./appSlice";
 
 import Login from "pages/login/Login";
 import Signup from "pages/signup/Signup";
 import Dashboard from "pages/dashboard/Dashboard";
+
 function App() {
   // Redux state
   const isAuthenticated = useSelector(selectIsAuthenticated);
-  const checkedAuth = useSelector(selectCheckedAuth);
   const dispatch = useDispatch();
 
   // Queries
   const [verify] = useLazyVerifyDoctorQuery();
 
   useEffect(() => {
-    console.log(checkedAuth);
-    const checkAuthenticated = async () => {
+    async function checkAuthenticated() {
       try {
         let res = await verify({ jwtToken: localStorage.accessToken }).unwrap();
-        console.log(res);
 
         const { isVerified } = res;
-        console.log(isVerified);
 
         if (isVerified) {
           dispatch(enableIsAuthenticated());
@@ -37,7 +34,7 @@ function App() {
         dispatch(disableIsAuthenticated());
         dispatch(enableCheckedAuth());
       }
-    };
+    }
 
     checkAuthenticated();
   }, [dispatch, verify]);

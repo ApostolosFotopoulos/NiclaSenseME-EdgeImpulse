@@ -14,6 +14,8 @@ import { disableIsGatheringData } from "pages/dashboard/patientInfo/patientInfoS
 import { selectIsGatheringData, selectSelectedPatient } from "pages/dashboard/patientInfo/patientInfoSlice";
 import { usePostPredictionMutation } from "api/apiSlice";
 
+import UserProfile from "./userProfile/UserProfile";
+
 export default function Status() {
   // Local variables
   const compRef = useRef({});
@@ -208,6 +210,7 @@ export default function Status() {
           {connectButtonText}
         </button>
         <div className="status__msg">{msg}</div>
+        <UserProfile />
       </div>
     </div>
   );

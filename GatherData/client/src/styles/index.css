@@ -135,6 +135,10 @@ button:disabled {
   min-height: 100vh;
 }
 
+.main-container--top {
+  justify-content: start;
+}
+
 .col-container {
   display: flex;
   flex-direction: column;
@@ -263,6 +267,7 @@ button:disabled {
 
 .status__button {
   width: 140px;
+  flex-shrink: 0;
 }
 
 .status__button--connecting {

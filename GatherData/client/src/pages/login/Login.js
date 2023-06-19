@@ -41,7 +41,6 @@ export default function Login() {
       };
 
       let res = await logInDoctor(body).unwrap();
-      console.log(res);
 
       if (res.jwtToken) {
         localStorage.setItem("accessToken", res.jwtToken);
