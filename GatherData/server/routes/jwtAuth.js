@@ -38,10 +38,10 @@ router.post("/signup", async (req, res) => {
       [doctorUserName, doctorFirstName, doctorLastName, doctorHashPassword]
     );
 
-    // Return the jwt token
+    // Return the jwt jwtToken
     const { doctor_id: doctorId } = queryRes.rows[0];
-    const token = jwtGenerator(doctorId);
-    res.json({ token });
+    const jwtToken = jwtGenerator(doctorId);
+    res.json({ jwtToken });
   } catch (err) {
     console.log(err.message);
     res.status(500).json({ errMsg: "Server error" });
@@ -73,10 +73,10 @@ router.post("/login", async (req, res) => {
       return res.status(401).json({ errMsg: "User or password is incorrect" });
     }
 
-    // Return the jwt token
+    // Return the jwt jwtToken
     const { doctor_id: doctorId } = queryRes.rows[0];
-    const token = jwtGenerator(doctorId);
-    res.json({ token });
+    const jwtToken = jwtGenerator(doctorId);
+    res.json({ jwtToken });
   } catch (err) {
     console.log(err.message);
     res.status(500).json({ errMsg: "Server error" });

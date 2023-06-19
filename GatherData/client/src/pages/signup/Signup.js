@@ -1,13 +1,12 @@
-import { useRef, useState, useEffect } from "react";
+import React, { useRef, useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { useDispatch } from "react-redux";
 import { faCheck, faTimes, faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { USER_REGEX, NAME_REGEX, PWD_REGEX } from "utils/constants";
 import { enableIsAuthenticated, disableIsAuthenticated } from "app/appSlice";
+import { selectCheckedAuth } from "app/appSlice";
 import { useSignUpDoctorMutation } from "api/apiSlice";
-
-import React from "react";
 
 export default function Signup() {
   // Refs
@@ -38,14 +37,17 @@ export default function Signup() {
   const [errMsg, setErrMsg] = useState("");
 
   // Redux state
+  const checkedAuth = useSelector(selectCheckedAuth);
   const dispatch = useDispatch();
 
   // Queries
   const [signUpDoctor] = useSignUpDoctorMutation();
 
   // useEffect(() => {
-  //   userRef.current.focus();
-  // }, []);
+  //   if (checkedAuth) {
+  //     userRef.current.focus();
+  //   }
+  // }, [checkedAuth]);
 
   useEffect(() => {
     setValidUser(USER_REGEX.test(user));
@@ -70,7 +72,6 @@ export default function Signup() {
 
   async function handleSubmit(e) {
     e.preventDefault();
-    // if button enabled with JS hack
     const v1 = USER_REGEX.test(user);
     const v2 = NAME_REGEX.test(firstName);
     const v3 = NAME_REGEX.test(lastName);
@@ -91,7 +92,8 @@ export default function Signup() {
       console.log(res);
 
       if (res.jwtToken) {
-        localStorage.setItem("token", res.jwtToken);
+        console.log("Stored token");
+        localStorage.setItem("accessToken", res.jwtToken);
         dispatch(enableIsAuthenticated());
       } else {
         dispatch(disableIsAuthenticated());
@@ -116,175 +118,177 @@ export default function Signup() {
 
   return (
     <div className="main-container">
-      <section className="col-container signup">
-        <p ref={errRef} className={errMsg ? "login-signup__errmsg" : "offscreen"} aria-live="assertive">
-          {errMsg}
-        </p>
-        <h1>Sign Up</h1>
-        <form className="login-signup__form" onSubmit={handleSubmit}>
-          <label className="login-signup__form-label" htmlFor="username">
-            Username:
-            <FontAwesomeIcon icon={faCheck} className={validUser ? "faCheck--green" : "hide"} />
-            <FontAwesomeIcon icon={faTimes} className={validUser || !user ? "hide" : "faTimes--red"} />
-          </label>
-          <input
-            className="login-signup__form-input"
-            type="text"
-            id="username"
-            ref={userRef}
-            autoComplete="off"
-            onChange={(e) => setUser(e.target.value)}
-            value={user}
-            required
-            aria-invalid={validUser ? "false" : "true"}
-            aria-describedby="usernote"
-            onFocus={() => setUserFocus(true)}
-            onBlur={() => setUserFocus(false)}
-          />
-          <p id="usernote" className={userFocus && !validUser ? "signup__instructions" : "offscreen"}>
-            <FontAwesomeIcon className="signup__instructions-svg" icon={faInfoCircle} />
-            4 to 24 characters.
-            <br />
-            Must begin with a letter.
-            <br />
-            Letters, numbers, underscores, hyphens allowed.
+      {checkedAuth && (
+        <section className="col-container signup">
+          <p ref={errRef} className={errMsg ? "login-signup__errmsg" : "offscreen"} aria-live="assertive">
+            {errMsg}
           </p>
-          <label className="login-signup__form-label" htmlFor="firstName">
-            First Name:
-            <FontAwesomeIcon icon={faCheck} className={validFirstName ? "faCheck--green" : "hide"} />
-            <FontAwesomeIcon
-              icon={faTimes}
-              className={validFirstName || !firstName ? "hide" : "faTimes--red"}
+          <h1>Sign Up</h1>
+          <form className="login-signup__form" onSubmit={handleSubmit}>
+            <label className="login-signup__form-label" htmlFor="username">
+              Username:
+              <FontAwesomeIcon icon={faCheck} className={validUser ? "faCheck--green" : "hide"} />
+              <FontAwesomeIcon icon={faTimes} className={validUser || !user ? "hide" : "faTimes--red"} />
+            </label>
+            <input
+              className="login-signup__form-input"
+              type="text"
+              id="username"
+              ref={userRef}
+              autoComplete="off"
+              onChange={(e) => setUser(e.target.value)}
+              value={user}
+              required
+              aria-invalid={validUser ? "false" : "true"}
+              aria-describedby="usernote"
+              onFocus={() => setUserFocus(true)}
+              onBlur={() => setUserFocus(false)}
             />
-          </label>
-          <input
-            className="login-signup__form-input"
-            type="text"
-            id="firstName"
-            autoComplete="off"
-            onChange={(e) => setFirstName(e.target.value)}
-            value={firstName}
-            required
-            aria-invalid={validFirstName ? "false" : "true"}
-            aria-describedby="firstnamenote"
-            onFocus={() => setFirstNameFocus(true)}
-            onBlur={() => setFirstNameFocus(false)}
-          />
-          <p
-            id="firstnamenote"
-            className={firstNameFocus && !validFirstName ? "signup__instructions" : "offscreen"}
-          >
-            <FontAwesomeIcon className="signup__instructions-svg" icon={faInfoCircle} />
-            No numbers or spaces.
-            <br />
-            Must use latin characters.
-          </p>
-          <label className="login-signup__form-label" htmlFor="lastName">
-            Last Name:
-            <FontAwesomeIcon icon={faCheck} className={validLastName ? "faCheck--green" : "hide"} />
-            <FontAwesomeIcon
-              icon={faTimes}
-              className={validLastName || !lastName ? "hide" : "faTimes--red"}
+            <p id="usernote" className={userFocus && !validUser ? "signup__instructions" : "offscreen"}>
+              <FontAwesomeIcon className="signup__instructions-svg" icon={faInfoCircle} />
+              4 to 24 characters.
+              <br />
+              Must begin with a letter.
+              <br />
+              Letters, numbers, underscores, hyphens allowed.
+            </p>
+            <label className="login-signup__form-label" htmlFor="firstName">
+              First Name:
+              <FontAwesomeIcon icon={faCheck} className={validFirstName ? "faCheck--green" : "hide"} />
+              <FontAwesomeIcon
+                icon={faTimes}
+                className={validFirstName || !firstName ? "hide" : "faTimes--red"}
+              />
+            </label>
+            <input
+              className="login-signup__form-input"
+              type="text"
+              id="firstName"
+              autoComplete="off"
+              onChange={(e) => setFirstName(e.target.value)}
+              value={firstName}
+              required
+              aria-invalid={validFirstName ? "false" : "true"}
+              aria-describedby="firstnamenote"
+              onFocus={() => setFirstNameFocus(true)}
+              onBlur={() => setFirstNameFocus(false)}
             />
-          </label>
-          <input
-            className="login-signup__form-input"
-            type="text"
-            id="lastName"
-            autoComplete="off"
-            onChange={(e) => setLastName(e.target.value)}
-            value={lastName}
-            required
-            aria-invalid={validLastName ? "false" : "true"}
-            aria-describedby="lastnamenote"
-            onFocus={() => setLastNameFocus(true)}
-            onBlur={() => setLastNameFocus(false)}
-          />
-          <p
-            id="lastnamenote"
-            className={lastNameFocus && !validLastName ? "signup__instructions" : "offscreen"}
-          >
-            <FontAwesomeIcon className="signup__instructions-svg" icon={faInfoCircle} />
-            No numbers or spaces.
-            <br />
-            Must use latin characters.
-          </p>
-          <label className="login-signup__form-label" htmlFor="password">
-            Password:
-            <FontAwesomeIcon icon={faCheck} className={validPassword ? "faCheck--green" : "hide"} />
-            <FontAwesomeIcon
-              icon={faTimes}
-              className={validPassword || !password ? "hide" : "faTimes--red"}
+            <p
+              id="firstnamenote"
+              className={firstNameFocus && !validFirstName ? "signup__instructions" : "offscreen"}
+            >
+              <FontAwesomeIcon className="signup__instructions-svg" icon={faInfoCircle} />
+              No numbers or spaces.
+              <br />
+              Must use latin characters.
+            </p>
+            <label className="login-signup__form-label" htmlFor="lastName">
+              Last Name:
+              <FontAwesomeIcon icon={faCheck} className={validLastName ? "faCheck--green" : "hide"} />
+              <FontAwesomeIcon
+                icon={faTimes}
+                className={validLastName || !lastName ? "hide" : "faTimes--red"}
+              />
+            </label>
+            <input
+              className="login-signup__form-input"
+              type="text"
+              id="lastName"
+              autoComplete="off"
+              onChange={(e) => setLastName(e.target.value)}
+              value={lastName}
+              required
+              aria-invalid={validLastName ? "false" : "true"}
+              aria-describedby="lastnamenote"
+              onFocus={() => setLastNameFocus(true)}
+              onBlur={() => setLastNameFocus(false)}
             />
-          </label>
-          <input
-            className="login-signup__form-input"
-            type="password"
-            id="password"
-            onChange={(e) => setPassword(e.target.value)}
-            value={password}
-            required
-            aria-invalid={validPassword ? "false" : "true"}
-            aria-describedby="passwordnote"
-            onFocus={() => setPasswordFocus(true)}
-            onBlur={() => setPasswordFocus(false)}
-          />
-          <p
-            id="passwordnote"
-            className={passwordFocus && !validPassword ? "signup__instructions" : "offscreen"}
-          >
-            <FontAwesomeIcon className="signup__instructions-svg" icon={faInfoCircle} />
-            8 to 24 characters.
-            <br />
-            Must include uppercase and lowercase letters, a number and a special character.
-            <br />
-            Allowed special characters: <span aria-label="exclamation mark">!</span>{" "}
-            <span aria-label="at symbol">@</span> <span aria-label="hashtag">#</span>{" "}
-            <span aria-label="dollar sign">$</span> <span aria-label="percent">%</span>
-          </p>
+            <p
+              id="lastnamenote"
+              className={lastNameFocus && !validLastName ? "signup__instructions" : "offscreen"}
+            >
+              <FontAwesomeIcon className="signup__instructions-svg" icon={faInfoCircle} />
+              No numbers or spaces.
+              <br />
+              Must use latin characters.
+            </p>
+            <label className="login-signup__form-label" htmlFor="password">
+              Password:
+              <FontAwesomeIcon icon={faCheck} className={validPassword ? "faCheck--green" : "hide"} />
+              <FontAwesomeIcon
+                icon={faTimes}
+                className={validPassword || !password ? "hide" : "faTimes--red"}
+              />
+            </label>
+            <input
+              className="login-signup__form-input"
+              type="password"
+              id="password"
+              onChange={(e) => setPassword(e.target.value)}
+              value={password}
+              required
+              aria-invalid={validPassword ? "false" : "true"}
+              aria-describedby="passwordnote"
+              onFocus={() => setPasswordFocus(true)}
+              onBlur={() => setPasswordFocus(false)}
+            />
+            <p
+              id="passwordnote"
+              className={passwordFocus && !validPassword ? "signup__instructions" : "offscreen"}
+            >
+              <FontAwesomeIcon className="signup__instructions-svg" icon={faInfoCircle} />
+              8 to 24 characters.
+              <br />
+              Must include uppercase and lowercase letters, a number and a special character.
+              <br />
+              Allowed special characters: <span aria-label="exclamation mark">!</span>{" "}
+              <span aria-label="at symbol">@</span> <span aria-label="hashtag">#</span>{" "}
+              <span aria-label="dollar sign">$</span> <span aria-label="percent">%</span>
+            </p>
 
-          <label className="login-signup__form-label" htmlFor="confirm_password">
-            Confirm Password:
-            <FontAwesomeIcon
-              icon={faCheck}
-              className={validMatch && matchPassword ? "faCheck--green" : "hide"}
+            <label className="login-signup__form-label" htmlFor="confirm_password">
+              Confirm Password:
+              <FontAwesomeIcon
+                icon={faCheck}
+                className={validMatch && matchPassword ? "faCheck--green" : "hide"}
+              />
+              <FontAwesomeIcon
+                icon={faTimes}
+                className={validMatch || !matchPassword ? "hide" : "faTimes--red"}
+              />
+            </label>
+            <input
+              className="login-signup__form-input"
+              type="password"
+              id="confirm_password"
+              onChange={(e) => setMatchPassword(e.target.value)}
+              value={matchPassword}
+              required
+              aria-invalid={validMatch ? "false" : "true"}
+              aria-describedby="confirmnote"
+              onFocus={() => setMatchFocus(true)}
+              onBlur={() => setMatchFocus(false)}
             />
-            <FontAwesomeIcon
-              icon={faTimes}
-              className={validMatch || !matchPassword ? "hide" : "faTimes--red"}
-            />
-          </label>
-          <input
-            className="login-signup__form-input"
-            type="password"
-            id="confirm_password"
-            onChange={(e) => setMatchPassword(e.target.value)}
-            value={matchPassword}
-            required
-            aria-invalid={validMatch ? "false" : "true"}
-            aria-describedby="confirmnote"
-            onFocus={() => setMatchFocus(true)}
-            onBlur={() => setMatchFocus(false)}
-          />
-          <p id="confirmnote" className={matchFocus && !validMatch ? "signup__instructions" : "offscreen"}>
-            <FontAwesomeIcon className="signup__instructions-svg" icon={faInfoCircle} />
-            Must match the first password input field.
-          </p>
-          <button
-            className="login-signup__button"
-            disabled={!validUser || !validFirstName || !validLastName || !validPassword || !validMatch}
-          >
-            Sign Up
-          </button>
-          <p className="login-signup__link">
-            Already registered?
-            <br />
-            <span>
-              <Link to={"/login"}>Log In</Link>
-            </span>
-          </p>
-        </form>
-      </section>
+            <p id="confirmnote" className={matchFocus && !validMatch ? "signup__instructions" : "offscreen"}>
+              <FontAwesomeIcon className="signup__instructions-svg" icon={faInfoCircle} />
+              Must match the first password input field.
+            </p>
+            <button
+              className="login-signup__button"
+              disabled={!validUser || !validFirstName || !validLastName || !validPassword || !validMatch}
+            >
+              Sign Up
+            </button>
+            <p className="login-signup__link">
+              Already registered?
+              <br />
+              <span>
+                <Link to={"/login"}>Log In</Link>
+              </span>
+            </p>
+          </form>
+        </section>
+      )}
     </div>
   );
 }

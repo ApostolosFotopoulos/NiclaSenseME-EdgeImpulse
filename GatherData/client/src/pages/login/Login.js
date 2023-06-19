@@ -1,95 +1,114 @@
-import { useRef, useState, useEffect } from "react";
+import React, { useRef, useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import React from "react";
+import { enableIsAuthenticated, disableIsAuthenticated } from "app/appSlice";
+import { selectCheckedAuth } from "app/appSlice";
+import { useLogInDoctorMutation } from "api/apiSlice";
 
 export default function Login() {
+  // Refs
   const userRef = useRef();
   const errRef = useRef();
 
+  // Local state
   const [user, setUser] = useState("");
-  const [pwd, setPwd] = useState("");
+  const [password, setPassword] = useState("");
   const [errMsg, setErrMsg] = useState("");
 
+  // Redux state
+  const checkedAuth = useSelector(selectCheckedAuth);
+  const dispatch = useDispatch();
+
+  // Queries
+  const [logInDoctor] = useLogInDoctorMutation();
+
   useEffect(() => {
-    userRef.current.focus();
-  }, []);
+    if (checkedAuth) {
+      userRef.current.focus();
+    }
+  }, [checkedAuth]);
 
   useEffect(() => {
     setErrMsg("");
-  }, [user, pwd]);
+  }, [user, password]);
 
-  const handleSubmit = async (e) => {
+  async function handleSubmit(e) {
     e.preventDefault();
-
     try {
-      // const response = await axios.post(LOGIN_URL, JSON.stringify({ user, pwd }), {
-      //   headers: { "Content-Type": "application/json" },
-      //   withCredentials: true,
-      // });
-      // console.log(JSON.stringify(response?.data));
-      // //console.log(JSON.stringify(response));
-      // const accessToken = response?.data?.accessToken;
-      // const roles = response?.data?.roles;
-      // setAuth({ user, pwd, roles, accessToken });
-      setUser("");
-      setPwd("");
-    } catch (err) {
-      if (!err?.response) {
-        setErrMsg("No Server Response");
-      } else if (err.response?.status === 400) {
-        setErrMsg("Missing Username or Password");
-      } else if (err.response?.status === 401) {
-        setErrMsg("Unauthorized");
+      const body = {
+        doctorUserName: user,
+        doctorPassword: password,
+      };
+
+      let res = await logInDoctor(body).unwrap();
+      console.log(res);
+
+      if (res.jwtToken) {
+        localStorage.setItem("accessToken", res.jwtToken);
+        dispatch(enableIsAuthenticated());
       } else {
-        setErrMsg("Login Failed");
+        dispatch(disableIsAuthenticated());
       }
+
+      setUser("");
+      setPassword("");
+    } catch (err) {
+      console.log(err);
+      if (err.data.errMsg) {
+        setErrMsg(err.data.errMsg);
+      } else {
+        setErrMsg("No server response");
+      }
+
       errRef.current.focus();
     }
-  };
+  }
 
   return (
     <div className="main-container">
-      <section className="col-container login">
-        <p ref={errRef} className={errMsg ? "login-signup__errmsg" : "offscreen"} aria-live="assertive">
-          {errMsg}
-        </p>
-        <h1>Log In</h1>
-        <form className="login-signup__form" onSubmit={handleSubmit}>
-          <label className="login-signup__form-label" htmlFor="username">
-            Username:
-          </label>
-          <input
-            className="login-signup__form-input"
-            type="text"
-            id="username"
-            ref={userRef}
-            autoComplete="off"
-            onChange={(e) => setUser(e.target.value)}
-            value={user}
-            required
-          />
-          <label className="login-signup__form-label" htmlFor="password">
-            Password:
-          </label>
-          <input
-            className="login-signup__form-input"
-            type="password"
-            id="password"
-            onChange={(e) => setPwd(e.target.value)}
-            value={pwd}
-            required
-          />
-          <button className="login-signup__button">Sign In</button>
-        </form>
-        <p className="login-signup__link">
-          Need an Account?
-          <br />
-          <span className="line">
-            {/*put router link here*/}
-            <Link to={"/signup"}>Sign Up</Link>
-          </span>
-        </p>
-      </section>
+      {checkedAuth && (
+        <section className="col-container login">
+          <p ref={errRef} className={errMsg ? "login-signup__errmsg" : "offscreen"} aria-live="assertive">
+            {errMsg}
+          </p>
+          <h1>Log In</h1>
+          <form className="login-signup__form" onSubmit={handleSubmit}>
+            <label className="login-signup__form-label" htmlFor="username">
+              Username:
+            </label>
+            <input
+              className="login-signup__form-input"
+              type="text"
+              id="username"
+              ref={userRef}
+              autoComplete="off"
+              onChange={(e) => setUser(e.target.value)}
+              value={user}
+              required
+            />
+            <label className="login-signup__form-label" htmlFor="password">
+              Password:
+            </label>
+            <input
+              className="login-signup__form-input"
+              type="password"
+              id="password"
+              onChange={(e) => setPassword(e.target.value)}
+              value={password}
+              required
+            />
+            <button className="login-signup__button">Sign In</button>
+          </form>
+          <p className="login-signup__link">
+            Need an Account?
+            <br />
+            <span className="line">
+              {/*put router link here*/}
+              <Link to={"/signup"}>Sign Up</Link>
+            </span>
+          </p>
+        </section>
+      )}
     </div>
   );
 }
