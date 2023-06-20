@@ -135,26 +135,25 @@ button:disabled {
   min-height: 100vh;
 }
 
-.main-container--top {
-  justify-content: start;
-}
-
 .col-container {
+  background-color: var(--MAIN-BG-COLOR);
   display: flex;
   flex-direction: column;
-  align-items: center;
   justify-content: center;
-  margin-top: 1rem;
+  align-items: center;
+  gap: 16px;
+  padding: 16px;
   width: var(--DESKTOP-PAGE-WIDTH);
 }
 
 .row-container {
+  background-color: var(--MAIN-BG-COLOR);
   display: flex;
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  gap: 1rem;
-  margin-top: 1rem;
+  gap: 16px;
+  padding: 16px;
   width: var(--DESKTOP-PAGE-WIDTH);
 }
 
@@ -169,12 +168,12 @@ button:disabled {
 
 .faCheck--green {
   color: limegreen;
-  margin-left: 0.25rem;
+  margin-left: 4px;
 }
 
 .faTimes--red {
   color: red;
-  margin-left: 0.25rem;
+  margin-left: 4px;
 }
 
 /* LOGIN-SIGNUP */
@@ -184,8 +183,8 @@ button:disabled {
   min-height: 340px;
   justify-content: flex-start;
   margin-top: 0;
-  margin-bottom: 4rem;
-  padding: 1rem;
+  margin-bottom: 64px;
+  padding: 16px;
   background-color: var(--MAIN-BG-COLOR);
 }
 
@@ -195,8 +194,8 @@ button:disabled {
   min-height: 400px;
   justify-content: flex-start;
   margin-top: 0;
-  margin-bottom: 4rem;
-  padding: 1rem;
+  margin-bottom: 64px;
+  padding: 16px;
   background-color: var(--MAIN-BG-COLOR);
 }
 
@@ -204,8 +203,8 @@ button:disabled {
   background-color: lightpink;
   color: firebrick;
   font-weight: bold;
-  padding: 0.5rem;
-  margin-bottom: 0.5rem;
+  padding: 8px;
+  margin-bottom: 8px;
 }
 
 .login-signup__form {
@@ -214,38 +213,38 @@ button:disabled {
   flex-direction: column;
   justify-content: space-evenly;
   flex-grow: 1;
-  padding-bottom: 1rem;
+  padding-bottom: 16px;
 }
 
 .login-signup__form-label {
   width: 100%;
-  margin-top: 1rem;
+  margin-top: 16px;
 }
 
 .login-signup__form-input {
   width: 100%;
-  padding: 0.25rem;
-  border-radius: 0.5rem;
+  padding: 4px;
+  border-radius: 8px;
   border: 1px solid gray;
 }
 
 .signup__instructions {
   font-size: var(--SMALL-FONT-SIZE);
-  border-radius: 0.5rem;
+  border-radius: 8px;
   background: #000;
-  padding: 0.25rem;
+  padding: 4px;
   position: relative;
   bottom: -10px;
 }
 
 .signup__instructions-svg {
   font-size: var(--MAIN-FONT-SIZE);
-  margin-right: 0.5rem;
+  margin-right: 8px;
 }
 
 .login-signup__button {
-  margin-top: 1rem;
-  margin-bottom: 1rem;
+  margin-top: 16px;
+  margin-bottom: 16px;
   align-self: center;
 }
 
@@ -253,14 +252,22 @@ button:disabled {
   text-align: center;
 }
 
+/* DASHBOARD */
+.dashboard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+  margin-top: 16px;
+  gap: 16px;
+}
+
 /* STATUS */
 .status {
   background-color: var(--MAIN-BG-COLOR);
   width: 100%;
-  padding: 1rem;
-  height: 4rem;
   display: flex;
-  gap: 2rem;
+  gap: 16px;
   justify-content: space-evenly;
   align-items: center;
 }
@@ -286,12 +293,6 @@ button:disabled {
 }
 
 /* PATIENT */
-.patient {
-  background-color: var(--MAIN-BG-COLOR);
-  gap: 2rem;
-  padding: 1rem;
-}
-
 .patient__form {
   display: flex;
   flex-wrap: wrap;
@@ -303,7 +304,7 @@ button:disabled {
 
 .patient__form-label {
   width: 100%;
-  margin-top: 1rem;
+  margin-top: 16px;
   align-self: center;
   letter-spacing: 1px;
   display: block;
@@ -312,29 +313,30 @@ button:disabled {
 
 .patient__form-input {
   width: 100%;
-  margin-top: 0.2rem;
+  margin-top: 4px;
   align-self: center;
-  padding: 0.5rem;
+  padding: 8px;
   border: 1px solid gray;
   border-radius: 5px;
 }
 
 .patient__form-button {
-  margin-top: 1rem;
+  margin-top: 16px;
 }
 
 .patient__details {
+  width: 100%;
   display: flex;
-  flex-wrap: wrap;
-  flex-direction: column;
-  justify-content: center;
+  flex-wrap: nowrap;
+  flex-direction: row;
+  justify-content: space-evenly;
+  gap: 16px;
   align-items: center;
-  width: 50%;
 }
 
 .patient__details-label {
   width: 100%;
-  margin-top: 1rem;
+  margin-top: 16px;
   align-self: center;
   letter-spacing: 1px;
   display: block;
@@ -343,9 +345,8 @@ button:disabled {
 
 .patient__details-input {
   width: 100%;
-  margin-top: 0.2rem;
   align-self: center;
-  padding: 0.5rem;
+  padding: 8px;
   border: none;
   border-radius: 5px;
 }
@@ -356,11 +357,11 @@ button:disabled {
 
 .patient__details-input:focus {
   outline: none;
+  border: none;
 }
 
 .patient__details-button {
   width: 120px;
-  margin-top: 1rem;
 }
 
 .patient__details-button--collecting {

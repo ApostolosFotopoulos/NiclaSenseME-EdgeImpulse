@@ -1,8 +1,12 @@
 import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
+import { disableIsAuthenticated } from "app/appSlice";
 import { useLazyGetDoctorQuery } from "api/apiSlice";
 
 export default function UserProfile() {
+  // Redux state
+  const dispatch = useDispatch();
+
   // Queries
   const [getDoctor] = useLazyGetDoctorQuery();
 
@@ -21,13 +25,10 @@ export default function UserProfile() {
 
   function logout(e) {
     e.preventDefault();
-    try {
-      localStorage.removeItem("accessToken");
-      //setAuth(false);
-    } catch (err) {
-      console.error(err.message);
-    }
+    localStorage.removeItem("accessToken");
+    dispatch(disableIsAuthenticated());
   }
 
+  // to do
   return <div>UserProfile</div>;
 }

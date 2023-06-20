@@ -1,11 +1,13 @@
 import Status from "pages/dashboard/status/Status";
 import PatientInfo from "pages/dashboard/patientInfo/PatientInfo";
+import InsertPatient from "./insertPatient/InsertPatient";
 
 function Dashboard() {
   return (
-    <section className="main-container main-container--top">
+    <section className="dashboard">
       <Status />
       <PatientInfo />
+      <InsertPatient />
     </section>
   );
 }
