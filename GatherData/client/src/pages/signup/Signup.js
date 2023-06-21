@@ -70,6 +70,14 @@ export default function Signup() {
     setErrMsg("");
   }, [user, firstName, lastName, password, matchPassword]);
 
+  function clearForm() {
+    setUser("");
+    setFirstName("");
+    setLastName("");
+    setPassword("");
+    setMatchPassword("");
+  }
+
   async function handleSubmit(e) {
     e.preventDefault();
     const v1 = USER_REGEX.test(user);
@@ -99,11 +107,7 @@ export default function Signup() {
         dispatch(disableIsAuthenticated());
       }
 
-      setUser("");
-      setFirstName("");
-      setLastName("");
-      setPassword("");
-      setMatchPassword("");
+      clearForm();
     } catch (err) {
       console.log(err);
       if (err.data.errMsg) {
@@ -125,13 +129,13 @@ export default function Signup() {
           </p>
           <h1>Sign Up</h1>
           <form className="login-signup__form" onSubmit={handleSubmit}>
-            <label className="login-signup__form-label" htmlFor="username">
+            <label className="main-input-label" htmlFor="username">
               Username:
               <FontAwesomeIcon icon={faCheck} className={validUser ? "faCheck--green" : "hide"} />
               <FontAwesomeIcon icon={faTimes} className={validUser || !user ? "hide" : "faTimes--red"} />
             </label>
             <input
-              className="login-signup__form-input"
+              className="main-input"
               type="text"
               id="username"
               ref={userRef}
@@ -140,19 +144,21 @@ export default function Signup() {
               value={user}
               required
               aria-invalid={validUser ? "false" : "true"}
-              aria-describedby="usernote"
+              aria-describedby="user-note"
               onFocus={() => setUserFocus(true)}
               onBlur={() => setUserFocus(false)}
             />
-            <p id="usernote" className={userFocus && !validUser ? "signup__instructions" : "offscreen"}>
-              <FontAwesomeIcon className="signup__instructions-svg" icon={faInfoCircle} />
+            <p id="user-note" className={userFocus && !validUser ? "input-instructions" : "offscreen"}>
+              <FontAwesomeIcon className="input-instructions-svg" icon={faInfoCircle} />
+              Only latin characters allowed.
+              <br />
               4 to 24 characters.
               <br />
               Must begin with a letter.
               <br />
               Letters, numbers, underscores, hyphens allowed.
             </p>
-            <label className="login-signup__form-label" htmlFor="firstName">
+            <label className="main-input-label" htmlFor="first-name">
               First Name:
               <FontAwesomeIcon icon={faCheck} className={validFirstName ? "faCheck--green" : "hide"} />
               <FontAwesomeIcon
@@ -161,28 +167,28 @@ export default function Signup() {
               />
             </label>
             <input
-              className="login-signup__form-input"
+              className="main-input"
               type="text"
-              id="firstName"
+              id="first-name"
               autoComplete="off"
               onChange={(e) => setFirstName(e.target.value)}
               value={firstName}
               required
               aria-invalid={validFirstName ? "false" : "true"}
-              aria-describedby="firstnamenote"
+              aria-describedby="first-name-note"
               onFocus={() => setFirstNameFocus(true)}
               onBlur={() => setFirstNameFocus(false)}
             />
             <p
-              id="firstnamenote"
-              className={firstNameFocus && !validFirstName ? "signup__instructions" : "offscreen"}
+              id="first-name-note"
+              className={firstNameFocus && !validFirstName ? "input-instructions" : "offscreen"}
             >
-              <FontAwesomeIcon className="signup__instructions-svg" icon={faInfoCircle} />
-              No numbers or spaces.
+              <FontAwesomeIcon className="input-instructions-svg" icon={faInfoCircle} />
+              Only latin characters allowed.
               <br />
-              Must use latin characters.
+              No numbers or spaces.
             </p>
-            <label className="login-signup__form-label" htmlFor="lastName">
+            <label className="main-input-label" htmlFor="last-name">
               Last Name:
               <FontAwesomeIcon icon={faCheck} className={validLastName ? "faCheck--green" : "hide"} />
               <FontAwesomeIcon
@@ -191,28 +197,28 @@ export default function Signup() {
               />
             </label>
             <input
-              className="login-signup__form-input"
+              className="main-input"
               type="text"
-              id="lastName"
+              id="last-name"
               autoComplete="off"
               onChange={(e) => setLastName(e.target.value)}
               value={lastName}
               required
               aria-invalid={validLastName ? "false" : "true"}
-              aria-describedby="lastnamenote"
+              aria-describedby="last-name-note"
               onFocus={() => setLastNameFocus(true)}
               onBlur={() => setLastNameFocus(false)}
             />
             <p
-              id="lastnamenote"
-              className={lastNameFocus && !validLastName ? "signup__instructions" : "offscreen"}
+              id="last-name-note"
+              className={lastNameFocus && !validLastName ? "input-instructions" : "offscreen"}
             >
-              <FontAwesomeIcon className="signup__instructions-svg" icon={faInfoCircle} />
-              No numbers or spaces.
+              <FontAwesomeIcon className="input-instructions-svg" icon={faInfoCircle} />
+              Only latin characters allowed.
               <br />
-              Must use latin characters.
+              No numbers or spaces.
             </p>
-            <label className="login-signup__form-label" htmlFor="password">
+            <label className="main-input-label" htmlFor="password">
               Password:
               <FontAwesomeIcon icon={faCheck} className={validPassword ? "faCheck--green" : "hide"} />
               <FontAwesomeIcon
@@ -221,22 +227,24 @@ export default function Signup() {
               />
             </label>
             <input
-              className="login-signup__form-input"
+              className="main-input"
               type="password"
               id="password"
               onChange={(e) => setPassword(e.target.value)}
               value={password}
               required
               aria-invalid={validPassword ? "false" : "true"}
-              aria-describedby="passwordnote"
+              aria-describedby="password-note"
               onFocus={() => setPasswordFocus(true)}
               onBlur={() => setPasswordFocus(false)}
             />
             <p
-              id="passwordnote"
-              className={passwordFocus && !validPassword ? "signup__instructions" : "offscreen"}
+              id="password-note"
+              className={passwordFocus && !validPassword ? "input-instructions" : "offscreen"}
             >
-              <FontAwesomeIcon className="signup__instructions-svg" icon={faInfoCircle} />
+              <FontAwesomeIcon className="input-instructions-svg" icon={faInfoCircle} />
+              Only latin characters allowed.
+              <br />
               8 to 24 characters.
               <br />
               Must include uppercase and lowercase letters, a number and a special character.
@@ -246,7 +254,7 @@ export default function Signup() {
               <span aria-label="dollar sign">$</span> <span aria-label="percent">%</span>
             </p>
 
-            <label className="login-signup__form-label" htmlFor="confirm_password">
+            <label className="main-input-label" htmlFor="confirm-password">
               Confirm Password:
               <FontAwesomeIcon
                 icon={faCheck}
@@ -258,20 +266,20 @@ export default function Signup() {
               />
             </label>
             <input
-              className="login-signup__form-input"
+              className="main-input"
               type="password"
-              id="confirm_password"
+              id="confirm-password"
               onChange={(e) => setMatchPassword(e.target.value)}
               value={matchPassword}
               required
               aria-invalid={validMatch ? "false" : "true"}
-              aria-describedby="confirmnote"
+              aria-describedby="confirm-note"
               onFocus={() => setMatchFocus(true)}
               onBlur={() => setMatchFocus(false)}
             />
-            <p id="confirmnote" className={matchFocus && !validMatch ? "signup__instructions" : "offscreen"}>
-              <FontAwesomeIcon className="signup__instructions-svg" icon={faInfoCircle} />
-              Must match the first password input field.
+            <p id="confirm-note" className={matchFocus && !validMatch ? "input-instructions" : "offscreen"}>
+              <FontAwesomeIcon className="input-instructions-svg" icon={faInfoCircle} />
+              Must match the first password.
             </p>
             <button
               className="login-signup__button"

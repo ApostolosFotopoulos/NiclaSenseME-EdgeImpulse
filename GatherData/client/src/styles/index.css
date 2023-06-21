@@ -157,6 +157,32 @@ button:disabled {
   width: var(--DESKTOP-PAGE-WIDTH);
 }
 
+.main-input-label {
+  width: 100%;
+  margin-top: 16px;
+}
+
+.main-input {
+  width: 100%;
+  padding: 8px;
+  border-radius: 8px;
+  border: 1px solid gray;
+}
+
+.input-instructions {
+  font-size: var(--SMALL-FONT-SIZE);
+  border-radius: 8px;
+  background: #000;
+  padding: 4px;
+  position: relative;
+  bottom: -10px;
+}
+
+.input-instructions-svg {
+  font-size: var(--MAIN-FONT-SIZE);
+  margin-right: 8px;
+}
+
 .offscreen {
   position: absolute;
   left: -9999px;
@@ -216,32 +242,6 @@ button:disabled {
   padding-bottom: 16px;
 }
 
-.login-signup__form-label {
-  width: 100%;
-  margin-top: 16px;
-}
-
-.login-signup__form-input {
-  width: 100%;
-  padding: 4px;
-  border-radius: 8px;
-  border: 1px solid gray;
-}
-
-.signup__instructions {
-  font-size: var(--SMALL-FONT-SIZE);
-  border-radius: 8px;
-  background: #000;
-  padding: 4px;
-  position: relative;
-  bottom: -10px;
-}
-
-.signup__instructions-svg {
-  font-size: var(--MAIN-FONT-SIZE);
-  margin-right: 8px;
-}
-
 .login-signup__button {
   margin-top: 16px;
   margin-bottom: 16px;
@@ -294,12 +294,12 @@ button:disabled {
 
 /* PATIENT */
 .patient__form {
-  display: flex;
-  flex-wrap: wrap;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
   width: 50%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  flex-grow: 1;
+  padding-bottom: 16px;
 }
 
 .patient__form-label {
@@ -322,6 +322,7 @@ button:disabled {
 
 .patient__form-button {
   margin-top: 16px;
+  align-self: center;
 }
 
 .patient__details {

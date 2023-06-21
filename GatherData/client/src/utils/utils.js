@@ -1,7 +1,7 @@
 import moment from "moment";
 moment.suppressDeprecationWarnings = true;
 // Valid inserted date formats
-const formats = ["DD/MM/YYYY", "D/M/YYYY", "DD-MM-YYYY", "D-M-YYYY"];
+const formats = ["D/M/YYYY", "D-M-YYYY"];
 
 // Check if a query result got the "Invalid Inputs" return from the database
 export function checkRes(res) {

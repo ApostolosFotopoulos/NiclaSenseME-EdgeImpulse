@@ -72,11 +72,11 @@ export default function Login() {
           </p>
           <h1>Log In</h1>
           <form className="login-signup__form" onSubmit={handleSubmit}>
-            <label className="login-signup__form-label" htmlFor="username">
+            <label className="main-input-label" htmlFor="username">
               Username:
             </label>
             <input
-              className="login-signup__form-input"
+              className="main-input"
               type="text"
               id="username"
               ref={userRef}
@@ -85,11 +85,11 @@ export default function Login() {
               value={user}
               required
             />
-            <label className="login-signup__form-label" htmlFor="password">
+            <label className="main-input-label" htmlFor="password">
               Password:
             </label>
             <input
-              className="login-signup__form-input"
+              className="main-input"
               type="password"
               id="password"
               onChange={(e) => setPassword(e.target.value)}
