@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { faCheck, faTimes, faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { USER_REGEX, NAME_REGEX, PWD_REGEX } from "utils/constants";
+import { isValidUserName, isValidName, isValidPassword } from "utils/validateData";
 import { enableIsAuthenticated, disableIsAuthenticated } from "app/appSlice";
 import { selectCheckedAuth } from "app/appSlice";
 import { useSignUpDoctorMutation } from "api/apiSlice";
@@ -50,19 +50,19 @@ export default function Signup() {
   // }, [checkedAuth]);
 
   useEffect(() => {
-    setValidUser(USER_REGEX.test(user));
+    setValidUser(isValidUserName(user));
   }, [user]);
 
   useEffect(() => {
-    setValidFirstName(NAME_REGEX.test(firstName));
+    setValidFirstName(isValidName(firstName));
   }, [firstName]);
 
   useEffect(() => {
-    setValidLastName(NAME_REGEX.test(lastName));
+    setValidLastName(isValidName(lastName));
   }, [lastName]);
 
   useEffect(() => {
-    setValidPassword(PWD_REGEX.test(password));
+    setValidPassword(isValidPassword(password));
     setValidMatch(password === matchPassword);
   }, [password, matchPassword]);
 
@@ -80,11 +80,12 @@ export default function Signup() {
 
   async function handleSubmit(e) {
     e.preventDefault();
-    const v1 = USER_REGEX.test(user);
-    const v2 = NAME_REGEX.test(firstName);
-    const v3 = NAME_REGEX.test(lastName);
-    const v4 = PWD_REGEX.test(password);
-    if (!v1 || !v2 || !v3 || !v4) {
+    if (
+      !isValidUserName(user) ||
+      !isValidName(firstName) ||
+      !isValidName(lastName) ||
+      !isValidPassword(password)
+    ) {
       setErrMsg("Invalid Entry");
       return;
     }
@@ -109,8 +110,7 @@ export default function Signup() {
 
       clearForm();
     } catch (err) {
-      console.log(err);
-      if (err.data.errMsg) {
+      if (err?.data) {
         setErrMsg(err.data.errMsg);
       } else {
         setErrMsg("No server response");

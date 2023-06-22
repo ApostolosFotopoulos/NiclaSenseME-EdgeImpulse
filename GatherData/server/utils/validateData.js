@@ -1,6 +1,26 @@
+const dayjs = require("dayjs");
+const customParseFormat = require("dayjs/plugin/customParseFormat");
+dayjs.extend(customParseFormat);
+// Valid inserted date formats
+const formats = ["YYYY-MM-DD"];
+
 const USER_REGEX = /^[A-z][A-z0-9-_]{3,23}$/;
 const NAME_REGEX = /^[a-zA-Z]+([ \\'-]{0,1}[a-zA-Z]+){0,2}[.]{0,1}$/;
 const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
+
+function isValidDateFormat(date) {
+  return dayjs(date, formats, true).isValid();
+}
+
+// Check if the inserted year is valid
+function isValidYear(date) {
+  const year = dayjs(date, formats, true).year();
+  return year > new Date().getFullYear() - 100 && year < new Date().getFullYear();
+}
+
+function isValidDate(date) {
+  return isValidDateFormat(date) && isValidYear(date);
+}
 
 function isPosFloat(n) {
   if (typeof n === "string") {
@@ -37,6 +57,7 @@ function isValidPassword(password) {
 }
 
 module.exports = {
+  isValidDate,
   isPosFloat,
   isPosInt,
   isPosNumeric,

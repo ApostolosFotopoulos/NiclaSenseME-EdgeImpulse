@@ -52,8 +52,7 @@ export default function Login() {
       setUser("");
       setPassword("");
     } catch (err) {
-      console.log(err);
-      if (err.data.errMsg) {
+      if (err?.data) {
         setErrMsg(err.data.errMsg);
       } else {
         setErrMsg("No server response");

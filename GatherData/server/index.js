@@ -11,51 +11,7 @@ app.use(express.json());
 // ROUTES
 app.use("/", require("@root/routes/jwtAuth"));
 app.use("/", require("@root/routes/doctor"));
-// PATIENT QUERIES
-// Get patient with first name, last name and date of birth
-app.get("/patient/:fname&:lname&:dob", async (req, res) => {
-  try {
-    console.log("Get patient");
-    console.log(req.params);
-    const { fname: patientFirstName, lname: patientLastName, dob: patientDateOfBirth } = req.params;
-    if (isString(patientFirstName) && isString(patientLastName) && isString(patientDateOfBirth)) {
-      const queryRes = await pool.query(
-        "SELECT * FROM patient WHERE first_name=$1 AND last_name=$2 AND date_of_birth=$3",
-        [patientFirstName, patientLastName, patientDateOfBirth]
-      );
-      console.log(queryRes.rows[0]);
-      res.json(queryRes.rows[0]);
-    } else {
-      res.json("Invalid Inputs");
-    }
-  } catch (err) {
-    console.log(err);
-  }
-});
-
-// Insert patient
-app.post("/patient", async (req, res) => {
-  console.log("Insert patient");
-  try {
-    console.log("Body:");
-    console.log(req.body);
-    const { patientFirstName, patientLastName, patientDateOfBirth } = req.body;
-
-    if (isString(patientFirstName) && isString(patientLastName) && isString(patientDateOfBirth)) {
-      const queryRes = await pool.query(
-        "INSERT INTO patient(first_name, last_name, date_of_birth) VALUES ($1, $2, $3) RETURNING *",
-        [patientFirstName, patientLastName, patientDateOfBirth]
-      );
-      console.log("Inserted data:");
-      console.log(queryRes.rows[0]);
-      res.json(queryRes.rows[0]);
-    } else {
-      res.json("Invalid Inputs");
-    }
-  } catch (err) {
-    console.log(err);
-  }
-});
+app.use("/", require("@root/routes/patient"));
 
 // PREDICTION QUERIES
 // Get predictions count with patient id and prediction date

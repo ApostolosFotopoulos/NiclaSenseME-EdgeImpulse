@@ -1,7 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
 import { DEBUG, SERVICE_UUID, CHARACTERISTIC_UUID, SET_INTERVAL_TIME } from "utils/constants";
 import { useDispatch, useSelector } from "react-redux";
-import { checkRes, isEmptyObj, getCurrentDate } from "utils/utils";
+import { checkRes, getCurrentDate } from "utils/utils";
+import { isEmptyObj } from "utils/validateData";
 import {
   setStatus,
   enableIsConnected,

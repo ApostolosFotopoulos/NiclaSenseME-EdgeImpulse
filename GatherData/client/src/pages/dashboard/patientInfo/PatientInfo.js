@@ -1,6 +1,7 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { checkRes, isEmptyObj, getCurrentDate } from "utils/utils";
+import { checkRes, getCurrentDate } from "utils/utils";
+import { isEmptyObj } from "utils/validateData";
 import { setStatus } from "pages/dashboard/status/statusSlice";
 import { selectIsConnected } from "pages/dashboard/status/statusSlice";
 import {
@@ -117,7 +118,7 @@ export default function PatientInfo() {
           placeholder="First Name"
           type="text"
           className="patient__details-input"
-          id={"First Name"}
+          id={"patient-details-first-name"}
           value={selectedPatient.patientFirstName}
         />
         <input
@@ -125,7 +126,7 @@ export default function PatientInfo() {
           placeholder="Last Name"
           type="text"
           className="patient__details-input"
-          id={"Last Name"}
+          id={"patient-details-last-name"}
           value={selectedPatient.patientLastName}
         />
         <input
@@ -133,7 +134,7 @@ export default function PatientInfo() {
           placeholder="Date Of Birth"
           type="text"
           className="patient__details-input"
-          id={"Date Of Birth"}
+          id={"patient-details-date-of-birth"}
           value={selectedPatient.patientDateOfBirth}
         />
       </div>

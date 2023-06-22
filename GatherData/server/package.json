@@ -11,10 +11,12 @@
   "dependencies": {
     "bcrypt": "^5.1.0",
     "cors": "^2.8.5",
+    "dayjs": "^1.11.8",
     "dotenv": "^16.1.4",
     "express": "^4.18.2",
     "jsonwebtoken": "^9.0.0",
     "module-alias": "^2.2.3",
+    "momment": "^0.0.1",
     "pg": "^8.10.0"
   },
   "_moduleAliases": {

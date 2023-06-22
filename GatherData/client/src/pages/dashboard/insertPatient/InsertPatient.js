@@ -2,12 +2,12 @@ import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { faCheck, faTimes, faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { NAME_REGEX } from "utils/constants";
-import { checkRes, isValidYear, isValidDate, toIsoDayFormat } from "utils/utils";
+import { toIsoDayFormat } from "utils/utils";
+import { isValidDate, isValidName } from "utils/validateData";
 import { setStatus } from "pages/dashboard/status/statusSlice";
 import { setSelectedpatient } from "pages/dashboard/patientInfo/patientInfoSlice";
 import { selectIsGatheringData } from "pages/dashboard/patientInfo/patientInfoSlice";
-import { useLazyGetPatientQuery, usePostPatientMutation } from "api/apiSlice";
+import { usePostPatientMutation } from "api/apiSlice";
 
 export default function InsertPatient() {
   // Local state
@@ -28,19 +28,18 @@ export default function InsertPatient() {
   const dispatch = useDispatch();
 
   // Queries
-  const [getPatient] = useLazyGetPatientQuery();
   const [insertPatient] = usePostPatientMutation();
 
   useEffect(() => {
-    setValidPatientFirstName(NAME_REGEX.test(patientFirstName));
+    setValidPatientFirstName(isValidName(patientFirstName));
   }, [patientFirstName]);
 
   useEffect(() => {
-    setValidPatientLastName(NAME_REGEX.test(patientLastName));
+    setValidPatientLastName(isValidName(patientLastName));
   }, [patientLastName]);
 
   useEffect(() => {
-    setValidPatientDateOfBirth(isValidDate(patientDateOfBirth) && isValidYear(patientDateOfBirth));
+    setValidPatientDateOfBirth(isValidDate(patientDateOfBirth));
   }, [patientDateOfBirth]);
 
   // Clear the form
@@ -54,10 +53,7 @@ export default function InsertPatient() {
   async function handleSubmit(e) {
     e.preventDefault();
 
-    const v1 = NAME_REGEX.test(patientFirstName);
-    const v2 = NAME_REGEX.test(patientLastName);
-    const v3 = isValidDate(patientDateOfBirth) && isValidYear(patientDateOfBirth);
-    if (!v1 || !v2 || !v3) {
+    if (!isValidName(patientFirstName) || !isValidName(patientLastName) || !isValidDate(patientDateOfBirth)) {
       dispatch(setStatus("Invalid entry"));
       return;
     }
@@ -71,28 +67,22 @@ export default function InsertPatient() {
       // Format the date to ISO8601
       const patientDateOfBirthIso = toIsoDayFormat(patientDateOfBirth);
       // Ckeck if the patient exists
-      let res = await getPatient({
+      let res = await insertPatient({
         patientFirstName,
         patientLastName,
         patientDateOfBirth: patientDateOfBirthIso,
       }).unwrap();
-      checkRes(res);
-      // If the patient doesn't exist, insert the patient in the database
-      if (res === null) {
-        res = await insertPatient({
-          patientFirstName,
-          patientLastName,
-          patientDateOfBirth: patientDateOfBirthIso,
-        }).unwrap();
-        checkRes(res);
-      }
 
       const { patient_id: patientId } = res;
       dispatch(setSelectedpatient({ patientId, patientFirstName, patientLastName, patientDateOfBirth }));
       dispatch(setStatus(`Patient ${patientFirstName} ${patientLastName} selected`));
       clearForm();
-    } catch (e) {
-      dispatch(setStatus("Error communicating with the database"));
+    } catch (err) {
+      if (err?.data) {
+        dispatch(setStatus(err.data.errMsg));
+      } else {
+        dispatch(setStatus("No server response"));
+      }
     }
   }
 
@@ -141,7 +131,7 @@ export default function InsertPatient() {
           className="main-input"
           type="text"
           id="patient-last-name"
-          onChange={(e) => setPatientFirstName(e.target.value)}
+          onChange={(e) => setPatientLastName(e.target.value)}
           value={patientLastName}
           required
           aria-invalid={validPatientLastName ? "false" : "true"}

@@ -3,6 +3,7 @@ const pool = require("@root/config/db");
 const { isPosInt, isValidUserName, isValidName, isValidPassword } = require("@root/utils/validateData");
 const auth = require("@root/middleware/auth");
 
+// Get doctor with auth middleware
 router.get("/doctor", auth, async (req, res) => {
   try {
     console.log("Select doctor");

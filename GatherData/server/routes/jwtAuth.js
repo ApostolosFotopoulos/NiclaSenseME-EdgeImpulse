@@ -1,6 +1,6 @@
 const router = require("express").Router();
-const bcrypt = require("bcrypt");
 const pool = require("@root/config/db");
+const bcrypt = require("bcrypt");
 const jwtGenerator = require("@root/utils/jwtGenerator");
 const { isString, isValidUserName, isValidName, isValidPassword } = require("@root/utils/validateData");
 const auth = require("@root/middleware/auth");

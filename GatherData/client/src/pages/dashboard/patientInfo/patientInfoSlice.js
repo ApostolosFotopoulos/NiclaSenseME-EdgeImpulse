@@ -4,7 +4,11 @@ const initialState = {
   isGatheringData: false,
   isSubmittingSession: false,
   gatherButtonText: "GATHER DATA",
-  selectedPatient: {},
+  selectedPatient: {
+    patientFirstName: "",
+    patientLastName: "",
+    patientDateOfBirth: "",
+  },
 };
 
 export const patientInfoSlice = createSlice({

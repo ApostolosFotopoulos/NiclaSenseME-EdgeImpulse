@@ -293,38 +293,7 @@ button:disabled {
 }
 
 /* PATIENT */
-.patient__form {
-  width: 50%;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-evenly;
-  flex-grow: 1;
-  padding-bottom: 16px;
-}
-
-.patient__form-label {
-  width: 100%;
-  margin-top: 16px;
-  align-self: center;
-  letter-spacing: 1px;
-  display: block;
-  text-align: left;
-}
-
-.patient__form-input {
-  width: 100%;
-  margin-top: 4px;
-  align-self: center;
-  padding: 8px;
-  border: 1px solid gray;
-  border-radius: 5px;
-}
-
-.patient__form-button {
-  margin-top: 16px;
-  align-self: center;
-}
-
+/* PATIENT DETAILS */
 .patient__details {
   width: 100%;
   display: flex;
@@ -335,18 +304,10 @@ button:disabled {
   align-items: center;
 }
 
-.patient__details-label {
-  width: 100%;
-  margin-top: 16px;
-  align-self: center;
-  letter-spacing: 1px;
-  display: block;
-  text-align: left;
-}
-
 .patient__details-input {
   width: 100%;
   align-self: center;
+  text-align: center;
   padding: 8px;
   border: none;
   border-radius: 5px;
@@ -368,4 +329,19 @@ button:disabled {
 .patient__details-button--collecting {
   background-color: grey;
   color: black;
+}
+
+/* INSERT PATIENT */
+.patient__form {
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  flex-grow: 1;
+  padding-bottom: 16px;
+}
+
+.patient__form-button {
+  margin-top: 16px;
+  align-self: center;
 }
