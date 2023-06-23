@@ -1,6 +1,6 @@
 const router = require("express").Router();
 const pool = require("@root/config/db");
-const { isValidName, isValidDate } = require("@root/utils/validateData");
+const { isValidName, isValidBirthDate } = require("@root/utils/validateData");
 
 // Get patient with first name, last name and date of birth
 router.get("/patient/:fname&:lname&:dob", async (req, res) => {
@@ -9,7 +9,11 @@ router.get("/patient/:fname&:lname&:dob", async (req, res) => {
     console.log(req.params);
 
     const { fname: patientFirstName, lname: patientLastName, dob: patientDateOfBirth } = req.params;
-    if (!isValidName(patientFirstName) || !isValidName(patientLastName) || !isValidDate(patientDateOfBirth)) {
+    if (
+      !isValidName(patientFirstName) ||
+      !isValidName(patientLastName) ||
+      !isValidBirthDate(patientDateOfBirth)
+    ) {
       return res.status(422).json({ errMsg: "Invalid data" });
     }
 
@@ -33,7 +37,11 @@ router.post("/patient", async (req, res) => {
     console.log(req.body);
     const { patientFirstName, patientLastName, patientDateOfBirth } = req.body;
 
-    if (!isValidName(patientFirstName) || !isValidName(patientLastName) || !isValidDate(patientDateOfBirth)) {
+    if (
+      !isValidName(patientFirstName) ||
+      !isValidName(patientLastName) ||
+      !isValidBirthDate(patientDateOfBirth)
+    ) {
       return res.status(422).json({ errMsg: "Invalid data" });
     }
 

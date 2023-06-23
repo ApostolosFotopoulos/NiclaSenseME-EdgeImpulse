@@ -25,7 +25,7 @@ VALUES ('Tom', 'Jones', '2000-08-11') RETURNING *
 
 -- PREDICTION QUERIES
 -- Get predictions count with patient id and prediction date
-SELECT COUNT(prediction_id)
+SELECT COUNT(prediction_id) AS prediction_count
 FROM prediction
 WHERE patient_id=26 AND prediction_date='2023-05-28'
 

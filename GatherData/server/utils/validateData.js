@@ -18,7 +18,7 @@ function isValidYear(date) {
   return year > new Date().getFullYear() - 100 && year < new Date().getFullYear();
 }
 
-function isValidDate(date) {
+function isValidBirthDate(date) {
   return isValidDateFormat(date) && isValidYear(date);
 }
 
@@ -57,7 +57,8 @@ function isValidPassword(password) {
 }
 
 module.exports = {
-  isValidDate,
+  isValidDateFormat,
+  isValidBirthDate,
   isPosFloat,
   isPosInt,
   isPosNumeric,
