@@ -2,7 +2,6 @@ require("module-alias/register");
 const express = require("express");
 const cors = require("cors");
 const pool = require("@root/config/db");
-const { isPosInt, isPosNumeric, isString } = require("@root/utils/validateData");
 
 const app = express();
 app.use(cors());

@@ -17,11 +17,11 @@ VALUES ('John', 'John', 'Mime', 'xxx') RETURNING doctor_id
 -- Get patient with first name, last name and date of birth
 SELECT * 
 FROM patient 
-WHERE first_name='Tolis' AND last_name='Fot' AND date_of_birth='1997-09-03'
+WHERE doctor_id=11 AND first_name='Tolis' AND last_name='Fot' AND date_of_birth='1997-09-03'
 
 -- Insert patient
-INSERT INTO patient(first_name, last_name, date_of_birth) 
-VALUES ('Tom', 'Jones', '2000-08-11') RETURNING *
+INSERT INTO patient(doctor_id, first_name, last_name, date_of_birth) 
+VALUES (11, 'Tom', 'Jones', '2000-08-11') RETURNING *
 
 -- PREDICTION QUERIES
 -- Get predictions count with patient id and prediction date

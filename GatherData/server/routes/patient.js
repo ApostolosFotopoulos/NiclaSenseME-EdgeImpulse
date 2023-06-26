@@ -1,15 +1,22 @@
 const router = require("express").Router();
 const pool = require("@root/config/db");
-const { isValidName, isValidBirthDate } = require("@root/utils/validateData");
+const { isValidName, isValidBirthDate, isPosInt } = require("@root/utils/validateData");
 
 // Get patient with first name, last name and date of birth
-router.get("/patient/:fname&:lname&:dob", async (req, res) => {
+router.get("/patient/:did&:fname&:lname&:dob", async (req, res) => {
   try {
     console.log("Get patient");
     console.log(req.params);
 
-    const { fname: patientFirstName, lname: patientLastName, dob: patientDateOfBirth } = req.params;
+    const {
+      did: doctorId,
+      fname: patientFirstName,
+      lname: patientLastName,
+      dob: patientDateOfBirth,
+    } = req.params;
+
     if (
+      !isPosInt(doctorId) ||
       !isValidName(patientFirstName) ||
       !isValidName(patientLastName) ||
       !isValidBirthDate(patientDateOfBirth)
@@ -18,8 +25,8 @@ router.get("/patient/:fname&:lname&:dob", async (req, res) => {
     }
 
     const queryRes = await pool.query(
-      "SELECT * FROM patient WHERE first_name=$1 AND last_name=$2 AND date_of_birth=$3",
-      [patientFirstName, patientLastName, patientDateOfBirth]
+      "SELECT * FROM patient WHERE doctor_id=$1 AND first_name=$2 AND last_name=$3 AND date_of_birth=$4",
+      [doctorId, patientFirstName, patientLastName, patientDateOfBirth]
     );
     console.log(queryRes.rows[0]);
     res.json(queryRes.rows[0]);
@@ -35,9 +42,10 @@ router.post("/patient", async (req, res) => {
   try {
     console.log("Body:");
     console.log(req.body);
-    const { patientFirstName, patientLastName, patientDateOfBirth } = req.body;
+    const { doctorId, patientFirstName, patientLastName, patientDateOfBirth } = req.body;
 
     if (
+      !isPosInt(doctorId) ||
       !isValidName(patientFirstName) ||
       !isValidName(patientLastName) ||
       !isValidBirthDate(patientDateOfBirth)
@@ -46,18 +54,18 @@ router.post("/patient", async (req, res) => {
     }
 
     let queryRes = await pool.query(
-      "SELECT * FROM patient WHERE first_name=$1 AND last_name=$2 AND date_of_birth=$3",
-      [patientFirstName, patientLastName, patientDateOfBirth]
+      "SELECT * FROM patient WHERE doctor_id=$1 AND first_name=$2 AND last_name=$3 AND date_of_birth=$4",
+      [doctorId, patientFirstName, patientLastName, patientDateOfBirth]
     );
     console.log("Patient exists:");
     console.log(queryRes.rows[0]);
-    if (queryRes.rows.length > 0) {
+    if (queryRes.rowCount > 0) {
       return res.json(queryRes.rows[0]);
     }
 
     queryRes = await pool.query(
-      "INSERT INTO patient(first_name, last_name, date_of_birth) VALUES ($1, $2, $3) RETURNING *",
-      [patientFirstName, patientLastName, patientDateOfBirth]
+      "INSERT INTO patient(doctor_id ,first_name, last_name, date_of_birth) VALUES ($1, $2, $3, $4) RETURNING *",
+      [doctorId, patientFirstName, patientLastName, patientDateOfBirth]
     );
     console.log("Inserted data:");
     console.log(queryRes.rows[0]);
