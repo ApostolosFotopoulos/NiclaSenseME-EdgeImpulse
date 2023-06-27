@@ -3,10 +3,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { faCheck, faTimes, faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { toIsoDayFormat } from "utils/utils";
-import { isValidDate, isValidName } from "utils/validateData";
+import { isValidBirthDate, isValidName } from "utils/validateData";
 import { setStatus } from "pages/dashboard/status/statusSlice";
 import { setSelectedpatient } from "pages/dashboard/patientInfo/patientInfoSlice";
 import { selectIsGatheringData } from "pages/dashboard/patientInfo/patientInfoSlice";
+import { selectDoctor } from "pages/dashboard/status/doctorProfile/doctorProfileSlice";
 import { usePostPatientMutation } from "api/apiSlice";
 
 export default function InsertPatient() {
@@ -24,6 +25,7 @@ export default function InsertPatient() {
   const [patientDateOfBirthFocus, setPatientDateOfBirthFocus] = useState(false);
 
   // Redux state
+  const doctor = useSelector(selectDoctor);
   const isGatheringData = useSelector(selectIsGatheringData);
   const dispatch = useDispatch();
 
@@ -39,7 +41,7 @@ export default function InsertPatient() {
   }, [patientLastName]);
 
   useEffect(() => {
-    setValidPatientDateOfBirth(isValidDate(patientDateOfBirth));
+    setValidPatientDateOfBirth(isValidBirthDate(patientDateOfBirth));
   }, [patientDateOfBirth]);
 
   // Clear the form
@@ -49,11 +51,16 @@ export default function InsertPatient() {
     setPatientDateOfBirth("");
   }
 
-  // Select and submit the new patient, if he doesn't already exist, in the database
+  // Insert the patient if he doesn't exist
+  // If he exists get the patient
   async function handleSubmit(e) {
     e.preventDefault();
 
-    if (!isValidName(patientFirstName) || !isValidName(patientLastName) || !isValidDate(patientDateOfBirth)) {
+    if (
+      !isValidName(patientFirstName) ||
+      !isValidName(patientLastName) ||
+      !isValidBirthDate(patientDateOfBirth)
+    ) {
       dispatch(setStatus("Invalid entry"));
       return;
     }
@@ -66,8 +73,9 @@ export default function InsertPatient() {
     try {
       // Format the date to ISO8601
       const patientDateOfBirthIso = toIsoDayFormat(patientDateOfBirth);
-      // Ckeck if the patient exists
+
       let res = await insertPatient({
+        doctorId: doctor.doctorId,
         patientFirstName,
         patientLastName,
         patientDateOfBirth: patientDateOfBirthIso,

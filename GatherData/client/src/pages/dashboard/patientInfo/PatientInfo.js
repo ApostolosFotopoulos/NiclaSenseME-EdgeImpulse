@@ -1,7 +1,7 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { checkRes, getCurrentDate } from "utils/utils";
-import { isEmptyObj } from "utils/validateData";
+import { getCurrentDate } from "utils/utils";
+import { hasSelectedPatient } from "utils/validateData";
 import { setStatus } from "pages/dashboard/status/statusSlice";
 import { selectIsConnected } from "pages/dashboard/status/statusSlice";
 import {
@@ -16,12 +16,7 @@ import {
   selectGatherButtonText,
   selectSelectedPatient,
 } from "./patientInfoSlice";
-import {
-  useLazyGetPredictionCountQuery,
-  useLazyGetSessionQuery,
-  usePostSessionMutation,
-  useUpdateSessionMutation,
-} from "api/apiSlice";
+import { usePostSessionMutation } from "api/apiSlice";
 
 export default function PatientInfo() {
   // Redux state
@@ -33,56 +28,24 @@ export default function PatientInfo() {
   const dispatch = useDispatch();
 
   // Queries
-  const [getPredictionCount] = useLazyGetPredictionCountQuery();
-  const [getSession] = useLazyGetSessionQuery();
   const [insertSession] = usePostSessionMutation();
-  const [updateSession] = useUpdateSessionMutation();
 
+  // Insert the new session if valid predictions exist
+  // If the session exists then update it
   async function submitSession() {
     dispatch(enableIsSubmittingSession());
 
     try {
-      // Ckeck if valid predictions exist
-      let res = await getPredictionCount({
-        patientId: selectedPatient.patientId,
-        predictionDate: getCurrentDate(),
-      }).unwrap();
-      checkRes(res);
-
-      const { count } = res;
-      console.log(count);
-      if (count <= 0) {
-        return;
-      }
-
-      res = await getSession({
+      await insertSession({
         patientId: selectedPatient.patientId,
         sessionDate: getCurrentDate(),
       }).unwrap();
-      checkRes(res);
-      console.log(res);
-
-      if (res === null) {
-        res = await insertSession({
-          patientId: selectedPatient.patientId,
-          sessionDate: getCurrentDate(),
-        }).unwrap();
-        checkRes(res);
-        console.log(res);
+    } catch (err) {
+      if (err?.data) {
+        dispatch(setStatus(err.data.errMsg));
       } else {
-        const { session_id: sessionId } = res;
-        console.log(sessionId);
-        res = await updateSession({
-          sessionId: sessionId,
-          patientId: selectedPatient.patientId,
-          sessionDate: getCurrentDate(),
-        });
-        checkRes(res);
-        console.log(res);
+        dispatch(setStatus("No server response"));
       }
-    } catch (e) {
-      console.log(e);
-      dispatch(setStatus("Error communicating with the database"));
     }
 
     dispatch(disableIsSubmittingSession());
@@ -95,7 +58,7 @@ export default function PatientInfo() {
       return;
     }
 
-    if (isEmptyObj(selectedPatient)) {
+    if (!hasSelectedPatient(selectedPatient)) {
       dispatch(setStatus("No patient is selected"));
       return;
     }

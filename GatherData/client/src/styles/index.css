@@ -27,6 +27,7 @@ img {
   --MAIN-BG-COLOR: #111111;
   --BUTTON-BG-COLOR: #d8f41d;
   --BUTTON-HOVER-COLOR: rgb(255, 255, 83);
+  --BUTTON-SUCCESS-HOVER-COLOR: rgb(0, 162, 0);
   --BUTTON-DISABLED-COLOR: rgba(242, 242, 242, 0.4);
   --LINK-BG-COLOR: blue;
   --LINK-HOVER-COLOR: rgb(116, 116, 255);
@@ -285,6 +286,10 @@ button:disabled {
 .status__button--connected {
   background-color: green;
   color: white;
+}
+
+.status__button--connected:hover {
+  background-color: var(--BUTTON-SUCCESS-HOVER-COLOR);
 }
 
 .status__msg {

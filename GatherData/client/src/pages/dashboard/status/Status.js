@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { DEBUG, SERVICE_UUID, CHARACTERISTIC_UUID, SET_INTERVAL_TIME } from "utils/constants";
 import { useDispatch, useSelector } from "react-redux";
-import { checkRes, getCurrentDate } from "utils/utils";
+import { getCurrentDate } from "utils/utils";
 import { isEmptyObj } from "utils/validateData";
 import {
   setStatus,
@@ -15,12 +15,12 @@ import { disableIsGatheringData } from "pages/dashboard/patientInfo/patientInfoS
 import { selectIsGatheringData, selectSelectedPatient } from "pages/dashboard/patientInfo/patientInfoSlice";
 import { usePostPredictionMutation } from "api/apiSlice";
 
-import UserProfile from "./userProfile/UserProfile";
+import DoctorProfile from "./doctorProfile/DoctorProfile";
 
 export default function Status() {
   // Local variables
   const compRef = useRef({});
-  const { current: my } = compRef;
+  const { current: refs } = compRef;
 
   // Local state
   const [predictionsBody, setPredictionsBody] = useState({});
@@ -39,7 +39,7 @@ export default function Status() {
 
   // Set local variables
   useEffect(() => {
-    my.NiclaSenseME = {
+    refs.NiclaSenseME = {
       predictions: {
         uuid: CHARACTERISTIC_UUID,
         properties: ["BLERead"],
@@ -48,21 +48,19 @@ export default function Status() {
       },
     };
 
-    const sensors = Object.keys(my.NiclaSenseME);
-    [my.sensor] = sensors;
-
-    my.initialRender = true;
-  }, [my]);
+    const sensors = Object.keys(refs.NiclaSenseME);
+    [refs.sensor] = sensors;
+  }, [refs]);
 
   // Remove connect button styles
   function stopConnection() {
-    clearInterval(my.NiclaSenseME[my.sensor].polling);
+    clearInterval(refs.NiclaSenseME[refs.sensor].polling);
     dispatch(disableIsConnected());
     dispatch(disableIsGatheringData());
   }
 
   // Stop polling when nicla disconnects
-  function onDisconnected(event) {
+  function onDisconnected() {
     console.log("Disconnected");
     stopConnection();
   }
@@ -85,14 +83,14 @@ export default function Status() {
     const service = await server.getPrimaryService(SERVICE_UUID);
 
     // Set up the characteristics
-    dispatch(setStatus("Characteristic " + my.sensor + "..."));
-    my.NiclaSenseME[my.sensor].characteristic = await service.getCharacteristic(
-      my.NiclaSenseME[my.sensor].uuid
+    dispatch(setStatus("Characteristic " + refs.sensor + "..."));
+    refs.NiclaSenseME[refs.sensor].characteristic = await service.getCharacteristic(
+      refs.NiclaSenseME[refs.sensor].uuid
     );
     // Set up polling for read
-    if (my.NiclaSenseME[my.sensor].properties.includes("BLERead")) {
-      my.NiclaSenseME[my.sensor].polling = setInterval(function () {
-        my.NiclaSenseME[my.sensor].characteristic
+    if (refs.NiclaSenseME[refs.sensor].properties.includes("BLERead")) {
+      refs.NiclaSenseME[refs.sensor].polling = setInterval(function () {
+        refs.NiclaSenseME[refs.sensor].characteristic
           .readValue()
           .then(function (data) {
             const decodedData = new TextDecoder().decode(data);
@@ -132,8 +130,8 @@ export default function Status() {
 
   // Imitate nicla data gathering for debugging
   function imitateConnection() {
-    clearInterval(my.NiclaSenseME[my.sensor].polling);
-    my.NiclaSenseME[my.sensor].polling = setInterval(function () {
+    clearInterval(refs.NiclaSenseME[refs.sensor].polling);
+    refs.NiclaSenseME[refs.sensor].polling = setInterval(function () {
       function getRandomFloat(min, max, decimals) {
         const str = (Math.random() * (max - min) + min).toFixed(decimals);
 
@@ -151,9 +149,9 @@ export default function Status() {
   //Run on unmount
   useEffect(() => {
     return () => {
-      clearInterval(my.NiclaSenseME[my.sensor].polling);
+      clearInterval(refs.NiclaSenseME[refs.sensor].polling);
     };
-  }, [my]);
+  }, [refs]);
 
   useEffect(() => {
     console.log("Run use effect for gathering");
@@ -164,10 +162,13 @@ export default function Status() {
           ...predictionsBody,
           predictionDate: getCurrentDate(),
         };
-        let res = await insertPrediction(body).unwrap();
-        checkRes(res);
-      } catch (e) {
-        dispatch(setStatus("Error communicating with the database"));
+        await insertPrediction(body).unwrap();
+      } catch (err) {
+        if (err?.data) {
+          dispatch(setStatus(err.data.errMsg));
+        } else {
+          dispatch(setStatus("No server response"));
+        }
       }
     }
 
@@ -211,7 +212,7 @@ export default function Status() {
           {connectButtonText}
         </button>
         <div className="status__msg">{msg}</div>
-        <UserProfile />
+        <DoctorProfile />
       </div>
     </div>
   );

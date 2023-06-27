@@ -19,8 +19,22 @@ function isValidYear(date) {
   return year > new Date().getFullYear() - 100 && year < new Date().getFullYear();
 }
 
-export function isValidDate(date) {
+// Check if a date is valid
+export function isValidBirthDate(date) {
   return isValidDateFormat(date) && isValidYear(date);
+}
+
+// Check if the user has selected a patient
+export function hasSelectedPatient(patient) {
+  if (
+    patient?.patientFirstName !== "" ||
+    patient?.patientLastName !== "" ||
+    patient?.patientDateOfBirth !== ""
+  ) {
+    return false;
+  }
+
+  return true;
 }
 
 // Check if an object is empty
@@ -28,14 +42,17 @@ export function isEmptyObj(obj) {
   return Object.keys(obj).length === 0;
 }
 
+// Check if a username is valid
 export function isValidUserName(userName) {
   return USER_REGEX.test(userName);
 }
 
+// Check if a name is valid
 export function isValidName(name) {
   return NAME_REGEX.test(name);
 }
 
+// Check if a password is valid
 export function isValidPassword(password) {
   return PWD_REGEX.test(password);
 }

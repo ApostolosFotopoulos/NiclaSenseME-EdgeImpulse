@@ -1,10 +1,13 @@
 import React, { useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { disableIsAuthenticated } from "app/appSlice";
 import { useLazyGetDoctorQuery } from "api/apiSlice";
+import { setDoctor } from "./doctorProfileSlice";
+import { selectDoctor } from "./doctorProfileSlice";
 
-export default function UserProfile() {
+export default function DoctorProfile() {
   // Redux state
+  const doctor = useSelector(selectDoctor);
   const dispatch = useDispatch();
 
   // Queries
@@ -15,13 +18,21 @@ export default function UserProfile() {
       try {
         let res = await getDoctor({ jwtToken: localStorage.accessToken }).unwrap();
         console.log(res);
+        const {
+          doctor_id: doctorId,
+          first_name: doctorFirstName,
+          last_name: doctorLastName,
+          user_name: doctorUserName,
+        } = res;
+
+        dispatch(setDoctor({ doctorId, doctorFirstName, doctorLastName, doctorUserName }));
       } catch (err) {
         console.error(err.message);
       }
     }
 
     getProfile();
-  }, [getDoctor]);
+  }, [getDoctor, dispatch]);
 
   function logout(e) {
     e.preventDefault();
