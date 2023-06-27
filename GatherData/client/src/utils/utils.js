@@ -17,5 +17,5 @@ export function toIsoDayFormat(date) {
 
 //Get current date in ISO8601 format
 export function getCurrentDate() {
-  return dayjs(new Date(), formats, true).toISOString(true).split("T")[0];
+  return dayjs(new Date(), true).toISOString(true).split("T")[0];
 }

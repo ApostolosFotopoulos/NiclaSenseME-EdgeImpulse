@@ -103,7 +103,7 @@ export default function PatientInfo() {
       </div>
 
       <button
-        className={`patient__details-button ${isGatheringData ? "patient__details-button--collecting" : ""}`}
+        className={`patient__details-button ${isGatheringData ? "button-loading" : ""}`}
         onClick={gatherData}
         disabled={isSubmittingSession}
       >

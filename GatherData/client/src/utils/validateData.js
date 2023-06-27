@@ -27,9 +27,9 @@ export function isValidBirthDate(date) {
 // Check if the user has selected a patient
 export function hasSelectedPatient(patient) {
   if (
-    patient?.patientFirstName !== "" ||
-    patient?.patientLastName !== "" ||
-    patient?.patientDateOfBirth !== ""
+    patient?.patientFirstName === "" ||
+    patient?.patientLastName === "" ||
+    patient?.patientDateOfBirth === ""
   ) {
     return false;
   }

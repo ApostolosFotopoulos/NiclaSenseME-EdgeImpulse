@@ -164,6 +164,7 @@ export default function Status() {
         };
         await insertPrediction(body).unwrap();
       } catch (err) {
+        console.log(err);
         if (err?.data) {
           dispatch(setStatus(err.data.errMsg));
         } else {
@@ -203,8 +204,8 @@ export default function Status() {
     <div className="col-container">
       <div className="status">
         <button
-          className={`status__button ${isConnecting ? "status__button--connecting" : ""} ${
-            isConnected ? "status__button--connected" : ""
+          className={`status__button ${isConnecting ? "button-loading" : ""} ${
+            isConnected ? "button-success" : ""
           }`}
           onClick={connect}
           disabled={isConnecting}

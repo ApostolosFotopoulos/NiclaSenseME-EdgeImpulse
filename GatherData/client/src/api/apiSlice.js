@@ -31,8 +31,8 @@ export const apiSlice = createApi({
       }),
     }),
     getPatient: builder.query({
-      query: ({ patientFirstName, patientLastName, patientDateOfBirth }) =>
-        `patient/${patientFirstName}&${patientLastName}&${patientDateOfBirth}`,
+      query: ({ doctorId, patientFirstName, patientLastName, patientDateOfBirth }) =>
+        `patient/${doctorId}&${patientFirstName}&${patientLastName}&${patientDateOfBirth}`,
     }),
     postPatient: builder.mutation({
       query: (body) => ({

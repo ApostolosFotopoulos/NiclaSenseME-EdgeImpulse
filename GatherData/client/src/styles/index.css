@@ -8,7 +8,6 @@
 
 img {
   display: block;
-  max-width: 100%;
   height: auto;
 }
 
@@ -26,9 +25,12 @@ img {
   --BODY-BG-COLOR: black;
   --MAIN-BG-COLOR: #111111;
   --BUTTON-BG-COLOR: #d8f41d;
+  --BUTTON-SUCCESS-BG-COLOR: green;
+  --BUTTON-LOADING-BG-COLOR: gray;
   --BUTTON-HOVER-COLOR: rgb(255, 255, 83);
   --BUTTON-SUCCESS-HOVER-COLOR: rgb(0, 162, 0);
-  --BUTTON-DISABLED-COLOR: rgba(242, 242, 242, 0.4);
+  --BUTTON-LOADING-HOVER-COLOR: rgb(152, 152, 152);
+  --BUTTON-DISABLED-BG-COLOR: rgba(242, 242, 242, 0.4);
   --LINK-BG-COLOR: blue;
   --LINK-HOVER-COLOR: rgb(116, 116, 255);
   --INPUT-BG-COLOR: #050505;
@@ -124,7 +126,7 @@ button:hover {
 }
 
 button:disabled {
-  background-color: var(--BUTTON-DISABLED-COLOR);
+  background-color: var(--BUTTON-DISABLED-BG-COLOR);
 }
 
 /* GENERAL CLASSES */
@@ -182,6 +184,24 @@ button:disabled {
 .input-instructions-svg {
   font-size: var(--MAIN-FONT-SIZE);
   margin-right: 8px;
+}
+
+.button-loading {
+  background-color: var(--BUTTON-LOADING-BG-COLOR);
+  color: black;
+}
+
+.button-loading:hover {
+  background-color: var(--BUTTON-LOADING-HOVER-COLOR);
+}
+
+.button-success {
+  background-color: var(--BUTTON-SUCCESS-BG-COLOR);
+  color: white;
+}
+
+.button-success:hover {
+  background-color: var(--BUTTON-SUCCESS-HOVER-COLOR);
 }
 
 .offscreen {
@@ -278,23 +298,55 @@ button:disabled {
   flex-shrink: 0;
 }
 
-.status__button--connecting {
-  background-color: grey;
-  color: black;
-}
-
-.status__button--connected {
-  background-color: green;
-  color: white;
-}
-
-.status__button--connected:hover {
-  background-color: var(--BUTTON-SUCCESS-HOVER-COLOR);
-}
-
 .status__msg {
   width: 75%;
   text-align: center;
+}
+
+/* DOCTOR PROFILE */
+.dropdown {
+  position: relative;
+  text-align: center;
+}
+
+.dropdown__img {
+  width: 60px;
+  height: auto;
+  border-radius: 50%;
+  border: 2px solid red;
+  cursor: pointer;
+}
+
+.dropdown__content {
+  display: none;
+  background-color: #fff;
+  width: 200px;
+  border-radius: 10px;
+  position: absolute;
+  padding: 8px;
+  transition: all 0.5s;
+  z-index: 1;
+  right: -70px;
+}
+
+.dropdown:hover .dropdown__content {
+  display: block;
+}
+
+.dropdown__content-item {
+  list-style: none;
+  text-align: left;
+  font-size: 15px;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  transition: all 0.5s;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.dropdown__content-item:hover {
+  background-color: #eee;
 }
 
 /* PATIENT */
@@ -329,11 +381,6 @@ button:disabled {
 
 .patient__details-button {
   width: 120px;
-}
-
-.patient__details-button--collecting {
-  background-color: grey;
-  color: black;
 }
 
 /* INSERT PATIENT */

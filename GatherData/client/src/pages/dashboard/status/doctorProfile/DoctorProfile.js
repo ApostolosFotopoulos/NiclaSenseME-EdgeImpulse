@@ -41,5 +41,14 @@ export default function DoctorProfile() {
   }
 
   // to do
-  return <div>UserProfile</div>;
+  return (
+    <div className="dropdown">
+      <img className="dropdown__img" src="https://placehold.co/400" alt="User" />
+      <ul className="dropdown__content">
+        <li className="dropdown__content-item">
+          <span>Logout</span>
+        </li>
+      </ul>
+    </div>
+  );
 }
