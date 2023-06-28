@@ -11,7 +11,6 @@ import {
   enableIsConnecting,
 } from "./statusSlice";
 import { selectMsg, selectConnectButtonText, selectIsConnecting, selectIsConnected } from "./statusSlice";
-import { disableIsGatheringData } from "pages/dashboard/patientInfo/patientInfoSlice";
 import { selectIsGatheringData, selectSelectedPatient } from "pages/dashboard/patientInfo/patientInfoSlice";
 import { usePostPredictionMutation } from "api/apiSlice";
 
@@ -56,7 +55,6 @@ export default function Status() {
   function stopConnection() {
     clearInterval(refs.NiclaSenseME[refs.sensor].polling);
     dispatch(disableIsConnected());
-    dispatch(disableIsGatheringData());
   }
 
   // Stop polling when nicla disconnects
@@ -180,6 +178,11 @@ export default function Status() {
 
   // Start the connection
   async function connect() {
+    if (isGatheringData) {
+      dispatch(setStatus("Can't disconnect Nicla while gathering data"));
+      return;
+    }
+
     if (isConnected) {
       stopConnection();
       return;

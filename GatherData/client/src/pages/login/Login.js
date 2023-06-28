@@ -101,7 +101,6 @@ export default function Login() {
             Need an Account?
             <br />
             <span className="line">
-              {/*put router link here*/}
               <Link to={"/signup"}>Sign Up</Link>
             </span>
           </p>

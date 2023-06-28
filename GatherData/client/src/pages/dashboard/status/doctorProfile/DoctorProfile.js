@@ -1,13 +1,18 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faUser } from "@fortawesome/free-solid-svg-icons";
 import { disableIsAuthenticated } from "app/appSlice";
 import { useLazyGetDoctorQuery } from "api/apiSlice";
 import { setDoctor } from "./doctorProfileSlice";
+import { setStatus } from "pages/dashboard/status/statusSlice";
 import { selectDoctor } from "./doctorProfileSlice";
+import { selectIsGatheringData } from "pages/dashboard/patientInfo/patientInfoSlice";
 
 export default function DoctorProfile() {
   // Redux state
   const doctor = useSelector(selectDoctor);
+  const isGatheringData = useSelector(selectIsGatheringData);
   const dispatch = useDispatch();
 
   // Queries
@@ -36,16 +41,27 @@ export default function DoctorProfile() {
 
   function logout(e) {
     e.preventDefault();
+
+    if (isGatheringData) {
+      dispatch(setStatus("Can't log out while gathering data"));
+      return;
+    }
+
     localStorage.removeItem("accessToken");
     dispatch(disableIsAuthenticated());
+    window.location.reload();
   }
 
   // to do
   return (
     <div className="dropdown">
-      <img className="dropdown__img" src="https://placehold.co/400" alt="User" />
+      <FontAwesomeIcon icon={faUser} className="dropdown__img" size="2x" border={true} />
       <ul className="dropdown__content">
-        <li className="dropdown__content-item">
+        <p className="dropdown__name">
+          <span>{doctor.doctorUserName}</span>
+        </p>
+        <hr className="solid"></hr>
+        <li className="dropdown__item" onClick={logout}>
           <span>Logout</span>
         </li>
       </ul>

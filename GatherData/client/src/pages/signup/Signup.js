@@ -131,8 +131,8 @@ export default function Signup() {
           <form className="login-signup__form" onSubmit={handleSubmit}>
             <label className="main-input-label" htmlFor="username">
               Username:
-              <FontAwesomeIcon icon={faCheck} className={validUser ? "faCheck--green" : "hide"} />
-              <FontAwesomeIcon icon={faTimes} className={validUser || !user ? "hide" : "faTimes--red"} />
+              <FontAwesomeIcon icon={faCheck} className={validUser ? "valid-input" : "hide"} />
+              <FontAwesomeIcon icon={faTimes} className={validUser || !user ? "hide" : "invalid-input"} />
             </label>
             <input
               className="main-input"
@@ -160,10 +160,10 @@ export default function Signup() {
             </p>
             <label className="main-input-label" htmlFor="first-name">
               First Name:
-              <FontAwesomeIcon icon={faCheck} className={validFirstName ? "faCheck--green" : "hide"} />
+              <FontAwesomeIcon icon={faCheck} className={validFirstName ? "valid-input" : "hide"} />
               <FontAwesomeIcon
                 icon={faTimes}
-                className={validFirstName || !firstName ? "hide" : "faTimes--red"}
+                className={validFirstName || !firstName ? "hide" : "invalid-input"}
               />
             </label>
             <input
@@ -190,10 +190,10 @@ export default function Signup() {
             </p>
             <label className="main-input-label" htmlFor="last-name">
               Last Name:
-              <FontAwesomeIcon icon={faCheck} className={validLastName ? "faCheck--green" : "hide"} />
+              <FontAwesomeIcon icon={faCheck} className={validLastName ? "valid-input" : "hide"} />
               <FontAwesomeIcon
                 icon={faTimes}
-                className={validLastName || !lastName ? "hide" : "faTimes--red"}
+                className={validLastName || !lastName ? "hide" : "invalid-input"}
               />
             </label>
             <input
@@ -220,10 +220,10 @@ export default function Signup() {
             </p>
             <label className="main-input-label" htmlFor="password">
               Password:
-              <FontAwesomeIcon icon={faCheck} className={validPassword ? "faCheck--green" : "hide"} />
+              <FontAwesomeIcon icon={faCheck} className={validPassword ? "valid-input" : "hide"} />
               <FontAwesomeIcon
                 icon={faTimes}
-                className={validPassword || !password ? "hide" : "faTimes--red"}
+                className={validPassword || !password ? "hide" : "invalid-input"}
               />
             </label>
             <input
@@ -258,11 +258,11 @@ export default function Signup() {
               Confirm Password:
               <FontAwesomeIcon
                 icon={faCheck}
-                className={validMatch && matchPassword ? "faCheck--green" : "hide"}
+                className={validMatch && matchPassword ? "valid-input" : "hide"}
               />
               <FontAwesomeIcon
                 icon={faTimes}
-                className={validMatch || !matchPassword ? "hide" : "faTimes--red"}
+                className={validMatch || !matchPassword ? "hide" : "invalid-input"}
               />
             </label>
             <input

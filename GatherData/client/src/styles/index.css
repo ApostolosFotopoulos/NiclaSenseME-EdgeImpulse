@@ -20,11 +20,13 @@ img {
   --MAIN-FONT-COLOR: rgb(231, 231, 231);
   --PLACEHOLDER-FONT-COLOR: rgb(156, 156, 156);
   --BUTTON-FONT-COLOR: black;
+  --DROPDOWN-FONT-COLOR: black;
 
   /* BG COLORS */
   --BODY-BG-COLOR: black;
-  --MAIN-BG-COLOR: #111111;
-  --BUTTON-BG-COLOR: #d8f41d;
+  --MAIN-BG-COLOR: rgb(17, 17, 17);
+  --ALT-BG-COLOR: rgb(98, 98, 98);
+  --BUTTON-BG-COLOR: rgb(216, 244, 29);
   --BUTTON-SUCCESS-BG-COLOR: green;
   --BUTTON-LOADING-BG-COLOR: gray;
   --BUTTON-HOVER-COLOR: rgb(255, 255, 83);
@@ -33,7 +35,8 @@ img {
   --BUTTON-DISABLED-BG-COLOR: rgba(242, 242, 242, 0.4);
   --LINK-BG-COLOR: blue;
   --LINK-HOVER-COLOR: rgb(116, 116, 255);
-  --INPUT-BG-COLOR: #050505;
+  --INPUT-BG-COLOR: rgb(5, 5, 5);
+  --DROPDOWN-HOVER-COLOR: rgb(122, 122, 122);
 
   /* WIDTHS */
   --DESKTOP-PAGE-WIDTH: 65%;
@@ -213,12 +216,12 @@ button:disabled {
   display: none;
 }
 
-.faCheck--green {
+.valid-input {
   color: limegreen;
   margin-left: 4px;
 }
 
-.faTimes--red {
+.invalid-input {
   color: red;
   margin-left: 4px;
 }
@@ -310,43 +313,52 @@ button:disabled {
 }
 
 .dropdown__img {
-  width: 60px;
-  height: auto;
-  border-radius: 50%;
-  border: 2px solid red;
+  --fa-border-radius: 32px;
+  --fa-border-padding: 8px;
+  --fa-border-width: 2px;
+  --fa-border-color: var(--ALT-BG-COLOR);
+  color: var(--ALT-BG-COLOR);
   cursor: pointer;
 }
 
 .dropdown__content {
   display: none;
-  background-color: #fff;
+  background-color: var(--ALT-BG-COLOR);
   width: 200px;
   border-radius: 10px;
   position: absolute;
   padding: 8px;
-  transition: all 0.5s;
   z-index: 1;
-  right: -70px;
+  right: -75px;
 }
 
 .dropdown:hover .dropdown__content {
   display: block;
 }
 
-.dropdown__content-item {
+.dropdown__name {
+  color: var(--DROPDOWN-FONT-COLOR);
+  padding: 8px;
+}
+
+.dropdown__item {
+  color: var(--DROPDOWN-FONT-COLOR);
   list-style: none;
-  text-align: left;
-  font-size: 15px;
   padding: 10px;
   display: flex;
+  justify-content: center;
   align-items: center;
   transition: all 0.5s;
   cursor: pointer;
   border-radius: 4px;
 }
 
-.dropdown__content-item:hover {
-  background-color: #eee;
+.dropdown__item:hover {
+  background-color: var(--DROPDOWN-HOVER-COLOR);
+}
+
+.solid {
+  border: 1px solid black;
 }
 
 /* PATIENT */

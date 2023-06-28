@@ -100,10 +100,10 @@ export default function InsertPatient() {
       <form className="patient__form" onSubmit={handleSubmit}>
         <label className="main-input-label" htmlFor="patient-first-name">
           First Name:
-          <FontAwesomeIcon icon={faCheck} className={validPatientFirstName ? "faCheck--green" : "hide"} />
+          <FontAwesomeIcon icon={faCheck} className={validPatientFirstName ? "valid-input" : "hide"} />
           <FontAwesomeIcon
             icon={faTimes}
-            className={validPatientFirstName || !patientFirstName ? "hide" : "faTimes--red"}
+            className={validPatientFirstName || !patientFirstName ? "hide" : "invalid-input"}
           />
         </label>
         <input
@@ -129,10 +129,10 @@ export default function InsertPatient() {
         </p>
         <label className="main-input-label" htmlFor="patient-last-name">
           Last Name:
-          <FontAwesomeIcon icon={faCheck} className={validPatientLastName ? "faCheck--green" : "hide"} />
+          <FontAwesomeIcon icon={faCheck} className={validPatientLastName ? "valid-input" : "hide"} />
           <FontAwesomeIcon
             icon={faTimes}
-            className={validPatientLastName || !patientLastName ? "hide" : "faTimes--red"}
+            className={validPatientLastName || !patientLastName ? "hide" : "invalid-input"}
           />
         </label>
         <input
@@ -158,10 +158,10 @@ export default function InsertPatient() {
         </p>
         <label className="main-input-label" htmlFor="patient-date-of-birth">
           Date of Birth:
-          <FontAwesomeIcon icon={faCheck} className={validPatientDateOfBirth ? "faCheck--green" : "hide"} />
+          <FontAwesomeIcon icon={faCheck} className={validPatientDateOfBirth ? "valid-input" : "hide"} />
           <FontAwesomeIcon
             icon={faTimes}
-            className={validPatientDateOfBirth || !patientDateOfBirth ? "hide" : "faTimes--red"}
+            className={validPatientDateOfBirth || !patientDateOfBirth ? "hide" : "invalid-input"}
           />
         </label>
         <input
