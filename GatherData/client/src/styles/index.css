@@ -178,7 +178,7 @@ button:disabled {
 .input-instructions {
   font-size: var(--SMALL-FONT-SIZE);
   border-radius: 8px;
-  background: #000;
+  background-color: var(--BODY-BG-COLOR);
   padding: 4px;
   position: relative;
   bottom: -10px;
@@ -205,6 +205,10 @@ button:disabled {
 
 .button-success:hover {
   background-color: var(--BUTTON-SUCCESS-HOVER-COLOR);
+}
+
+.line-divider {
+  border: 1px solid black;
 }
 
 .offscreen {
@@ -357,11 +361,31 @@ button:disabled {
   background-color: var(--DROPDOWN-HOVER-COLOR);
 }
 
-.solid {
-  border: 1px solid black;
+/* PATIENT */
+/* PATIENT SEARCH */
+.patient__search {
+  width: 400px;
+  border: 1px solid gray;
+  border-radius: 8px;
+  padding: 8px;
+  background-color: var(--BODY-BG-COLOR);
+  display: flex;
+  align-items: center;
 }
 
-/* PATIENT */
+.patient__search-input {
+  background-color: transparent;
+  border: none;
+  height: 100%;
+  width: 100%;
+  margin-left: 4px;
+}
+
+.patient__search-input:focus {
+  outline: none;
+  border: none;
+}
+
 /* PATIENT DETAILS */
 .patient__details {
   width: 100%;

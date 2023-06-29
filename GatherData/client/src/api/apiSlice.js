@@ -34,6 +34,9 @@ export const apiSlice = createApi({
       query: ({ doctorId, patientFirstName, patientLastName, patientDateOfBirth }) =>
         `patient/${doctorId}&${patientFirstName}&${patientLastName}&${patientDateOfBirth}`,
     }),
+    getPatients: builder.query({
+      query: ({ doctorId, partOfName }) => `patients/${doctorId}&${partOfName}`,
+    }),
     postPatient: builder.mutation({
       query: (body) => ({
         url: "patient",
@@ -77,6 +80,7 @@ export const {
   useLazyVerifyDoctorQuery,
   useLazyGetDoctorQuery,
   useLazyGetPatientQuery,
+  useLazyGetPatientsQuery,
   usePostPatientMutation,
   useLazyGetPredictionCountQuery,
   usePostPredictionMutation,

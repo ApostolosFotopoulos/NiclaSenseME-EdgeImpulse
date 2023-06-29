@@ -23,6 +23,11 @@ WHERE doctor_id=11 AND first_name='Tolis' AND last_name='Fot' AND date_of_birth=
 INSERT INTO patient(doctor_id, first_name, last_name, date_of_birth) 
 VALUES (11, 'Tom', 'Jones', '2000-08-11') RETURNING *
 
+-- Get patients from their full name
+SELECT patient_id, first_name, last_name, date_of_birth
+FROM patient 
+WHERE doctor_id=11 AND LOWER(CONCAT(first_name, ' ', last_name)) LIKE '%s%'
+
 -- PREDICTION QUERIES
 -- Get predictions count with patient id and prediction date
 SELECT COUNT(prediction_id) AS prediction_count

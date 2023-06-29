@@ -9,18 +9,20 @@ router.get("/session/:pid&:sdate", async (req, res) => {
   try {
     console.log(req.params);
     const { pid: patientId, sdate: sessionDate } = req.params;
-    if (isPosInt(parseInt(patientId)) && isString(sessionDate)) {
-      const queryRes = await pool.query("SELECT * FROM session WHERE patient_id=$1 AND session_date=$2", [
-        patientId,
-        sessionDate,
-      ]);
-      console.log(queryRes.rows[0]);
-      res.json(queryRes.rows[0]);
-    } else {
-      res.json("Invalid Inputs");
+
+    if (!isPosInt(patientId) || !isValidDateFormat(sessionDate)) {
+      return res.status(422).json({ errMsg: "Invalid data" });
     }
+
+    const queryRes = await pool.query("SELECT * FROM session WHERE patient_id=$1 AND session_date=$2", [
+      patientId,
+      sessionDate,
+    ]);
+    console.log(queryRes.rows[0]);
+    res.json(queryRes.rows[0]);
   } catch (err) {
-    console.log(err);
+    console.log(err.message);
+    res.status(500).json({ errMsg: "Server error" });
   }
 });
 
@@ -88,6 +90,11 @@ router.put("/session/:sid&:pid&:sdate", async (req, res) => {
   try {
     console.log(req.body);
     const { sid: sessionId, pid: patientId, sdate: sessionDate } = req.params;
+
+    if (!isPosInt(sessionId) || !isPosInt(patientId) || !isValidDateFormat(sessionDate)) {
+      return res.status(422).json({ errMsg: "Invalid data" });
+    }
+
     const queryRes = await pool.query(
       "UPDATE session as s SET normal=new_avg.normal, cp1=new_avg.cp1, cp2=new_avg.cp2 FROM (SELECT ROUND(AVG(normal)::numeric, 5) as normal, ROUND(AVG(cp1)::numeric, 5) as cp1, ROUND(AVG(cp2)::numeric, 5) as cp2 FROM prediction WHERE patient_id=$1 AND prediction_date=$2) AS new_avg WHERE session_id = $3 RETURNING s.session_id, s.patient_id, s.normal, s.cp1, s.cp2, s.session_date",
       [patientId, sessionDate, sessionId]
@@ -95,7 +102,8 @@ router.put("/session/:sid&:pid&:sdate", async (req, res) => {
     console.log(queryRes.rows[0]);
     res.json(queryRes.rows[0]);
   } catch (err) {
-    console.log(err);
+    console.log(err.message);
+    res.status(500).json({ errMsg: "Server error" });
   }
 });
 

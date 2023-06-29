@@ -1,6 +1,6 @@
 const router = require("express").Router();
 const pool = require("@root/config/db");
-const { isValidName, isValidBirthDate, isPosInt } = require("@root/utils/validateData");
+const { isValidName, isValidBirthDate, isPosInt, isString } = require("@root/utils/validateData");
 
 // Get patient with first name, last name and date of birth
 router.get("/patient/:did&:fname&:lname&:dob", async (req, res) => {
@@ -30,6 +30,30 @@ router.get("/patient/:did&:fname&:lname&:dob", async (req, res) => {
     );
     console.log(queryRes.rows[0]);
     res.json(queryRes.rows[0]);
+  } catch (err) {
+    console.log(err.message);
+    res.status(500).json({ errMsg: "Server error" });
+  }
+});
+
+router.get("/patients/:did&:name", async (req, res) => {
+  try {
+    console.log("Get patients");
+    console.log(req.params);
+
+    const { did: doctorId, name: partOfName } = req.params;
+
+    if (!isPosInt(doctorId) || !isString(partOfName)) {
+      return res.status(422).json({ errMsg: "Invalid data" });
+    }
+
+    const partOfNameWildcard = `%${partOfName}%`;
+    const queryRes = await pool.query(
+      "SELECT patient_id, first_name, last_name, date_of_birth FROM patient WHERE doctor_id=$1 AND LOWER(CONCAT(first_name, ' ', last_name)) LIKE $2",
+      [doctorId, partOfNameWildcard]
+    );
+    console.log(queryRes.rows);
+    res.json(queryRes.rows);
   } catch (err) {
     console.log(err.message);
     res.status(500).json({ errMsg: "Server error" });

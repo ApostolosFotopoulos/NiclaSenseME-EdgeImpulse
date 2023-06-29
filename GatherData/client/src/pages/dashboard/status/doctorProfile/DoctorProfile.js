@@ -39,9 +39,7 @@ export default function DoctorProfile() {
     getProfile();
   }, [getDoctor, dispatch]);
 
-  function logout(e) {
-    e.preventDefault();
-
+  function logout() {
     if (isGatheringData) {
       dispatch(setStatus("Can't log out while gathering data"));
       return;
@@ -60,7 +58,7 @@ export default function DoctorProfile() {
         <p className="dropdown__name">
           <span>{doctor.doctorUserName}</span>
         </p>
-        <hr className="solid"></hr>
+        <hr className="line-divider"></hr>
         <li className="dropdown__item" onClick={logout}>
           <span>Logout</span>
         </li>

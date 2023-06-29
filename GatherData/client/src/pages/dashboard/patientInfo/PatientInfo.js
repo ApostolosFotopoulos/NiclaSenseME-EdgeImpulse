@@ -17,6 +17,7 @@ import {
   selectSelectedPatient,
 } from "./patientInfoSlice";
 import { usePostSessionMutation } from "api/apiSlice";
+import SearchPatient from "./searchPatient/SearchPatient";
 
 export default function PatientInfo() {
   // Redux state
@@ -75,6 +76,7 @@ export default function PatientInfo() {
   return (
     <div className="col-container">
       <h1>Patient's Details</h1>
+      <SearchPatient />
       <div className="patient__details">
         <input
           readOnly
@@ -101,7 +103,6 @@ export default function PatientInfo() {
           value={selectedPatient.patientDateOfBirth}
         />
       </div>
-
       <button
         className={`patient__details-button ${isGatheringData ? "button-loading" : ""}`}
         onClick={gatherData}
