@@ -22,7 +22,7 @@ export default function DoctorProfile() {
     async function getProfile() {
       try {
         let res = await getDoctor({ jwtToken: localStorage.accessToken }).unwrap();
-        console.log(res);
+
         const {
           doctor_id: doctorId,
           first_name: doctorFirstName,

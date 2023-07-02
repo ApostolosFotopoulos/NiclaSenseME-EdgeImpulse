@@ -26,7 +26,8 @@ VALUES (11, 'Tom', 'Jones', '2000-08-11') RETURNING *
 -- Get patients from their full name
 SELECT patient_id, first_name, last_name, date_of_birth
 FROM patient 
-WHERE doctor_id=11 AND LOWER(CONCAT(first_name, ' ', last_name)) LIKE '%s%'
+WHERE doctor_id=11 AND LOWER(CONCAT(first_name, ' ', last_name)) LIKE LOWER('%s%')
+LIMIT 8
 
 -- PREDICTION QUERIES
 -- Get predictions count with patient id and prediction date

@@ -49,7 +49,7 @@ router.get("/patients/:did&:name", async (req, res) => {
 
     const partOfNameWildcard = `%${partOfName}%`;
     const queryRes = await pool.query(
-      "SELECT patient_id, first_name, last_name, date_of_birth FROM patient WHERE doctor_id=$1 AND LOWER(CONCAT(first_name, ' ', last_name)) LIKE $2",
+      "SELECT patient_id, first_name, last_name, date_of_birth FROM patient WHERE doctor_id=$1 AND LOWER(CONCAT(first_name, ' ', last_name)) LIKE LOWER($2) LIMIT 8",
       [doctorId, partOfNameWildcard]
     );
     console.log(queryRes.rows);

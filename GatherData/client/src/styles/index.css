@@ -20,12 +20,14 @@ img {
   --MAIN-FONT-COLOR: rgb(231, 231, 231);
   --PLACEHOLDER-FONT-COLOR: rgb(156, 156, 156);
   --BUTTON-FONT-COLOR: black;
-  --DROPDOWN-FONT-COLOR: black;
+  --BUTTON-SUCCESS-FONT-COLOR: rgb(231, 231, 231);
+  --BUTTON-LOADING-FONT-COLOR: black;
+  --DROPDOWN-FONT-COLOR: rgb(231, 231, 231);
 
   /* BG COLORS */
   --BODY-BG-COLOR: black;
   --MAIN-BG-COLOR: rgb(17, 17, 17);
-  --ALT-BG-COLOR: rgb(98, 98, 98);
+  --ALT-BG-COLOR: rgb(69, 69, 69);
   --BUTTON-BG-COLOR: rgb(216, 244, 29);
   --BUTTON-SUCCESS-BG-COLOR: green;
   --BUTTON-LOADING-BG-COLOR: gray;
@@ -36,6 +38,8 @@ img {
   --LINK-BG-COLOR: blue;
   --LINK-HOVER-COLOR: rgb(116, 116, 255);
   --INPUT-BG-COLOR: rgb(5, 5, 5);
+  --INPUT-BORDER-COLOR: gray;
+  --INPUT-BORDER-HOVER-COLOR: white;
   --DROPDOWN-HOVER-COLOR: rgb(122, 122, 122);
 
   /* WIDTHS */
@@ -73,7 +77,7 @@ textarea {
 
 input:focus,
 textarea:focus {
-  border: 1px solid white;
+  border: 1px solid var(--INPUT-BORDER-HOVER-COLOR);
 }
 
 input::placeholder,
@@ -85,14 +89,17 @@ textarea::placeholder {
 input:-webkit-autofill,
 input:-webkit-autofill:hover,
 input:-webkit-autofill:focus,
+input:-webkit-autofill:active,
 textarea:-webkit-autofill,
 textarea:-webkit-autofill:hover,
 textarea:-webkit-autofill:focus,
+textarea:-webkit-autofill:active,
 select:-webkit-autofill,
 select:-webkit-autofill:hover,
-select:-webkit-autofill:focus {
-  border: none;
+select:-webkit-autofill:focus,
+select:-webkit-autofill:active {
   -webkit-text-fill-color: var(--MAIN-FONT-COLOR);
+  caret-color: var(--MAIN-FONT-COLOR);
   transition: background-color 10000s ease-in-out 0s;
 }
 
@@ -172,7 +179,7 @@ button:disabled {
   width: 100%;
   padding: 8px;
   border-radius: 8px;
-  border: 1px solid gray;
+  border: 1px solid var(--INPUT-BORDER-COLOR);
 }
 
 .input-instructions {
@@ -191,7 +198,7 @@ button:disabled {
 
 .button-loading {
   background-color: var(--BUTTON-LOADING-BG-COLOR);
-  color: black;
+  color: var(--BUTTON-LOADING-FONT-COLOR);
 }
 
 .button-loading:hover {
@@ -200,7 +207,7 @@ button:disabled {
 
 .button-success {
   background-color: var(--BUTTON-SUCCESS-BG-COLOR);
-  color: white;
+  color: var(--BUTTON-SUCCESS-FONT-COLOR);
 }
 
 .button-success:hover {
@@ -208,7 +215,7 @@ button:disabled {
 }
 
 .line-divider {
-  border: 1px solid black;
+  border: 1px solid var(--DROPDOWN-FONT-COLOR);
 }
 
 .offscreen {
@@ -352,7 +359,6 @@ button:disabled {
   display: flex;
   justify-content: center;
   align-items: center;
-  transition: all 0.5s;
   cursor: pointer;
   border-radius: 4px;
 }
@@ -365,12 +371,19 @@ button:disabled {
 /* PATIENT SEARCH */
 .patient__search {
   width: 400px;
-  border: 1px solid gray;
+}
+
+.patient__search-bar {
+  border: 1px solid var(--INPUT-BORDER-COLOR);
   border-radius: 8px;
   padding: 8px;
   background-color: var(--BODY-BG-COLOR);
   display: flex;
   align-items: center;
+}
+
+.patient__search-bar--selected {
+  border: 1px solid var(--INPUT-BORDER-HOVER-COLOR);
 }
 
 .patient__search-input {
@@ -384,6 +397,24 @@ button:disabled {
 .patient__search-input:focus {
   outline: none;
   border: none;
+}
+
+.patient__search-list {
+  width: 400px;
+  background-color: var(--BODY-BG-COLOR);
+  position: absolute;
+  z-index: 1;
+  border-radius: 8px;
+  overflow-y: auto;
+}
+
+.patient__search-item {
+  cursor: pointer;
+  padding: 8px 20px;
+}
+
+.patient__search-item:hover {
+  background-color: var(--ALT-BG-COLOR);
 }
 
 /* PATIENT DETAILS */
