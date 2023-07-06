@@ -107,4 +107,27 @@ router.put("/session/:sid&:pid&:sdate", async (req, res) => {
   }
 });
 
+// Get latest sessions with patient id
+router.get("/latest-sessions/:pid", async (req, res) => {
+  console.log("Get latest sessions");
+  try {
+    console.log(req.params);
+    const { pid: patientId } = req.params;
+
+    if (!isPosInt(patientId)) {
+      return res.status(422).json({ errMsg: "Invalid data" });
+    }
+
+    const queryRes = await pool.query(
+      "SELECT * FROM session WHERE patient_id = $1 ORDER BY session_date DESC LIMIT 20",
+      [patientId]
+    );
+    console.log(queryRes.rows);
+    res.json(queryRes.rows);
+  } catch (err) {
+    console.log(err.message);
+    res.status(500).json({ errMsg: "Server error" });
+  }
+});
+
 module.exports = router;

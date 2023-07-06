@@ -31,12 +31,12 @@ import SearchPatient from "pages/dashboard/patientInfo/searchPatient/SearchPatie
 
 export default function PatientInfo() {
   // Redux state
+  const dispatch = useDispatch();
   const isGatheringData = useSelector(selectIsGatheringData);
   const isSubmittingSession = useSelector(selectIsSubmittingSession);
   const gatherButtonText = useSelector(selectGatherButtonText);
   const selectedPatient = useSelector(selectSelectedPatient);
   const isConnected = useSelector(selectIsConnected);
-  const dispatch = useDispatch();
 
   // Queries
   const [insertSession] = usePostSessionMutation();

@@ -57,6 +57,9 @@ export const apiSlice = createApi({
     getSession: builder.query({
       query: ({ patientId, sessionDate }) => `session/${patientId}&${sessionDate}`,
     }),
+    getLatestSessions: builder.query({
+      query: ({ patientId }) => `latest-sessions/${patientId}`,
+    }),
     postSession: builder.mutation({
       query: (body) => ({
         url: "session",
@@ -85,6 +88,7 @@ export const {
   useLazyGetPredictionCountQuery,
   usePostPredictionMutation,
   useLazyGetSessionQuery,
+  useLazyGetLatestSessionsQuery,
   usePostSessionMutation,
   useUpdateSessionMutation,
 } = apiSlice;

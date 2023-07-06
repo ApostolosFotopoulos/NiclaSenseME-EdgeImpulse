@@ -39,13 +39,13 @@ export default function Status() {
   const [predictionsBody, setPredictionsBody] = useState({});
 
   // Redux state
+  const dispatch = useDispatch();
   const msg = useSelector(selectMsg);
   const connectButtonText = useSelector(selectConnectButtonText);
   const isConnecting = useSelector(selectIsConnecting);
   const isConnected = useSelector(selectIsConnected);
   const isGatheringData = useSelector(selectIsGatheringData);
   const selectedPatient = useSelector(selectSelectedPatient);
-  const dispatch = useDispatch();
 
   //Queries
   const [insertPrediction] = usePostPredictionMutation();

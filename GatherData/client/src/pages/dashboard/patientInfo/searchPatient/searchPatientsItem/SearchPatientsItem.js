@@ -10,8 +10,8 @@ import { setSelectedpatient } from "pages/dashboard/patientInfo/patientInfoSlice
 
 export default function SearchPatientsItem({ patient, setSearch, setSearchFocus, setPatients }) {
   // Redux state
-  const isGatheringData = useSelector(selectIsGatheringData);
   const dispatch = useDispatch();
+  const isGatheringData = useSelector(selectIsGatheringData);
 
   function handleClick() {
     if (isGatheringData) {

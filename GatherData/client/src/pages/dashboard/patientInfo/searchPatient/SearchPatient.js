@@ -25,8 +25,8 @@ export default function SearchPatient() {
   const [searchFocus, setSearchFocus] = useState(false);
 
   // Redux state
-  const doctor = useSelector(selectDoctor);
   const dispatch = useDispatch();
+  const doctor = useSelector(selectDoctor);
 
   // Queries
   const [getPatients] = useLazyGetPatientsQuery();
@@ -53,7 +53,6 @@ export default function SearchPatient() {
     try {
       const res = await getPatients({ doctorId: doctor.doctorId, partOfName: value }).unwrap();
       setPatients(res);
-      console.log(res);
     } catch (err) {
       console.log(err);
       if (err?.data) {

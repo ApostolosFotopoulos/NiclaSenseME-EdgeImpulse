@@ -17,9 +17,9 @@ import { useLazyGetDoctorQuery } from "api/apiSlice";
 
 export default function DoctorProfile() {
   // Redux state
+  const dispatch = useDispatch();
   const doctor = useSelector(selectDoctor);
   const isGatheringData = useSelector(selectIsGatheringData);
-  const dispatch = useDispatch();
 
   // Queries
   const [getDoctor] = useLazyGetDoctorQuery();

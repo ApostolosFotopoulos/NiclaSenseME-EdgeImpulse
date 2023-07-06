@@ -18,8 +18,8 @@ import Dashboard from "pages/dashboard/Dashboard";
 
 function App() {
   // Redux state
-  const isAuthenticated = useSelector(selectIsAuthenticated);
   const dispatch = useDispatch();
+  const isAuthenticated = useSelector(selectIsAuthenticated);
 
   // Queries
   const [verify] = useLazyVerifyDoctorQuery();

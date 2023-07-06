@@ -33,9 +33,9 @@ export default function InsertPatient() {
   const [patientDateOfBirthFocus, setPatientDateOfBirthFocus] = useState(false);
 
   // Redux state
+  const dispatch = useDispatch();
   const doctor = useSelector(selectDoctor);
   const isGatheringData = useSelector(selectIsGatheringData);
-  const dispatch = useDispatch();
 
   // Queries
   const [insertPatient] = usePostPatientMutation();
