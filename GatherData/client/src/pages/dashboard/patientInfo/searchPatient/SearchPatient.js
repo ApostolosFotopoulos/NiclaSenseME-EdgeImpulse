@@ -2,10 +2,18 @@ import React, { useState, useRef, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { setStatus } from "pages/dashboard/status/statusSlice";
+
+// Redux selectors
 import { selectDoctor } from "pages/dashboard/status/doctorProfile/doctorProfileSlice";
+
+// Redux reducers
+import { setStatus } from "pages/dashboard/status/statusSlice";
+
+// Queries
 import { useLazyGetPatientsQuery } from "api/apiSlice";
-import SearchPatientsItem from "./searchPatientsItem/SearchPatientsItem";
+
+// Components
+import SearchPatientsItem from "pages/dashboard/patientInfo/searchPatient/searchPatientsItem/SearchPatientsItem";
 
 export default function SearchPatient() {
   // Refs

@@ -1,23 +1,37 @@
 import React, { useEffect, useRef, useState } from "react";
-import { DEBUG, SERVICE_UUID, CHARACTERISTIC_UUID, SET_INTERVAL_TIME } from "utils/constants";
 import { useDispatch, useSelector } from "react-redux";
+
+// Utils
+import { DEBUG, SERVICE_UUID, CHARACTERISTIC_UUID, SET_INTERVAL_TIME } from "utils/constants";
 import { getCurrentDate } from "utils/utils";
 import { isEmptyObj } from "utils/validateData";
+
+// Redux selectors
+import {
+  selectMsg,
+  selectConnectButtonText,
+  selectIsConnecting,
+  selectIsConnected,
+} from "pages/dashboard/status/statusSlice";
+import { selectIsGatheringData, selectSelectedPatient } from "pages/dashboard/patientInfo/patientInfoSlice";
+
+// Redux reducers
 import {
   setStatus,
   enableIsConnected,
   disableIsConnected,
   disableIsConnecting,
   enableIsConnecting,
-} from "./statusSlice";
-import { selectMsg, selectConnectButtonText, selectIsConnecting, selectIsConnected } from "./statusSlice";
-import { selectIsGatheringData, selectSelectedPatient } from "pages/dashboard/patientInfo/patientInfoSlice";
+} from "pages/dashboard/status/statusSlice";
+
+// Queries
 import { usePostPredictionMutation } from "api/apiSlice";
 
-import DoctorProfile from "./doctorProfile/DoctorProfile";
+// Components
+import DoctorProfile from "pages/dashboard/status/doctorProfile/DoctorProfile";
 
 export default function Status() {
-  // Local variables
+  // Refs
   const compRef = useRef({});
   const { current: refs } = compRef;
 

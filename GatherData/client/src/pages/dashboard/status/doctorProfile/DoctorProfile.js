@@ -2,12 +2,18 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
-import { disableIsAuthenticated } from "app/appSlice";
-import { useLazyGetDoctorQuery } from "api/apiSlice";
-import { setDoctor } from "./doctorProfileSlice";
-import { setStatus } from "pages/dashboard/status/statusSlice";
-import { selectDoctor } from "./doctorProfileSlice";
+
+// Redux selectors
 import { selectIsGatheringData } from "pages/dashboard/patientInfo/patientInfoSlice";
+import { selectDoctor } from "pages/dashboard/status/doctorProfile/doctorProfileSlice";
+
+// Redux reducers
+import { disableIsAuthenticated } from "app/appSlice";
+import { setDoctor } from "pages/dashboard/status/doctorProfile/doctorProfileSlice";
+import { setStatus } from "pages/dashboard/status/statusSlice";
+
+// Queries
+import { useLazyGetDoctorQuery } from "api/apiSlice";
 
 export default function DoctorProfile() {
   // Redux state

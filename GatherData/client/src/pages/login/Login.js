@@ -1,8 +1,14 @@
 import React, { useRef, useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { enableIsAuthenticated, disableIsAuthenticated } from "app/appSlice";
+
+// Redux selectors
 import { selectCheckedAuth } from "app/appSlice";
+
+// Redux reducers
+import { enableIsAuthenticated, disableIsAuthenticated } from "app/appSlice";
+
+// Queries
 import { useLogInDoctorMutation } from "api/apiSlice";
 
 export default function Login() {

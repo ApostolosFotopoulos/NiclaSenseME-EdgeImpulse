@@ -1,23 +1,33 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getCurrentDate } from "utils/utils";
+
+// Utils
 import { hasSelectedPatient } from "utils/validateData";
-import { setStatus } from "pages/dashboard/status/statusSlice";
+import { getCurrentDate } from "utils/utils";
+
+// Redux selectors
 import { selectIsConnected } from "pages/dashboard/status/statusSlice";
-import {
-  enableIsGatheringData,
-  disableIsGatheringData,
-  enableIsSubmittingSession,
-  disableIsSubmittingSession,
-} from "./patientInfoSlice";
 import {
   selectIsGatheringData,
   selectIsSubmittingSession,
   selectGatherButtonText,
   selectSelectedPatient,
-} from "./patientInfoSlice";
+} from "pages/dashboard/patientInfo/patientInfoSlice";
+
+// Redux reducers
+import { setStatus } from "pages/dashboard/status/statusSlice";
+import {
+  enableIsGatheringData,
+  disableIsGatheringData,
+  enableIsSubmittingSession,
+  disableIsSubmittingSession,
+} from "pages/dashboard/patientInfo/patientInfoSlice";
+
+// Queries
 import { usePostSessionMutation } from "api/apiSlice";
-import SearchPatient from "./searchPatient/SearchPatient";
+
+// Components
+import SearchPatient from "pages/dashboard/patientInfo/searchPatient/SearchPatient";
 
 export default function PatientInfo() {
   // Redux state

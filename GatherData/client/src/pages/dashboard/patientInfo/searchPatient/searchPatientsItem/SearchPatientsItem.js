@@ -1,8 +1,12 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
+
+// Redux selectors
+import { selectIsGatheringData } from "pages/dashboard/patientInfo/patientInfoSlice";
+
+// Redux reducers
 import { setStatus } from "pages/dashboard/status/statusSlice";
 import { setSelectedpatient } from "pages/dashboard/patientInfo/patientInfoSlice";
-import { selectIsGatheringData } from "pages/dashboard/patientInfo/patientInfoSlice";
 
 export default function SearchPatientsItem({ patient, setSearch, setSearchFocus, setPatients }) {
   // Redux state

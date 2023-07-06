@@ -2,12 +2,20 @@ import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { faCheck, faTimes, faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
+// Utils
 import { toIsoDayFormat } from "utils/utils";
 import { isValidBirthDate, isValidName } from "utils/validateData";
-import { setStatus } from "pages/dashboard/status/statusSlice";
-import { setSelectedpatient } from "pages/dashboard/patientInfo/patientInfoSlice";
+
+// Redux selectors
 import { selectIsGatheringData } from "pages/dashboard/patientInfo/patientInfoSlice";
 import { selectDoctor } from "pages/dashboard/status/doctorProfile/doctorProfileSlice";
+
+// Redux reducers
+import { setStatus } from "pages/dashboard/status/statusSlice";
+import { setSelectedpatient } from "pages/dashboard/patientInfo/patientInfoSlice";
+
+// Queries
 import { usePostPatientMutation } from "api/apiSlice";
 
 export default function InsertPatient() {
@@ -96,7 +104,7 @@ export default function InsertPatient() {
 
   return (
     <div className="col-container patient">
-      <h1>Select Patient</h1>
+      <h1>Insert Patient</h1>
       <form className="patient__form" onSubmit={handleSubmit}>
         <label className="main-input-label" htmlFor="patient-first-name">
           First Name:

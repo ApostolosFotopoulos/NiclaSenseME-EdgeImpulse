@@ -3,9 +3,17 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { faCheck, faTimes, faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
+// Utils
 import { isValidUserName, isValidName, isValidPassword } from "utils/validateData";
-import { enableIsAuthenticated, disableIsAuthenticated } from "app/appSlice";
+
+// Redux selectors
 import { selectCheckedAuth } from "app/appSlice";
+
+// Redux reducers
+import { enableIsAuthenticated, disableIsAuthenticated } from "app/appSlice";
+
+// Queries
 import { useSignUpDoctorMutation } from "api/apiSlice";
 
 export default function Signup() {

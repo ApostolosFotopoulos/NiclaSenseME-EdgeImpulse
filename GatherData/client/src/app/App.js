@@ -1,10 +1,17 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
-import { useLazyVerifyDoctorQuery } from "api/apiSlice";
-import { enableIsAuthenticated, disableIsAuthenticated, enableCheckedAuth } from "./appSlice";
-import { selectIsAuthenticated } from "./appSlice";
 
+// Redux selectors
+import { selectIsAuthenticated } from "app/appSlice";
+
+// Redux reducers
+import { enableIsAuthenticated, disableIsAuthenticated, enableCheckedAuth } from "app/appSlice";
+
+// Queries
+import { useLazyVerifyDoctorQuery } from "api/apiSlice";
+
+// Components
 import Login from "pages/login/Login";
 import Signup from "pages/signup/Signup";
 import Dashboard from "pages/dashboard/Dashboard";

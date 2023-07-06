@@ -1,6 +1,7 @@
-import Status from "./status/Status";
-import PatientInfo from "./patientInfo/PatientInfo";
-import InsertPatient from "./insertPatient/InsertPatient";
+// Components
+import Status from "pages/dashboard/status/Status";
+import PatientInfo from "pages/dashboard/patientInfo/PatientInfo";
+import InsertPatient from "pages/dashboard/insertPatient/InsertPatient";
 
 function Dashboard() {
   return (

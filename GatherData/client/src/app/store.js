@@ -1,8 +1,8 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { setupListeners } from "@reduxjs/toolkit/query";
+import appReducer from "app/appSlice";
 import statusReducer from "pages/dashboard/status/statusSlice";
 import patientInfoReducer from "pages/dashboard/patientInfo/patientInfoSlice";
-import appReducer from "app/appSlice";
 import doctorProfileReducer from "pages/dashboard/status/doctorProfile/doctorProfileSlice";
 import { apiSlice } from "api/apiSlice";
 
