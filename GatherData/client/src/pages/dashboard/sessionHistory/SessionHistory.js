@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { LineChart, ResponsiveContainer, Line, XAxis, YAxis, CartesianGrid } from "recharts";
 
 // Utils
 import { hasSelectedPatient } from "utils/validateData";
@@ -28,6 +29,7 @@ export default function SessionHistory() {
     async function getSessions() {
       try {
         let res = await getLatestSessions({ patientId: selectedPatient.patientId }).unwrap();
+        res = [...res].reverse();
         console.log(res);
         setSessions(res);
       } catch (err) {
@@ -40,10 +42,36 @@ export default function SessionHistory() {
       }
     }
 
-    if (hasSelectedPatient(selectedPatient)) {
+    if (hasSelectedPatient(selectedPatient) && !isGatheringData) {
       getSessions();
     }
-  }, [selectedPatient, getLatestSessions, dispatch]);
+  }, [selectedPatient, isGatheringData, getLatestSessions, dispatch]);
 
-  return <div className="col-container">SessionHistory</div>;
+  return (
+    <div className="col-container">
+      {sessions && sessions.length > 0 ? (
+        <ResponsiveContainer width="95%" height={300}>
+          <LineChart data={sessions}>
+            <CartesianGrid strokeDasharray="5 5" stroke="white" />
+            <XAxis stroke="white" />
+            <YAxis type="number" domain={[0, 1]} stroke="white" />
+            <Line type="monotone" dataKey="normal" stroke="blue" />
+            <Line type="monotone" dataKey="cp1" stroke="yellow" />
+            <Line type="monotone" dataKey="cp2" stroke="red" />
+          </LineChart>
+        </ResponsiveContainer>
+      ) : (
+        <ResponsiveContainer width="90%" height={300}>
+          <LineChart>
+            <CartesianGrid strokeDasharray="5 5" stroke="white" />
+            <XAxis stroke="white" />
+            <YAxis type="number" domain={[0, 1]} stroke="white" />
+            <Line type="monotone" dataKey="normal" stroke="blue" />
+            <Line type="monotone" dataKey="cp1" stroke="yellow" />
+            <Line type="monotone" dataKey="cp2" stroke="red" />
+          </LineChart>
+        </ResponsiveContainer>
+      )}
+    </div>
+  );
 }

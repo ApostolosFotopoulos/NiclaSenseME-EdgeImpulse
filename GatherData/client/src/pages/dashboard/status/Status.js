@@ -150,10 +150,14 @@ export default function Status() {
         return parseFloat(str);
       }
 
+      const max = 1;
+      const x1 = getRandomFloat(0, max, 5);
+      const x2 = getRandomFloat(0, max - x1, 5);
+      const x3 = max - x1 - x2;
       setPredictionsBody({
-        normal: getRandomFloat(0, 1, 5),
-        cp1: getRandomFloat(0, 1, 5),
-        cp2: getRandomFloat(0, 1, 5),
+        normal: x1,
+        cp1: x2,
+        cp2: x3,
       });
     }, SET_INTERVAL_TIME);
   }
