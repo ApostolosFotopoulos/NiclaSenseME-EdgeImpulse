@@ -47,11 +47,21 @@ img {
 }
 
 /* GENERAL STYLES */
+html {
+  -webkit-font-smoothing: antialiased;
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+}
+
 * {
   font-family: var(--FF-MAIN);
 }
 
 *:focus {
+  outline: none;
+}
+
+*:hover {
   outline: none;
 }
 
