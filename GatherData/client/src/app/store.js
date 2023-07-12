@@ -15,6 +15,7 @@ export const store = configureStore({
     patientInfo: patientInfoReducer,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(apiSlice.middleware),
+  devTools: false,
 });
 
 setupListeners(store.dispatch);

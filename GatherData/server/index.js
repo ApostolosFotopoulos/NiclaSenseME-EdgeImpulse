@@ -1,10 +1,11 @@
 require("module-alias/register");
+require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
-const pool = require("@root/config/db");
+const corsOptions = require("@root/config/corsOptions");
 
 const app = express();
-app.use(cors());
+app.use(cors(corsOptions));
 app.use(express.json());
 
 // ROUTES
@@ -14,14 +15,7 @@ app.use("/", require("@root/routes/patient"));
 app.use("/", require("@root/routes/prediction"));
 app.use("/", require("@root/routes/session"));
 
-app.delete("/patient/:id", async (req, res) => {
-  try {
-    const { id: patientId } = req.params;
-    const patient = await pool.query("DELETE FROM patient WHERE patient_id = $1", [patientId]);
-    res.json("delete success");
-  } catch (err) {}
-});
-
-app.listen(5000, () => {
-  console.log("Server has started on port 5000");
+const port = process.env.port || 5000;
+app.listen(port, () => {
+  console.log(`Server has started on port ${port}`);
 });
