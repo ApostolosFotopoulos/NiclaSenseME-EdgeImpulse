@@ -24,6 +24,9 @@ import { setStatus } from "pages/dashboard/status/statusSlice";
 // Queries
 import { useLazyGetLatestSessionsQuery } from "api/apiSlice";
 
+// Components
+import CustomTooltip from "pages/dashboard/sessionHistory/customTooltip/CustomTooltip";
+
 export default function SessionHistory() {
   // Local state
   const [sessions, setSessions] = useState([]);
@@ -80,7 +83,7 @@ export default function SessionHistory() {
                 angle={270}
               />
             </YAxis>
-            <Tooltip contentStyle={{ backgroundColor: "rgb(69, 69, 69)" }} />
+            <Tooltip content={<CustomTooltip />} />
             <Legend align="right" />
             <Line type="monotone" dataKey="normal" stroke="blue" />
             <Line type="monotone" dataKey="cp1" stroke="yellow" />

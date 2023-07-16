@@ -23,6 +23,9 @@ img {
   --BUTTON-SUCCESS-FONT-COLOR: rgb(231, 231, 231);
   --BUTTON-LOADING-FONT-COLOR: black;
   --DROPDOWN-FONT-COLOR: rgb(231, 231, 231);
+  --NORMAL-FONT-COLOR: blue;
+  --CP1-FONT-COLOR: yellow;
+  --CP2-FONT-COLOR: red;
 
   /* BG COLORS */
   --BODY-BG-COLOR: black;
@@ -133,7 +136,7 @@ button {
   background-color: var(--BUTTON-BG-COLOR);
   color: var(--BUTTON-FONT-COLOR);
   font-size: var(--MAIN-FONT-SIZE);
-  padding: 5px;
+  padding: 4px;
   text-align: center;
   border: none;
   width: 100px;
@@ -458,6 +461,31 @@ button:disabled {
 
 .patient__details-button {
   width: 120px;
+}
+
+/* CUSTOM TOOLTIP */
+.custom-tooltip {
+  display: flex;
+  flex-direction: column;
+  padding: 8px;
+  background-color: var(--ALT-BG-COLOR);
+}
+
+.custom-tooltip__header {
+  align-self: center;
+  font-size: 20px;
+}
+
+.custom-tooltip__normal {
+  color: var(--NORMAL-FONT-COLOR);
+}
+
+.custom-tooltip__cp1 {
+  color: var(--CP1-FONT-COLOR);
+}
+
+.custom-tooltip__cp2 {
+  color: var(--CP2-FONT-COLOR);
 }
 
 /* INSERT PATIENT */
