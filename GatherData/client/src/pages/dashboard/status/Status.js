@@ -73,7 +73,7 @@ export default function Status() {
 
   // Stop polling when nicla disconnects
   function onDisconnected() {
-    console.log("Disconnected");
+    //console.log("Disconnected");
     stopConnection();
   }
 
@@ -124,7 +124,7 @@ export default function Status() {
               return b;
             });
 
-            console.log(predictions);
+            //console.log(predictions);
             if (bestPrediction.id !== "idle") {
               setPredictionsBody({
                 normal: parseFloat(predictions.find((el) => el.id === "normal").value),
@@ -133,8 +133,8 @@ export default function Status() {
               });
             }
           })
-          .catch((e) => {
-            // console.log(e);
+          .catch((err) => {
+            // console.log(err);
           });
       }, SET_INTERVAL_TIME);
     }
@@ -170,7 +170,7 @@ export default function Status() {
   }, [refs]);
 
   useEffect(() => {
-    console.log("Run use effect for gathering");
+    // console.log("Run use effect for gathering");
     async function postPrediction() {
       try {
         const body = {

@@ -75,8 +75,8 @@ export default function PatientInfo() {
     }
 
     if (isGatheringData) {
-      dispatch(disableIsGatheringData());
       await submitSession();
+      dispatch(disableIsGatheringData());
       return;
     }
 
