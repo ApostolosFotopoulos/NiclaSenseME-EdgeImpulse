@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   msg: "Waiting ...",
-  connectButtonText: "CONNECT NICLA",
+  connectButtonText: "CONNECT CPWATCHER",
   isConnecting: false,
   isConnected: false,
 };
@@ -30,7 +30,7 @@ export const statusSlice = createSlice({
     disableIsConnected: (state) => {
       state.isConnecting = false;
       state.isConnected = false;
-      state.connectButtonText = "CONNECT NICLA";
+      state.connectButtonText = "CONNECT CPWATCHER";
       state.msg = "Waiting ...";
     },
   },

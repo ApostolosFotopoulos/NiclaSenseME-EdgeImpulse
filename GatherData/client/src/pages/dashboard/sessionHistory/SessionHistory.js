@@ -43,12 +43,11 @@ export default function SessionHistory() {
       try {
         let res = await getLatestSessions({ patientId: selectedPatient.patientId }).unwrap();
         res = [...res].reverse();
-        console.log(res);
         res = res.map((ses, i) => ({
           ...ses,
           xLabel: i + 1,
         }));
-        console.log(res);
+        // console.log(res);
         setSessions(res);
       } catch (err) {
         console.log(err);

@@ -136,7 +136,7 @@ void setup()
     and can be used by remote devices to identify this Bluetooth® Low Energy device
     The name can be changed but maybe be truncated based on space left in advertisement packet
   */
-  BLE.setLocalName("Nicla Sense");
+  BLE.setLocalName("CPWATCHER");
   BLE.setAdvertisedService(edgeImpulseService); // add the service UUID
   edgeImpulseService.addCharacteristic(predictionChar); 
   BLE.addService(edgeImpulseService); 
