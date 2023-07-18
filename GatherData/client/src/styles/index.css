@@ -47,6 +47,7 @@ img {
 
   /* WIDTHS */
   --DESKTOP-PAGE-WIDTH: 65%;
+  --MOBILE-PAGE-WIDTH: 95%;
 }
 
 /* GENERAL STYLES */
@@ -502,4 +503,37 @@ button:disabled {
 .patient__form-button {
   margin-top: 16px;
   align-self: center;
+}
+
+@media only screen and (max-width: 1100px) {
+  .recharts-legend-item {
+    position: relative;
+    left: 20000px;
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  .col-container {
+    width: var(--MOBILE-PAGE-WIDTH);
+  }
+
+  .row-container {
+    width: var(--MOBILE-PAGE-WIDTH);
+  }
+
+  .status {
+    flex-direction: column-reverse;
+  }
+
+  .patient__search {
+    width: 100%;
+  }
+
+  .patient__details {
+    flex-direction: column;
+  }
+
+  .patient__form {
+    width: 100%;
+  }
 }
