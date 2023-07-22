@@ -1,8 +1,13 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
+let baseUrl = "http://localhost:5000/";
+if (process.env.NODE_ENV === "production") {
+  baseUrl = "";
+}
+
 export const apiSlice = createApi({
   reducerPath: "api",
-  baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:5000/", timeout: 5000 }),
+  baseQuery: fetchBaseQuery({ baseUrl: baseUrl, timeout: 5000 }),
   endpoints: (builder) => ({
     signUpDoctor: builder.mutation({
       query: (body) => ({
