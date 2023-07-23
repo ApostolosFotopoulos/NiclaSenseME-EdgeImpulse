@@ -9,11 +9,11 @@ app.use(cors(corsOptions));
 app.use(express.json());
 
 // ROUTES
-app.use("/", require("@root/routes/jwtAuth"));
-app.use("/", require("@root/routes/doctor"));
-app.use("/", require("@root/routes/patient"));
-app.use("/", require("@root/routes/prediction"));
-app.use("/", require("@root/routes/session"));
+app.use("/api/", require("@root/routes/jwtAuth"));
+app.use("/api/", require("@root/routes/doctor"));
+app.use("/api/", require("@root/routes/patient"));
+app.use("/api/", require("@root/routes/prediction"));
+app.use("/api/", require("@root/routes/session"));
 
 const port = process.env.port || 5000;
 app.listen(port, () => {
