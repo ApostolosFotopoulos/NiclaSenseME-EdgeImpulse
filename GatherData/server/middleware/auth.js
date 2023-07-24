@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken");
-require("dotenv").config();
+const envVariables = require("@root/env/envVariables");
 
 module.exports = function (req, res, next) {
   console.log("Middleware");
@@ -13,7 +13,7 @@ module.exports = function (req, res, next) {
 
   // Verify token
   try {
-    const verify = jwt.verify(token, process.env.jwtSecret);
+    const verify = jwt.verify(token, envVariables.jwtSecret);
     console.log(verify);
 
     req.doctor = verify.doctor;

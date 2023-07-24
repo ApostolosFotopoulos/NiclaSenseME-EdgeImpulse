@@ -1,6 +1,6 @@
 const router = require("express").Router();
 const pool = require("@root/config/db");
-const { isPosInt, isValidUserName, isValidName, isValidPassword } = require("@root/utils/validateData");
+const { isPosInt } = require("@root/utils/validateData");
 const auth = require("@root/middleware/auth");
 
 // Get doctor with auth middleware

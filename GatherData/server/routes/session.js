@@ -1,6 +1,6 @@
 const router = require("express").Router();
 const pool = require("@root/config/db");
-const { isPosInt, isString, isValidDateFormat } = require("@root/utils/validateData");
+const { isPosInt, isValidDateFormat } = require("@root/utils/validateData");
 
 // SESSION QUERIES
 // Get session with patient id and session date
