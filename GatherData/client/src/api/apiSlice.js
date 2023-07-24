@@ -26,57 +26,49 @@ export const apiSlice = createApi({
     verifyDoctor: builder.query({
       query: ({ jwtToken }) => ({
         url: "verify",
-        headers: { jwt_token: jwtToken },
+        headers: { "jwt-token": jwtToken },
       }),
     }),
     getDoctor: builder.query({
       query: ({ jwtToken }) => ({
         url: "doctor",
-        headers: { jwt_token: jwtToken },
+        headers: { "jwt-token": jwtToken },
       }),
     }),
-    getPatient: builder.query({
-      query: ({ doctorId, patientFirstName, patientLastName, patientDateOfBirth }) =>
-        `patient/${doctorId}&${patientFirstName}&${patientLastName}&${patientDateOfBirth}`,
-    }),
     getPatients: builder.query({
-      query: ({ doctorId, partOfName }) => `patients/${doctorId}&${partOfName}`,
+      query: ({ jwtToken, doctorId, partOfName }) => ({
+        url: `patients/${doctorId}&${partOfName}`,
+        headers: { "jwt-token": jwtToken },
+      }),
     }),
     postPatient: builder.mutation({
-      query: (body) => ({
+      query: ({ jwtToken, ...body }) => ({
         url: "patient",
         method: "POST",
         body: body,
+        headers: { "jwt-token": jwtToken },
       }),
     }),
-    getPredictionCount: builder.query({
-      query: ({ patientId, predictionDate }) => `prediction-count/${patientId}&${predictionDate}`,
-    }),
     postPrediction: builder.mutation({
-      query: (body) => ({
+      query: ({ jwtToken, ...body }) => ({
         url: "prediction",
         method: "POST",
         body: body,
+        headers: { "jwt-token": jwtToken },
       }),
     }),
-    getSession: builder.query({
-      query: ({ patientId, sessionDate }) => `session/${patientId}&${sessionDate}`,
-    }),
     getLatestSessions: builder.query({
-      query: ({ patientId }) => `latest-sessions/${patientId}`,
+      query: ({ jwtToken, patientId }) => ({
+        url: `latest-sessions/${patientId}`,
+        headers: { "jwt-token": jwtToken },
+      }),
     }),
     postSession: builder.mutation({
-      query: (body) => ({
+      query: ({ jwtToken, ...body }) => ({
         url: "session",
         method: "POST",
         body: body,
-      }),
-    }),
-    updateSession: builder.mutation({
-      query: ({ sessionId, patientId, sessionDate, ...body }) => ({
-        url: `session/${sessionId}&${patientId}&${sessionDate}`,
-        method: "PUT",
-        body: body,
+        headers: { "jwt-token": jwtToken },
       }),
     }),
   }),
@@ -87,13 +79,9 @@ export const {
   useLogInDoctorMutation,
   useLazyVerifyDoctorQuery,
   useLazyGetDoctorQuery,
-  useLazyGetPatientQuery,
   useLazyGetPatientsQuery,
   usePostPatientMutation,
-  useLazyGetPredictionCountQuery,
   usePostPredictionMutation,
-  useLazyGetSessionQuery,
   useLazyGetLatestSessionsQuery,
   usePostSessionMutation,
-  useUpdateSessionMutation,
 } = apiSlice;

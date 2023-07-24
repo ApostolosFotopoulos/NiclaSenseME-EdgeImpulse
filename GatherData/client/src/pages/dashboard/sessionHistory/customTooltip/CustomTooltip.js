@@ -2,7 +2,6 @@ import React from "react";
 import { toCustomFormat } from "utils/utils";
 
 export default function CustomTooltip({ active, payload, label }) {
-  // console.log(payload);
   if (active && payload && payload.length) {
     return (
       <div className="custom-tooltip">

@@ -1,10 +1,11 @@
 const router = require("express").Router();
 const pool = require("@root/config/db");
 const { isPosInt, isPosNumeric, isString } = require("@root/utils/validateData");
+const auth = require("@root/middleware/auth");
 
 // PREDICTION QUERIES
 // Get predictions count with patient id and prediction date
-router.get("/prediction-count/:pid&:pdate", async (req, res) => {
+router.get("/prediction-count/:pid&:pdate", auth, async (req, res) => {
   console.log("Get predictions count");
   try {
     console.log(req.params);
@@ -27,7 +28,7 @@ router.get("/prediction-count/:pid&:pdate", async (req, res) => {
 });
 
 // Insert prediction
-router.post("/prediction", async (req, res) => {
+router.post("/prediction", auth, async (req, res) => {
   console.log("Insert prediction");
   try {
     console.log("Body:");

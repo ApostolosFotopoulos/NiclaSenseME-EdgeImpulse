@@ -51,10 +51,13 @@ export default function SearchPatient() {
     }
 
     try {
-      const res = await getPatients({ doctorId: doctor.doctorId, partOfName: value }).unwrap();
+      const res = await getPatients({
+        jwtToken: localStorage.accessToken,
+        doctorId: doctor.doctorId,
+        partOfName: value,
+      }).unwrap();
       setPatients(res);
     } catch (err) {
-      console.log(err);
       if (err?.data) {
         dispatch(setStatus(err.data.errMsg));
       } else {

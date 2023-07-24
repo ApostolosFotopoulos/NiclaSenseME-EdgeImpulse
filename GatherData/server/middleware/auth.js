@@ -1,10 +1,11 @@
 const jwt = require("jsonwebtoken");
 const envVariables = require("@root/env/envVariables");
+const { request } = require("express");
 
 module.exports = function (req, res, next) {
   console.log("Middleware");
   // Get token from header
-  const token = req.header("jwt_token");
+  const token = req.header("jwt-token");
 
   // Check if not token
   if (!token) {

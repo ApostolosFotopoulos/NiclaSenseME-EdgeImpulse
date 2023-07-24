@@ -106,10 +106,8 @@ export default function Signup() {
         doctorPassword: password,
       };
       let res = await signUpDoctor(body).unwrap();
-      console.log(res);
 
       if (res.jwtToken) {
-        console.log("Stored token");
         localStorage.setItem("accessToken", res.jwtToken);
         dispatch(enableIsAuthenticated());
       } else {

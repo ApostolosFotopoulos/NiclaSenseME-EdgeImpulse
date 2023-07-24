@@ -83,6 +83,7 @@ export default function InsertPatient() {
       const patientDateOfBirthIso = toIsoDayFormat(patientDateOfBirth);
 
       let res = await insertPatient({
+        jwtToken: localStorage.accessToken,
         doctorId: doctor.doctorId,
         patientFirstName,
         patientLastName,

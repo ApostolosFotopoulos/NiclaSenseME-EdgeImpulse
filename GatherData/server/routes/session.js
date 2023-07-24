@@ -1,10 +1,11 @@
 const router = require("express").Router();
 const pool = require("@root/config/db");
 const { isPosInt, isValidDateFormat } = require("@root/utils/validateData");
+const auth = require("@root/middleware/auth");
 
 // SESSION QUERIES
 // Get session with patient id and session date
-router.get("/session/:pid&:sdate", async (req, res) => {
+router.get("/session/:pid&:sdate", auth, async (req, res) => {
   console.log("Get session");
   try {
     console.log(req.params);
@@ -27,7 +28,7 @@ router.get("/session/:pid&:sdate", async (req, res) => {
 });
 
 // Insert session
-router.post("/session", async (req, res) => {
+router.post("/session", auth, async (req, res) => {
   console.log("Insert session");
   try {
     console.log("Body:");
@@ -85,7 +86,7 @@ router.post("/session", async (req, res) => {
 });
 
 // Update session
-router.put("/session/:sid&:pid&:sdate", async (req, res) => {
+router.put("/session/:sid&:pid&:sdate", auth, async (req, res) => {
   console.log("Update session");
   try {
     console.log(req.body);
@@ -108,7 +109,7 @@ router.put("/session/:sid&:pid&:sdate", async (req, res) => {
 });
 
 // Get latest sessions with patient id
-router.get("/latest-sessions/:pid", async (req, res) => {
+router.get("/latest-sessions/:pid", auth, async (req, res) => {
   console.log("Get latest sessions");
   try {
     console.log(req.params);

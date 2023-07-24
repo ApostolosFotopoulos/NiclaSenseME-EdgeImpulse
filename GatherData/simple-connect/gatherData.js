@@ -78,8 +78,8 @@ async function connect() {
               }
               console.log(predictions);
             })
-            .catch((e) => {
-              // console.log(e);
+            .catch((err) => {
+              // console.log(err);
             });
         }, 1000);
       }
@@ -88,8 +88,8 @@ async function connect() {
     pairButton.style.color = "white";
     pairButton.innerHTML = "PAIRED";
     msg("Characteristics configured");
-  } catch (e) {
-    // console.log(e);
+  } catch (err) {
+    // console.log(err);
   }
 }
 

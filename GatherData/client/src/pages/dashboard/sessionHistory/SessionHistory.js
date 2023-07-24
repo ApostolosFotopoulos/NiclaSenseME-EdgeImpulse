@@ -41,16 +41,18 @@ export default function SessionHistory() {
   useEffect(() => {
     async function getSessions() {
       try {
-        let res = await getLatestSessions({ patientId: selectedPatient.patientId }).unwrap();
+        let res = await getLatestSessions({
+          jwtToken: localStorage.accessToken,
+          patientId: selectedPatient.patientId,
+        }).unwrap();
         res = [...res].reverse();
         res = res.map((ses, i) => ({
           ...ses,
           xLabel: i + 1,
         }));
-        // console.log(res);
+
         setSessions(res);
       } catch (err) {
-        console.log(err);
         if (err?.data) {
           dispatch(setStatus(err.data.errMsg));
         } else {

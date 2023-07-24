@@ -48,6 +48,7 @@ export default function PatientInfo() {
 
     try {
       await insertSession({
+        jwtToken: localStorage.accessToken,
         patientId: selectedPatient.patientId,
         sessionDate: getCurrentDate(),
       }).unwrap();

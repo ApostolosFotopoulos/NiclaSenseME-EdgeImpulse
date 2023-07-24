@@ -1,9 +1,10 @@
 const router = require("express").Router();
 const pool = require("@root/config/db");
 const { isValidName, isValidBirthDate, isPosInt, isString } = require("@root/utils/validateData");
+const auth = require("@root/middleware/auth");
 
 // Get patient with first name, last name and date of birth
-router.get("/patient/:did&:fname&:lname&:dob", async (req, res) => {
+router.get("/patient/:did&:fname&:lname&:dob", auth, async (req, res) => {
   try {
     console.log("Get patient");
     console.log(req.params);
@@ -36,7 +37,8 @@ router.get("/patient/:did&:fname&:lname&:dob", async (req, res) => {
   }
 });
 
-router.get("/patients/:did&:name", async (req, res) => {
+// Get patients from part of their name
+router.get("/patients/:did&:name", auth, async (req, res) => {
   try {
     console.log("Get patients");
     console.log(req.params);
@@ -61,7 +63,7 @@ router.get("/patients/:did&:name", async (req, res) => {
 });
 
 // Insert patient
-router.post("/patient", async (req, res) => {
+router.post("/patient", auth, async (req, res) => {
   console.log("Insert patient");
   try {
     console.log("Body:");
