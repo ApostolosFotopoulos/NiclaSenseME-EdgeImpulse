@@ -5,7 +5,7 @@ var timezone = require("dayjs/plugin/timezone"); // dependent on utc plugin
 dayjs.extend(utc);
 dayjs.extend(timezone);
 // Valid inserted date formats
-const formats = ["D/M/YYYY", "D-M-YYYY"];
+const formats = ["D/M/YYYY", "D-M-YYYY", "DD/M/YYYY", "DD-M-YYYY", "D/MM/YYYY", "D-MM-YYYY"];
 
 // Change a string date to ISO8601 format
 export function toIsoDayFormat(date) {

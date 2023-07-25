@@ -2,7 +2,7 @@ const dayjs = require("dayjs");
 const customParseFormat = require("dayjs/plugin/customParseFormat");
 dayjs.extend(customParseFormat);
 // Valid inserted date formats
-const formats = ["YYYY-M-D"];
+const formats = ["YYYY-M-D", "YYYY-MM-DD", "YYYY-M-DD", "YYYY-MM-D"];
 
 const USER_REGEX = /^[A-z][A-z0-9-_]{3,23}$/;
 const NAME_REGEX = /^[a-zA-Z]+([ \\'-]{0,1}[a-zA-Z]+){0,2}[.]{0,1}$/;
@@ -19,8 +19,11 @@ function isValidYear(date) {
 }
 
 function isValidBirthDate(date) {
+  console.log(isValidDateFormat(date));
+  console.log(isValidYear(date));
   return isValidDateFormat(date) && isValidYear(date);
 }
+isValidBirthDate("2023-07-5");
 
 function isPosFloat(n) {
   if (typeof n === "string") {

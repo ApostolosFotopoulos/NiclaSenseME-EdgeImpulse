@@ -2,7 +2,7 @@ import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 dayjs.extend(customParseFormat);
 // Valid inserted date formats
-const formats = ["D/M/YYYY", "D-M-YYYY"];
+const formats = ["D/M/YYYY", "D-M-YYYY", "DD/M/YYYY", "DD-M-YYYY", "D/MM/YYYY", "D-MM-YYYY"];
 
 const USER_REGEX = /^[A-z][A-z0-9-_]{3,23}$/;
 const NAME_REGEX = /^[a-zA-Z]+([ \\'-]{0,1}[a-zA-Z]+){0,2}[.]{0,1}$/;
