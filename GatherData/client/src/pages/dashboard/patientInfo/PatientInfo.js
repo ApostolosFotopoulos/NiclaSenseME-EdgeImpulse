@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 // Utils
 import { hasSelectedPatient } from "utils/validateData";
-import { getCurrentDate } from "utils/utils";
+import { getCurrentDate, toDisplayFormat } from "utils/utils";
 
 // Redux selectors
 import { selectIsConnected } from "pages/dashboard/status/statusSlice";
@@ -111,7 +111,9 @@ export default function PatientInfo() {
           type="text"
           className="patient__details-input"
           id={"patient-details-date-of-birth"}
-          value={selectedPatient.patientDateOfBirth}
+          value={
+            selectedPatient.patientDateOfBirth ? toDisplayFormat(selectedPatient.patientDateOfBirth) : ""
+          }
         />
       </div>
       <button

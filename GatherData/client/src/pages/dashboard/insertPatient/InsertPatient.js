@@ -90,8 +90,16 @@ export default function InsertPatient() {
         patientDateOfBirth: patientDateOfBirthIso,
       }).unwrap();
 
+      console.log(patientDateOfBirthIso);
       const { patient_id: patientId } = res;
-      dispatch(setSelectedpatient({ patientId, patientFirstName, patientLastName, patientDateOfBirth }));
+      dispatch(
+        setSelectedpatient({
+          patientId,
+          patientFirstName,
+          patientLastName,
+          patientDateOfBirth: patientDateOfBirthIso,
+        })
+      );
       dispatch(setStatus(`Patient ${patientFirstName} ${patientLastName} selected`));
       clearForm();
     } catch (err) {
