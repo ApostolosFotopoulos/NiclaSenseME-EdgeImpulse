@@ -3,6 +3,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
 
+// Utils
+import constants from "utils/constants";
+
 // Redux selectors
 import { selectIsGatheringData } from "pages/dashboard/patientInfo/patientInfoSlice";
 import { selectDoctor } from "pages/dashboard/status/doctorProfile/doctorProfileSlice";
@@ -35,6 +38,16 @@ export default function DoctorProfile() {
           last_name: doctorLastName,
           user_name: doctorUserName,
         } = res;
+
+        // Check if test user
+        if (
+          doctorId === 16 &&
+          doctorUserName === "testSim" &&
+          doctorFirstName === "test" &&
+          doctorLastName === "sim"
+        ) {
+          constants.enableDebug();
+        }
 
         dispatch(setDoctor({ doctorId, doctorFirstName, doctorLastName, doctorUserName }));
       } catch (err) {

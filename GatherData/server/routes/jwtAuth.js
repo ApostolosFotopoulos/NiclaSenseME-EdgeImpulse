@@ -60,6 +60,7 @@ router.post("/login", async (req, res) => {
 
     // Check if the user exists
     let queryRes = await pool.query("SELECT * FROM doctor WHERE user_name=$1", [doctorUserName]);
+    console.log("User exists:");
     console.log(queryRes.rows[0]);
 
     if (queryRes.rows.length === 0) {

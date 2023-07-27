@@ -171,6 +171,7 @@ button:disabled {
   gap: 16px;
   padding: 16px;
   width: var(--DESKTOP-PAGE-WIDTH);
+  max-width: 1024px;
 }
 
 .row-container {
@@ -182,6 +183,7 @@ button:disabled {
   gap: 16px;
   padding: 16px;
   width: var(--DESKTOP-PAGE-WIDTH);
+  max-width: 1024px;
 }
 
 .main-input-label {
@@ -308,6 +310,7 @@ button:disabled {
   align-items: center;
   min-height: 100vh;
   margin-top: 16px;
+  margin-bottom: 16px;
   gap: 16px;
 }
 

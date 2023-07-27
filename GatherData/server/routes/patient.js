@@ -93,7 +93,7 @@ router.post("/patient", auth, async (req, res) => {
       "INSERT INTO patient(doctor_id ,first_name, last_name, date_of_birth) VALUES ($1, $2, $3, $4) RETURNING *",
       [doctorId, patientFirstName, patientLastName, patientDateOfBirth]
     );
-    console.log("Inserted data:");
+    console.log("Inserted patient:");
     console.log(queryRes.rows[0]);
     res.json(queryRes.rows[0]);
   } catch (err) {

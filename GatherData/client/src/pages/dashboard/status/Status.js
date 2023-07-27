@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 // Utils
-import { DEBUG, SERVICE_UUID, CHARACTERISTIC_UUID, SET_INTERVAL_TIME } from "utils/constants";
+import constants from "utils/constants";
 import { getCurrentDate } from "utils/utils";
 import { isEmptyObj } from "utils/validateData";
 
@@ -54,7 +54,7 @@ export default function Status() {
   useEffect(() => {
     refs.NiclaSenseME = {
       predictions: {
-        uuid: CHARACTERISTIC_UUID,
+        uuid: constants.CHARACTERISTIC_UUID,
         properties: ["BLERead"],
         structure: ["Float32"],
         data: { predictions: [] },
@@ -81,7 +81,7 @@ export default function Status() {
     const device = await navigator.bluetooth.requestDevice({
       filters: [
         {
-          services: [SERVICE_UUID], // SERVICE_UUID
+          services: [constants.SERVICE_UUID], // SERVICE_UUID
         },
       ],
     });
@@ -91,7 +91,7 @@ export default function Status() {
     const server = await device.gatt.connect();
 
     dispatch(setStatus("Getting primary service ..."));
-    const service = await server.getPrimaryService(SERVICE_UUID);
+    const service = await server.getPrimaryService(constants.SERVICE_UUID);
 
     // Set up the characteristics
     dispatch(setStatus("Characteristic " + refs.sensor + "..."));
@@ -134,7 +134,7 @@ export default function Status() {
           .catch((err) => {
             // console.log(err);
           });
-      }, SET_INTERVAL_TIME);
+      }, constants.SET_INTERVAL_TIME);
     }
   }
 
@@ -151,13 +151,14 @@ export default function Status() {
       const max = 1;
       const x1 = getRandomFloat(0, max, 5);
       const x2 = getRandomFloat(0, max - x1, 5);
-      const x3 = max - x1 - x2;
+      const x3 = (max - x1 - x2).toFixed(5);
+
       setPredictionsBody({
         normal: x1,
         cp1: x2,
         cp2: x3,
       });
-    }, SET_INTERVAL_TIME);
+    }, constants.SET_INTERVAL_TIME);
   }
 
   //Run on unmount
@@ -204,7 +205,7 @@ export default function Status() {
 
     dispatch(enableIsConnecting());
     try {
-      if (DEBUG) {
+      if (constants.DEBUG) {
         imitateConnection();
       } else {
         await connectNicla();
