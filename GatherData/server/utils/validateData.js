@@ -19,11 +19,8 @@ function isValidYear(date) {
 }
 
 function isValidBirthDate(date) {
-  console.log(isValidDateFormat(date));
-  console.log(isValidYear(date));
   return isValidDateFormat(date) && isValidYear(date);
 }
-isValidBirthDate("2023-07-5");
 
 function isPosFloat(n) {
   if (typeof n === "string") {
