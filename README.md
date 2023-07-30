@@ -6,7 +6,7 @@
 
 👉 Live Demo: <a href=''>CPwatcher</a>
 
-<h3>Build with:</h3>
+<h3>Built with:</h3>
 » Arduino <br>
 » PlatformIO <br>
 » Edge Impulse <br>
