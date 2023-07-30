@@ -4,7 +4,7 @@
 
 <p>In order to view and collect the data a web app was created. This was created by using the PERN (PostgreSQL, Express, React and Node.js) stack. The connection between the app and the sensor happens via BLE (Bluetooth Low Energy). The app lets the user create an account, add patients, collect data for each patient and track their improvement over time.</p>
 
-👉 Live Demo: <a href=''>CPwatcher</a>
+👉 Live Demo: <a href='http://3.76.38.238/'>CPwatcher</a>
 
 <h3>Built with:</h3>
 » Arduino <br>
