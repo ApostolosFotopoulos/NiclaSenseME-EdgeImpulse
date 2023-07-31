@@ -18,6 +18,7 @@
 » PostgreSQL <br>
 » Express <br>
 » ReactJS <br>
+» Redux <br>
 » Node.js <br> <br>
 
 <h3>Deployed with:</h3>
