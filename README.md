@@ -17,7 +17,7 @@
 » Edge Impulse <br>
 » PostgreSQL <br>
 » Express <br>
-» ReactJS <br>
+» React <br>
 » Redux <br>
 » Node.js <br> <br>
 
