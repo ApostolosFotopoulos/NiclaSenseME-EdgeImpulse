@@ -8,8 +8,8 @@
 
 <p>In order to test the app enter the credentials below:</p>
 <p><b>User: testSim</b></p> 
-<p><b>Password: bgddgnQQ1!</b></p> 
-<p>This account will let you test the app without having to connect the sensor. This is done by a script that returns similar values to the ones the sensor would return.</p> <br>
+<p><b>Password: bgddgnQQ1!</b> (Watch out when copying the password)</p> 
+<p>This account will let you test the app without having to connect the sensor. This is done by a script that returns similar values to the ones the sensor would return. For a patient search and select "test sim". Choosing a different patient is fine, "test sim" already has some historical data. Then press "CONNECT CPWATCHER", followed by "GATHER DATA". When you are ready, stop gathering data by pressing the button again. An average of your measurements now appears on the graph below. If you collect more measurements that average will get updated. The entries on the graph are the averages of a single day-session of measurements. Basically to get a new entry in the graph, you need to collect data a different day (UTC time).</p> <br>
 
 <h3>Built with:</h3>
 » Arduino <br>
