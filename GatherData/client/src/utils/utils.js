@@ -16,7 +16,6 @@ export function toIsoDayFormat(date) {
 
 // Change date to display format
 export function toDisplayFormat(date) {
-  console.log(date);
   const d = dayjs(date, isoFormats, true);
   return `${d.get("date")}-${d.get("month") + 1}-${d.get("year")}`;
 }

@@ -90,7 +90,6 @@ export default function InsertPatient() {
         patientDateOfBirth: patientDateOfBirthIso,
       }).unwrap();
 
-      console.log(patientDateOfBirthIso);
       const { patient_id: patientId } = res;
       dispatch(
         setSelectedpatient({

@@ -213,7 +213,8 @@ export default function Status() {
 
       dispatch(disableIsConnecting());
       dispatch(enableIsConnected());
-    } catch (e) {
+    } catch (err) {
+      //console.log(err);
       stopConnection();
     }
   }
