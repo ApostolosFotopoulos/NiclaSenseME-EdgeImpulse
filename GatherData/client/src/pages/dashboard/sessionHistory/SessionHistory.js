@@ -86,7 +86,7 @@ export default function SessionHistory() {
             </YAxis>
             <Tooltip content={<CustomTooltip />} />
             <Legend align="right" />
-            <Line type="monotone" dataKey="normal" stroke="blue" />
+            <Line type="monotone" strokeWidth={3} dataKey="normal" stroke="#2ecbff" />
             <Line type="monotone" dataKey="cp1" stroke="yellow" />
             <Line type="monotone" dataKey="cp2" stroke="red" />
           </LineChart>

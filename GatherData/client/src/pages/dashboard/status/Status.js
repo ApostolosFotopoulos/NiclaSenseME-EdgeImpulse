@@ -151,7 +151,7 @@ export default function Status() {
       const max = 1;
       const x1 = getRandomFloat(0, max, 5);
       const x2 = getRandomFloat(0, max - x1, 5);
-      const x3 = (max - x1 - x2).toFixed(5);
+      const x3 = parseFloat((max - x1 - x2).toFixed(5));
 
       setPredictionsBody({
         normal: x1,
@@ -187,6 +187,13 @@ export default function Status() {
     }
 
     if (isGatheringData && !isEmptyObj(predictionsBody)) {
+      dispatch(
+        setStatus(
+          `N:${predictionsBody.normal.toFixed(2)}, 
+          CP1:${predictionsBody.cp1.toFixed(2)}, 
+          CP2:${predictionsBody.cp2.toFixed(2)}`
+        )
+      );
       postPrediction();
     }
   }, [predictionsBody, isGatheringData, selectedPatient, insertPrediction, dispatch]);
