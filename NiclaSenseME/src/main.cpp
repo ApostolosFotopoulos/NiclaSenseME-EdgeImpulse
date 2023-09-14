@@ -142,9 +142,10 @@ void setup()
   BLE.addService(edgeImpulseService); 
   predictionChar.writeValue("Start"); // set initial value for this characteristic
 
-//   nicla::begin();
-//   nicla::leds.begin();
-//   nicla::leds.setColorBlue();
+  nicla::begin();
+  nicla::leds.begin();
+  nicla::leds.setColorBlue();
+  nicla::enableCharge(180);
   /* Start advertising Bluetooth® Low Energy.  It will start continuously transmitting Bluetooth® Low Energy
     advertising packets and will be visible to remote Bluetooth® Low Energy central devices
     until it receives a new connection */
