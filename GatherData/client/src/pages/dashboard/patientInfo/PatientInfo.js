@@ -6,7 +6,7 @@ import { hasSelectedPatient } from "utils/validateData";
 import { getCurrentDate, toDisplayFormat } from "utils/utils";
 
 // Redux selectors
-import { selectIsConnected } from "pages/dashboard/status/statusSlice";
+import { selectCollectedData, selectIsConnected } from "pages/dashboard/status/statusSlice";
 import {
   selectIsGatheringData,
   selectIsSubmittingSession,
@@ -15,7 +15,7 @@ import {
 } from "pages/dashboard/patientInfo/patientInfoSlice";
 
 // Redux reducers
-import { setStatus } from "pages/dashboard/status/statusSlice";
+import { setStatus, clearData } from "pages/dashboard/status/statusSlice";
 import {
   enableIsGatheringData,
   disableIsGatheringData,
@@ -32,6 +32,7 @@ import SearchPatient from "pages/dashboard/patientInfo/searchPatient/SearchPatie
 export default function PatientInfo() {
   // Redux state
   const dispatch = useDispatch();
+  const collectedData = useSelector(selectCollectedData);
   const isGatheringData = useSelector(selectIsGatheringData);
   const isSubmittingSession = useSelector(selectIsSubmittingSession);
   const gatherButtonText = useSelector(selectGatherButtonText);
@@ -76,6 +77,32 @@ export default function PatientInfo() {
     }
 
     if (isGatheringData) {
+      if (collectedData.length > 0) {
+        const showData = collectedData.reduce(
+          (acc, cur) => {
+            const temp = {};
+            temp.normal = acc.normal + cur.normal;
+            temp.cp1 = acc.cp1 + cur.cp1;
+            temp.cp2 = acc.cp2 + cur.cp2;
+            return temp;
+          },
+          { normal: 0, cp1: 0, cp2: 0 }
+        );
+
+        showData.normal = showData.normal / collectedData.length;
+        showData.cp1 = showData.cp1 / collectedData.length;
+        showData.cp2 = showData.cp2 / collectedData.length;
+        dispatch(clearData());
+        dispatch(
+          setStatus({
+            text: `N:${showData.normal.toFixed(2)},
+            CP1:${showData.cp1.toFixed(2)},
+            CP2:${showData.cp2.toFixed(2)}`,
+            showCensorPredictions: true,
+          })
+        );
+      }
+
       await submitSession();
       dispatch(disableIsGatheringData());
       return;

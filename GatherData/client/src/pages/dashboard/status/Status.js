@@ -18,6 +18,7 @@ import { selectIsGatheringData, selectSelectedPatient } from "pages/dashboard/pa
 // Redux reducers
 import {
   setStatus,
+  addData,
   enableIsConnected,
   disableIsConnected,
   disableIsConnecting,
@@ -187,13 +188,7 @@ export default function Status() {
     }
 
     if (isGatheringData && !isEmptyObj(predictionsBody)) {
-      dispatch(
-        setStatus(
-          `N:${predictionsBody.normal.toFixed(2)}, 
-          CP1:${predictionsBody.cp1.toFixed(2)}, 
-          CP2:${predictionsBody.cp2.toFixed(2)}`
-        )
-      );
+      dispatch(addData({ ...predictionsBody }));
       postPrediction();
     }
   }, [predictionsBody, isGatheringData, selectedPatient, insertPrediction, dispatch]);
@@ -238,7 +233,17 @@ export default function Status() {
         >
           {connectButtonText}
         </button>
-        <div className="status__msg">{msg}</div>
+        <div className="status__msg">
+          {Array.isArray(msg) ? (
+            <p>
+              <span className="status__normal-msg">{msg[0]}</span>,
+              <span className="status__cp1-msg">{msg[1]}</span>,
+              <span className="status__cp2-msg">{msg[2]}</span>
+            </p>
+          ) : (
+            msg
+          )}
+        </div>
         <DoctorProfile />
       </div>
     </div>

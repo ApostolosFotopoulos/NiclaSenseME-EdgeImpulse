@@ -335,6 +335,18 @@ button:disabled {
   text-align: center;
 }
 
+.status__normal-msg {
+  color: var(--NORMAL-FONT-COLOR);
+}
+
+.status__cp1-msg {
+  color: var(--CP1-FONT-COLOR);
+}
+
+.status__cp2-msg {
+  color: var(--CP2-FONT-COLOR);
+}
+
 /* DOCTOR PROFILE */
 .dropdown {
   position: relative;
