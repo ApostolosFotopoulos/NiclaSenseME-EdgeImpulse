@@ -13,7 +13,7 @@ export const statusSlice = createSlice({
   initialState,
   reducers: {
     setStatus: (state, msg) => {
-      if (msg.payload.showCensorPredictions) {
+      if (msg.payload.showSensorPredictions) {
         const nIndex = msg.payload.text.indexOf("N");
         const cp1Index = msg.payload.text.indexOf("CP1");
         const cp2Index = msg.payload.text.indexOf("CP2");

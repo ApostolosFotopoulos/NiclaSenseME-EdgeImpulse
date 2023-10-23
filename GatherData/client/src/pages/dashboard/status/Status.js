@@ -74,6 +74,7 @@ export default function Status() {
 
   // Stop polling when nicla disconnects
   function onDisconnected() {
+    // console.log("Disconnected");
     stopConnection();
   }
 
@@ -124,7 +125,8 @@ export default function Status() {
               return b;
             });
 
-            if (bestPrediction.id !== "idle") {
+            const idle = parseFloat(predictions.find((el) => el.id === "idle").value);
+            if (bestPrediction.id !== "idle" && idle < 0.1) {
               setPredictionsBody({
                 normal: parseFloat(predictions.find((el) => el.id === "normal").value),
                 cp1: parseFloat(predictions.find((el) => el.id === "cp1").value),
@@ -132,9 +134,7 @@ export default function Status() {
               });
             }
           })
-          .catch((err) => {
-            // console.log(err);
-          });
+          .catch((err) => {});
       }, constants.SET_INTERVAL_TIME);
     }
   }
@@ -172,6 +172,7 @@ export default function Status() {
   useEffect(() => {
     async function postPrediction() {
       try {
+        //console.log(predictionsBody);
         await insertPrediction({
           jwtToken: localStorage.accessToken,
           patientId: selectedPatient.patientId,
@@ -216,7 +217,6 @@ export default function Status() {
       dispatch(disableIsConnecting());
       dispatch(enableIsConnected());
     } catch (err) {
-      //console.log(err);
       stopConnection();
     }
   }

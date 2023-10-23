@@ -98,7 +98,7 @@ export default function PatientInfo() {
             text: `N:${showData.normal.toFixed(2)},
             CP1:${showData.cp1.toFixed(2)},
             CP2:${showData.cp2.toFixed(2)}`,
-            showCensorPredictions: true,
+            showSensorPredictions: true,
           })
         );
       }
