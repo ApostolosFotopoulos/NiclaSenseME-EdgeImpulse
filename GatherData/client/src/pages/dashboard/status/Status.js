@@ -118,17 +118,20 @@ export default function Status() {
               predictions.push(pr);
             }
 
-            const bestPrediction = predictions.reduce((a, b) => {
-              if (parseFloat(a.value) > parseFloat(b.value)) {
-                return a;
-              }
-              return b;
-            });
+            // const bestPrediction = predictions.reduce((a, b) => {
+            //   if (parseFloat(a.value) > parseFloat(b.value)) {
+            //     return a;
+            //   }
+            //   return b;
+            // });
 
             const idle = parseFloat(predictions.find((el) => el.id === "idle").value);
-            if (bestPrediction.id !== "idle" && idle < 0.1) {
+            let normal = parseFloat(predictions.find((el) => el.id === "normal").value);
+            normal = normal + idle;
+
+            if (idle < 0.99) {
               setPredictionsBody({
-                normal: parseFloat(predictions.find((el) => el.id === "normal").value),
+                normal: normal,
                 cp1: parseFloat(predictions.find((el) => el.id === "cp1").value),
                 cp2: parseFloat(predictions.find((el) => el.id === "cp2").value),
               });
