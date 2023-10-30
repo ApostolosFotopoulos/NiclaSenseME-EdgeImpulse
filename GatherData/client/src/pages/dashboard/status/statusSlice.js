@@ -15,13 +15,11 @@ export const statusSlice = createSlice({
     setStatus: (state, msg) => {
       if (msg.payload.showSensorPredictions) {
         const nIndex = msg.payload.text.indexOf("N");
-        const cp1Index = msg.payload.text.indexOf("CP1");
-        const cp2Index = msg.payload.text.indexOf("CP2");
+        const cpIndex = msg.payload.text.indexOf("CP");
 
         const n = msg.payload.text.slice(nIndex, nIndex + 6);
-        const cp1 = msg.payload.text.slice(cp1Index, cp1Index + 8);
-        const cp2 = msg.payload.text.slice(cp2Index, cp2Index + 8);
-        state.msg = [n, cp1, cp2];
+        const cp = msg.payload.text.slice(cpIndex, cpIndex + 7);
+        state.msg = [n, cp];
       } else {
         state.msg = msg.payload;
       }

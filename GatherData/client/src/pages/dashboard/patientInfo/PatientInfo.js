@@ -82,22 +82,20 @@ export default function PatientInfo() {
           (acc, cur) => {
             const temp = {};
             temp.normal = acc.normal + cur.normal;
-            temp.cp1 = acc.cp1 + cur.cp1;
-            temp.cp2 = acc.cp2 + cur.cp2;
+            temp.cp = acc.cp + cur.cp2 + cur.cp1;
             return temp;
           },
-          { normal: 0, cp1: 0, cp2: 0 }
+          { normal: 0, cp: 0 }
         );
 
         showData.normal = showData.normal / collectedData.length;
-        showData.cp1 = showData.cp1 / collectedData.length;
-        showData.cp2 = showData.cp2 / collectedData.length;
+        showData.cp = showData.cp / collectedData.length;
+
         dispatch(clearData());
         dispatch(
           setStatus({
             text: `N:${showData.normal.toFixed(2)},
-            CP1:${showData.cp1.toFixed(2)},
-            CP2:${showData.cp2.toFixed(2)}`,
+            CP:${showData.cp.toFixed(2)}`,
             showSensorPredictions: true,
           })
         );

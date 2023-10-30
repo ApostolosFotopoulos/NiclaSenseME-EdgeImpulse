@@ -24,8 +24,7 @@ img {
   --BUTTON-LOADING-FONT-COLOR: black;
   --DROPDOWN-FONT-COLOR: rgb(231, 231, 231);
   --NORMAL-FONT-COLOR: rgb(46, 203, 255);
-  --CP1-FONT-COLOR: yellow;
-  --CP2-FONT-COLOR: red;
+  --CP-FONT-COLOR: red;
 
   /* BG COLORS */
   --BODY-BG-COLOR: black;
@@ -339,12 +338,8 @@ button:disabled {
   color: var(--NORMAL-FONT-COLOR);
 }
 
-.status__cp1-msg {
-  color: var(--CP1-FONT-COLOR);
-}
-
-.status__cp2-msg {
-  color: var(--CP2-FONT-COLOR);
+.status__cp-msg {
+  color: var(--CP-FONT-COLOR);
 }
 
 /* DOCTOR PROFILE */
@@ -497,12 +492,8 @@ button:disabled {
   color: var(--NORMAL-FONT-COLOR);
 }
 
-.custom-tooltip__cp1 {
-  color: var(--CP1-FONT-COLOR);
-}
-
-.custom-tooltip__cp2 {
-  color: var(--CP2-FONT-COLOR);
+.custom-tooltip__cp {
+  color: var(--CP-FONT-COLOR);
 }
 
 /* INSERT PATIENT */

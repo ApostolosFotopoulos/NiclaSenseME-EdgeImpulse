@@ -240,8 +240,7 @@ export default function Status() {
           {Array.isArray(msg) ? (
             <p>
               <span className="status__normal-msg">{msg[0]}</span>,
-              <span className="status__cp1-msg">{msg[1]}</span>,
-              <span className="status__cp2-msg">{msg[2]}</span>
+              <span className="status__cp-msg">{msg[1]}</span>
             </p>
           ) : (
             msg

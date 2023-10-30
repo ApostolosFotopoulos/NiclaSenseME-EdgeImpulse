@@ -47,7 +47,11 @@ export default function SessionHistory() {
         }).unwrap();
         res = [...res].reverse();
         res = res.map((ses, i) => ({
-          ...ses,
+          normal: ses.normal.toFixed(5),
+          cp: (ses.cp1 + ses.cp2).toFixed(5),
+          session_id: ses.session_id,
+          patient_id: ses.patient_id,
+          session_date: ses.session_date,
           xLabel: i + 1,
         }));
 
@@ -87,8 +91,7 @@ export default function SessionHistory() {
             <Tooltip content={<CustomTooltip />} />
             <Legend align="right" />
             <Line type="monotone" strokeWidth={3} dataKey="normal" stroke="#2ecbff" />
-            <Line type="monotone" dataKey="cp1" stroke="yellow" />
-            <Line type="monotone" dataKey="cp2" stroke="red" />
+            <Line type="monotone" dataKey="cp" stroke="red" />
           </LineChart>
         </ResponsiveContainer>
       ) : (
