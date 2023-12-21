@@ -1,0 +1,16 @@
+version: "3.8"
+services:
+  nicla_database:
+    container_name: nicla_database
+    image: postgres:16.0-alpine
+    ports:
+      - "5100:5432"
+    environment:
+      - POSTGRES_PASSWORD=1233
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=cpwatcher
+    volumes:
+      - nicla_database-volume:/var/lib/postgresql/data
+
+volumes:
+  nicla_database-volume:
